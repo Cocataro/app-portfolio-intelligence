@@ -76,7 +76,7 @@ async function api(path, opts={}){
     credentials:'include',
   };
   const res = await fetch(url, fetchOpts);
-  if(res.status===403){
+  if(res.status===401||res.status===403){
     // Auth failed — prompt for login
     const ok = await doLogin();
     if(ok) return api(path, opts); // retry
