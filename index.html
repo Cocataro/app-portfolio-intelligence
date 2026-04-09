@@ -56,12 +56,13 @@
   .board-item-detail { font-size: 11px; color: #666; margin-top: 2px; }
   .board-item-left { flex: 1; }
   .status-legend { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+  .section-header { font-size: 11px; color: #555; text-transform: uppercase; letter-spacing: 0.5px; padding: 8px 0 4px; margin-top: 8px; }
 </style>
 </head>
 <body>
 
 <h1>Tiven Labs — Portfolio Dashboard</h1>
-<div class="updated">Last updated: April 9, 2026 — 9 pipeline opportunities, Trades scan complete, board brief in progress, Education scan active</div>
+<div class="updated">Last updated: April 9, 2026 04:30 — 22 pipeline opportunities · Education + Food &amp; Cooking + Reddit scans complete · QA gate cleared · all agents idle</div>
 
 <!-- BOARD ACTION TRACKER -->
 <div class="board-section">
@@ -75,25 +76,123 @@
     <span class="status status-killed">KILLED</span>
   </div>
 
-  <!-- FINDINGS — Board marks status as they move through the pipeline -->
+  <div class="section-header">— QA Approved — Build Queue —</div>
+
   <div class="board-item">
     <div class="board-item-left">
-      <div class="board-item-name">Text Expansion App (Texpand)</div>
-      <div class="board-item-detail">Signal: SUBSCRIPTION_BACKLASH · Score: 8.5/10 · Est. $8,400/mo · $14.99 one-time · S effort (2–3 wk)</div>
+      <div class="board-item-name">Habit Tracker <strong style="color:#4ade80">★ BUILD FIRST</strong></div>
+      <div class="board-item-detail">Signal: UNHAPPY_MONEY · Score: 7.0/10 · Est. $1,400–1,700/mo · $5.99 one-time · S effort (2 wk) · QA approved (TIVAAA-40)</div>
     </div>
-    <span class="status status-in-review">IN REVIEW</span>
+    <span class="status status-todo">TODO</span>
   </div>
   <div class="board-item">
     <div class="board-item-left">
-      <div class="board-item-name">Work Hours Tracker</div>
-      <div class="board-item-detail">Signal: ABANDONED_APPS · Score: 9/10 · Est. $4,500/mo · $2.99 one-time · S effort (2 wk)</div>
+      <div class="board-item-name">Text Expansion App (Texpand) — BUILD SECOND</div>
+      <div class="board-item-detail">Signal: SUBSCRIPTION_BACKLASH · Score: 6.5/10 (revised — WordBoard competitor confirmed) · Est. $3,100–5,200/mo · $14.99 one-time · S effort (2–3 wk) · QA approved</div>
+    </div>
+    <span class="status status-todo">TODO</span>
+  </div>
+  <div class="board-item">
+    <div class="board-item-left">
+      <div class="board-item-name">Sleep Tracker — HOLD</div>
+      <div class="board-item-detail">Signal: SUBSCRIPTION_BACKLASH · Score: 5.0/10 · Est. $1,000–1,300/mo · QA verdict: HOLD (revisit after Habit Tracker ships)</div>
     </div>
     <span class="status status-in-review">IN REVIEW</span>
   </div>
+
+  <div class="section-header">— Awaiting Validation —</div>
+
+  <div class="board-item">
+    <div class="board-item-left">
+      <div class="board-item-name">Spaced Repetition Flashcards (Education)</div>
+      <div class="board-item-detail">Signal: SUBSCRIPTION_BACKLASH · Score: 9/10 · Quizlet 1M+ reviews on subscription · $4.99–7.99 one-time · S effort (2–3 wk) — Education scan</div>
+    </div>
+    <span class="status status-todo">TODO</span>
+  </div>
+  <div class="board-item">
+    <div class="board-item-left">
+      <div class="board-item-name">Scientific Calculator for iPad (Education)</div>
+      <div class="board-item-detail">Signal: ABANDONED · Score: 9/10 · 60,746 reviews, 65 months stale · $2.99–4.99 one-time · S effort (2–3 wk) — Education scan</div>
+    </div>
+    <span class="status status-todo">TODO</span>
+  </div>
+  <div class="board-item">
+    <div class="board-item-left">
+      <div class="board-item-name">Offline Macro &amp; Nutrition Tracker (Food)</div>
+      <div class="board-item-detail">Signal: SUBSCRIPTION_BACKLASH · Score: 9/10 · MFP/Cronometer backlash massive · USDA public domain · Est. ~$25K/mo — Food &amp; Cooking scan</div>
+    </div>
+    <span class="status status-todo">TODO</span>
+  </div>
+  <div class="board-item">
+    <div class="board-item-left">
+      <div class="board-item-name">Tip-Out Calculator (Worker iOS)</div>
+      <div class="board-item-detail">Signal: MARKET_GAP · Score: 9/10 · No iOS app exists for tip-out calculation · Reddit confirmed — Reddit Scout scan</div>
+    </div>
+    <span class="status status-todo">TODO</span>
+  </div>
+  <div class="board-item">
+    <div class="board-item-left">
+      <div class="board-item-name">Paprika Replacement (Accurate Recipe Scaling)</div>
+      <div class="board-item-detail">Signal: ACTIVE_USER_MIGRATION · Score: 9/10 · Paprika users actively migrating due to scaling bugs · Reddit confirmed — distinct from RecipeScaler (single-recipe)</div>
+    </div>
+    <span class="status status-todo">TODO</span>
+  </div>
+  <div class="board-item">
+    <div class="board-item-left">
+      <div class="board-item-name">Homework Planner (Education)</div>
+      <div class="board-item-detail">Signal: ABANDONED · Score: 8/10 · 7K+ reviews, 81–92 months stale · $2.99–3.99 one-time · S effort (2–3 wk) — Education scan</div>
+    </div>
+    <span class="status status-todo">TODO</span>
+  </div>
+  <div class="board-item">
+    <div class="board-item-left">
+      <div class="board-item-name">SAT/ACT Test Prep (Education)</div>
+      <div class="board-item-detail">Signal: ABANDONED · Score: 8/10 · 4K+ reviews, 85 months stale, evergreen demand · $4.99–9.99 one-time · 3–4 wk — Education scan</div>
+    </div>
+    <span class="status status-todo">TODO</span>
+  </div>
+  <div class="board-item">
+    <div class="board-item-left">
+      <div class="board-item-name">Allergen &amp; Ingredient Scanner (Food)</div>
+      <div class="board-item-detail">Signal: SUBSCRIPTION_BACKLASH · Yuka buggy offline mode · Open Food Facts enables fully offline one-time app · Est. ~$17K/mo — Food &amp; Cooking scan</div>
+    </div>
+    <span class="status status-todo">TODO</span>
+  </div>
+  <div class="board-item">
+    <div class="board-item-left">
+      <div class="board-item-name">NEC Electrician Conduit Suite (Trades)</div>
+      <div class="board-item-detail">Signal: ACCURACY_PAIN · Score: 8/10 · Southwire accuracy errors, no existing-conduit audit mode · Offline-first one-time · Reddit confirmed</div>
+    </div>
+    <span class="status status-todo">TODO</span>
+  </div>
+  <div class="board-item">
+    <div class="board-item-left">
+      <div class="board-item-name">Mobile Manual J Block Load (HVAC/Trades)</div>
+      <div class="board-item-detail">Signal: MARKET_GAP · Score: 8/10 · All leaders desktop-only · PDF quote output · $14.99–19.99 one-time · Reddit confirmed</div>
+    </div>
+    <span class="status status-todo">TODO</span>
+  </div>
+  <div class="board-item">
+    <div class="board-item-left">
+      <div class="board-item-name">Keto / Net Carb Calculator (Food)</div>
+      <div class="board-item-detail">Signal: SUBSCRIPTION_BACKLASH · Carb Manager backlash · Keto.app Android proves one-time model · Est. ~$15K/mo — Food &amp; Cooking scan</div>
+    </div>
+    <span class="status status-todo">TODO</span>
+  </div>
+  <div class="board-item">
+    <div class="board-item-left">
+      <div class="board-item-name">Typing Trainer / WPM Practice (Education)</div>
+      <div class="board-item-detail">Signal: ABANDONED · Score: 7/10 · TapTyping 109 months stale (longest gap found) · Android 10M+ installs · $1.99–3.99 one-time · 2 wk build</div>
+    </div>
+    <span class="status status-todo">TODO</span>
+  </div>
+
+  <div class="section-header">— Existing Pipeline — Awaiting Board Decision —</div>
+
   <div class="board-item">
     <div class="board-item-left">
       <div class="board-item-name">Contractor Estimate Maker</div>
-      <div class="board-item-detail">Signal: ABANDONED ×2 · Est. $12,000/mo · $5.99–$7.99 one-time · M effort — Trades &amp; Construction scan</div>
+      <div class="board-item-detail">Signal: ABANDONED ×2 · Est. $12,000/mo · $5.99–$7.99 one-time · M effort — Trades &amp; Construction scan, validation complete</div>
     </div>
     <span class="status status-todo">TODO</span>
   </div>
@@ -127,129 +226,242 @@
   </div>
   <div class="board-item">
     <div class="board-item-left">
-      <div class="board-item-name">Habit Tracker</div>
-      <div class="board-item-detail">Signal: UNHAPPY_MONEY · Score: 7.0/10 · Est. $3,000/mo · $5.99 one-time · S effort</div>
-    </div>
-    <span class="status status-todo">TODO</span>
-  </div>
-  <div class="board-item">
-    <div class="board-item-left">
       <div class="board-item-name">SubList — Subscription Tracker</div>
       <div class="board-item-detail">Signal: SUBSCRIPTION_BACKLASH · Est. $5,000/mo · $1.99 one-time · S effort</div>
     </div>
     <span class="status status-todo">TODO</span>
   </div>
 
-  <!-- ADD NEW FINDINGS BELOW — copy this template:
+  <div class="section-header">— Passed / Dropped —</div>
+
   <div class="board-item">
     <div class="board-item-left">
-      <div class="board-item-name">APP NAME</div>
-      <div class="board-item-detail">Signal: TYPE · Gap: X/10 · Est. $X.XX</div>
+      <div class="board-item-name">Work Hours Tracker — PASS</div>
+      <div class="board-item-detail">Acq. Score 15/30 · 8+ active competitors (33K–74K reviews each) · Zero defensibility · Commodity app · One-time purchase kills recurring revenue for 7-fig exits · QA verdict: PASS (TIVAAA-40/48)</div>
     </div>
-    <span class="status status-todo">TODO</span>
+    <span class="status status-killed">PASS</span>
   </div>
-  -->
-
+  <div class="board-item">
+    <div class="board-item-left">
+      <div class="board-item-name">Calendar App — DROPPED</div>
+      <div class="board-item-detail">BusyCal fills gap — no viable differentiation · QA verdict: DROP (TIVAAA-40)</div>
+    </div>
+    <span class="status status-killed">KILLED</span>
+  </div>
 </div>
 <!-- END BOARD ACTION TRACKER -->
 
 <h2>Decision Queue</h2>
 <div class="decision">
-  <div class="decision-title"><span class="rank">#1</span> Texpand — Text Expansion App</div>
-  <div class="decision-action">Score 8.5/10. Est. $8,400/mo at $14.99 one-time. SUBSCRIPTION_BACKLASH signal. Fastest build (2–3 wks). TextExpander refugees — proven demand for years. <strong>Awaiting board GO/NO-GO.</strong></div>
+  <div class="decision-title"><span class="rank">#1</span> Habit Tracker — BUILD FIRST (QA Approved)</div>
+  <div class="decision-action">Score 7.0/10. Est. $1,400–1,700/mo at $5.99 one-time. Streaks proves model (27K reviews). UNHAPPY_MONEY signal. S effort 2 wk. <strong>QA gate cleared — awaiting board GO.</strong></div>
 </div>
 <div class="decision">
-  <div class="decision-title"><span class="rank">#2</span> Work Hours Tracker</div>
-  <div class="decision-action">Score 9/10. 23K+ stranded reviews across 3 abandoned apps. Android: Clockify 10M+, Toggl 5M+ downloads. $2.99 one-time. <strong>Awaiting board GO/NO-GO.</strong></div>
+  <div class="decision-title"><span class="rank">#2</span> Text Expansion — BUILD SECOND (QA Approved, Score Revised)</div>
+  <div class="decision-action">Score revised to 6.5/10 (WordBoard competitor confirmed — free, 5.4K reviews, 4.9★). Est. $3,100–5,200/mo at $14.99 one-time. TextExpander refugees still strong signal. <strong>QA gate cleared — awaiting board GO.</strong></div>
 </div>
 <div class="decision">
-  <div class="decision-title"><span class="rank">#3</span> Contractor Estimate Maker</div>
-  <div class="decision-action">Medium effort. Est. $12,000/mo — highest revenue opp in pipeline. Two abandoned 4.9★ apps (4,374 combined reviews). Subscription tools cost $50–150/mo. $5.99–$7.99 one-time. <strong>Awaiting board GO/NO-GO (Trades validation in progress).</strong></div>
+  <div class="decision-title"><span class="rank">#3</span> Spaced Repetition Flashcards (Education)</div>
+  <div class="decision-action">Score 9/10. Quizlet 1M+ reviews on subscription — backlash is massive (Trustpilot 1.4/5). $4.99–7.99 one-time. S effort 2–3 wk. <strong>Awaiting deep research validation.</strong></div>
 </div>
 <div class="decision">
-  <div class="decision-title"><span class="rank">#4</span> Concrete Calculator Pro</div>
-  <div class="decision-action">Small effort. Est. $9,000/mo. 23K-review incumbent abandoned Mar 2024 alongside 4 other calculator apps — deliberate mass exit. ~4.7M lifetime downloads proves TAM. $3.99 one-time. <strong>Awaiting board GO/NO-GO (Trades validation in progress).</strong></div>
+  <div class="decision-title"><span class="rank">#4</span> Offline Macro &amp; Nutrition Tracker (Food)</div>
+  <div class="decision-action">Score 9/10. Est. ~$25K/mo (annual ~$300K). MFP/Cronometer subscription backlash is massive; no one-time-purchase iOS alternative exists. USDA database is public domain. <strong>Awaiting deep research validation.</strong></div>
 </div>
 <div class="decision">
-  <div class="decision-title"><span class="rank">#5</span> ShiftPay — Tip &amp; Income Tracker</div>
-  <div class="decision-action">Score 82/100. Small effort. Est. $6,700/mo. 750K+ server market; ServerLife &amp; TipTracker gate features behind subscriptions. No dominant one-time-purchase option. $2.99 one-time. <strong>Awaiting board prioritization.</strong></div>
-</div>
-<div class="decision">
-  <div class="decision-title"><span class="rank">#6</span> Roof Pitch &amp; Rafter Calculator</div>
-  <div class="decision-action">Small effort. Est. $7,500/mo. 11-year-old 3.8★ app still accumulating reviews. Multiple unhappy/abandoned roofing signals. $2.99–$4.99 one-time. <strong>Awaiting board GO/NO-GO (Trades validation in progress).</strong></div>
-</div>
-<div class="decision">
-  <div class="decision-title"><span class="rank">#7</span> SplitRight — Group Expense Splitter</div>
-  <div class="decision-action">Score 61/100 (caution: Tricount is a strong free competitor). Medium effort. Est. $6,000/mo. Splitwise meltdown (3.9 ⭐, 65% 1-star Trustpilot, $40/yr subscription backlash). $4.99 one-time. <strong>Awaiting board prioritization.</strong></div>
-</div>
-<div class="decision">
-  <div class="decision-title"><span class="rank">#8</span> Habit Tracker</div>
-  <div class="decision-action">Score 7.0/10. Small effort. Est. $3,000/mo. Streaks proves $5.99 one-time model (27K reviews). Build 2nd after Texpand. <strong>Awaiting board prioritization.</strong></div>
-</div>
-<div class="decision">
-  <div class="decision-title"><span class="rank">#9</span> SubList — Subscription Tracker</div>
-  <div class="decision-action">Small effort. Est. $5,000/mo. Hiatus billing scandal + Bobby gaps. Local-only, no account, $1.99 one-time. <strong>Awaiting board prioritization.</strong></div>
+  <div class="decision-title"><span class="rank">#5</span> Contractor Estimate Maker (Trades)</div>
+  <div class="decision-action">Est. $12,000/mo — highest revenue in existing pipeline. Two abandoned 4.9★ apps (4,374 combined reviews). Subscription tools cost $50–150/mo. $5.99–$7.99 one-time. Trades validation complete. <strong>Awaiting board GO/NO-GO.</strong></div>
 </div>
 
 <h2>Portfolio Health</h2>
 <div class="card-grid">
   <div class="card">
     <div class="card-label">Kova</div>
-    <div class="card-value">$—</div>
-    <div class="card-sub">MRR est. · Vocabulary flashcards · $6.99 one-time · ASO refresh in progress</div>
+    <div class="card-value warning">⚠ Action</div>
+    <div class="card-sub">Vocabulary flashcards · Price is #1 blocker: drop to $0.99 immediately · Update subtitle + keywords · Seed 10 reviews — ASO refresh done (TIVAAA-41)</div>
   </div>
   <div class="card">
     <div class="card-label">Gratuiti</div>
-    <div class="card-value">$—</div>
-    <div class="card-sub">MRR est. · Tip calculator · one-time · ASO baseline done</div>
+    <div class="card-value warning">74 reviews</div>
+    <div class="card-sub">4.3★ · #1 for "gratuity calculator" · ⚠ Tip Check v4.0 is new threat (162× our review base) · Add SKStoreReviewRequestAPI prompt — ASO refresh done (TIVAAA-52)</div>
   </div>
   <div class="card">
     <div class="card-label">RecipeScaler</div>
     <div class="card-value">$—</div>
-    <div class="card-sub">MRR est. · Recipe scaling + OCR · lifetime · ASO baseline done</div>
+    <div class="card-sub">Recipe scaling + OCR · Lifetime · ASO baseline done · Safe from Food &amp; Cooking pipeline (different scope)</div>
   </div>
   <div class="card">
     <div class="card-label">Trades-Calc</div>
     <div class="card-value">$—</div>
-    <div class="card-sub">MRR est. · Construction calcs · free + IAP · drywall gap flagged</div>
+    <div class="card-sub">Construction calcs · Free + IAP · Drywall gap, roofing, tile, plumbing wide open — ASO done (TIVAAA-31)</div>
   </div>
 </div>
 
 <h2>Shipped Apps</h2>
 <table>
-  <tr><th>App</th><th>MRR</th><th>Trend</th><th>Organic %</th><th>Acq. Score</th><th>Top Issue / Notes</th></tr>
-  <tr><td>Kova</td><td>—</td><td class="neutral">—</td><td>—</td><td>—</td><td class="neutral">ASO refresh in progress (TIVAAA-41) — keyword gap analysis active</td></tr>
-  <tr><td>Gratuiti</td><td>—</td><td class="neutral">—</td><td>—</td><td>—</td><td class="neutral">ASO baseline done</td></tr>
-  <tr><td>RecipeScaler</td><td>—</td><td class="neutral">—</td><td>—</td><td>—</td><td class="neutral">ASO baseline done</td></tr>
+  <tr><th>App</th><th>MRR</th><th>Trend</th><th>Reviews</th><th>Rating</th><th>Top Issue / Notes</th></tr>
+  <tr>
+    <td>Kova</td><td>—</td><td class="neutral">—</td><td>0</td><td>—</td>
+    <td class="bad">URGENT: Drop price to $0.99 · Update subtitle/keywords · Seed 10 reviews to unlock star display · 3 new competitors appeared this week (Noji, WordPal, Gizmo AI)</td>
+  </tr>
+  <tr>
+    <td>Gratuiti</td><td>—</td><td class="good">+3 reviews</td><td>74</td><td class="good">4.3★</td>
+    <td class="warning">⚠ Tip Check v4.0.0 (Mar 18) now matches on receipt scan + iCloud sync — 162× our review base. Add post-split review prompt. Update subtitle: "Split Bills, Scan &amp; No Ads"</td>
+  </tr>
+  <tr>
+    <td>RecipeScaler</td><td>—</td><td class="neutral">—</td><td>—</td><td>—</td>
+    <td class="neutral">ASO baseline done. Pipeline Paprika replacement is architecturally distinct — no cannibalization risk.</td>
+  </tr>
   <tr>
     <td>Trades-Calc</td><td>—</td><td class="neutral">—</td><td>—</td><td>—</td>
-    <td class="warning">ASO done — drywall gap (2.8★, 2018) is prime opportunity; roofing, tile, plumbing also wide open</td>
+    <td class="warning">ASO done — drywall gap (2.8★, 2018) is prime opportunity; roofing, tile, plumbing also wide open. Reddit confirms Construction Master Pro subscription backlash is #1 1-star theme.</td>
   </tr>
 </table>
 
 <h2>App Gap Pipeline</h2>
+
+<h3>QA Cleared — Ready to Build</h3>
 <table>
-  <tr><th>Finding</th><th>Signal</th><th>Category</th><th>Est. MRR</th><th>Effort</th><th>Score</th><th>Verdict</th><th>Board Status</th></tr>
+  <tr><th>Finding</th><th>Signal</th><th>Category</th><th>Est. MRR</th><th>Effort</th><th>Score</th><th>Verdict</th></tr>
   <tr>
-    <td><strong>Texpand — Text Expansion</strong></td>
+    <td><strong>Habit Tracker ★</strong></td>
+    <td>UNHAPPY_MONEY</td>
+    <td>Productivity</td>
+    <td class="good">$1,400–1,700</td>
+    <td>S (2 wk)</td>
+    <td class="score good">7.0/10</td>
+    <td><span class="tag tag-go">BUILD FIRST</span></td>
+  </tr>
+  <tr>
+    <td><strong>Text Expansion (Texpand)</strong></td>
     <td>SUBSCRIPTION_BACKLASH</td>
     <td>Productivity</td>
-    <td class="good">$8,400</td>
+    <td class="good">$3,100–5,200</td>
     <td>S (2–3 wk)</td>
-    <td class="score">8.5/10</td>
-    <td><span class="tag tag-validated">VALIDATED</span></td>
-    <td><span class="status status-in-review">IN REVIEW</span></td>
+    <td class="score">6.5/10</td>
+    <td><span class="tag tag-go">BUILD SECOND</span></td>
   </tr>
   <tr>
-    <td><strong>Work Hours Tracker</strong></td>
+    <td>Sleep Tracker</td>
+    <td>SUBSCRIPTION_BACKLASH</td>
+    <td>Health</td>
+    <td>$1,000–1,300</td>
+    <td>M–L</td>
+    <td class="score">5.0/10</td>
+    <td><span class="tag tag-maybe">HOLD</span></td>
+  </tr>
+  <tr>
+    <td><del>Work Hours Tracker</del></td>
     <td>ABANDONED_APPS</td>
     <td>Productivity</td>
-    <td class="good">~$4,500</td>
-    <td>S (2 wk)</td>
-    <td class="score">9/10</td>
-    <td><span class="tag tag-validated">VALIDATED</span></td>
-    <td><span class="status status-in-review">IN REVIEW</span></td>
+    <td>—</td>
+    <td>—</td>
+    <td class="score bad">15/30</td>
+    <td><span class="tag tag-pass">PASS</span></td>
   </tr>
+</table>
+
+<h3>Education — Awaiting Validation (TIVAAA-46)</h3>
+<table>
+  <tr><th>Finding</th><th>Signal</th><th>Est. MRR</th><th>Effort</th><th>Score</th><th>Verdict</th></tr>
+  <tr>
+    <td><strong>Spaced Repetition Flashcards</strong></td>
+    <td>SUBSCRIPTION_BACKLASH (Quizlet)</td>
+    <td class="good">—</td>
+    <td>S (2–3 wk)</td>
+    <td class="score good">9/10</td>
+    <td><span class="tag tag-maybe">QUEUED</span></td>
+  </tr>
+  <tr>
+    <td><strong>Scientific Calculator for iPad</strong></td>
+    <td>ABANDONED (60K reviews, 65mo stale)</td>
+    <td class="good">—</td>
+    <td>S (2–3 wk)</td>
+    <td class="score good">9/10</td>
+    <td><span class="tag tag-maybe">QUEUED</span></td>
+  </tr>
+  <tr>
+    <td><strong>Homework Planner</strong></td>
+    <td>ABANDONED (7K reviews, 81–92mo stale)</td>
+    <td>—</td>
+    <td>S (2–3 wk)</td>
+    <td class="score">8/10</td>
+    <td><span class="tag tag-maybe">QUEUED</span></td>
+  </tr>
+  <tr>
+    <td><strong>SAT/ACT Test Prep</strong></td>
+    <td>ABANDONED (4K reviews, 85mo stale)</td>
+    <td>—</td>
+    <td>M (3–4 wk)</td>
+    <td class="score">8/10</td>
+    <td><span class="tag tag-maybe">QUEUED</span></td>
+  </tr>
+  <tr>
+    <td>Typing Trainer / WPM</td>
+    <td>ABANDONED (109 months! Android 10M+)</td>
+    <td>—</td>
+    <td>S (2 wk)</td>
+    <td class="score">7/10</td>
+    <td><span class="tag tag-maybe">QUEUED</span></td>
+  </tr>
+  <tr>
+    <td>Citation &amp; Bibliography Generator</td>
+    <td>UNHAPPY + ABANDONED (3.95★)</td>
+    <td>—</td>
+    <td>M (3–4 wk)</td>
+    <td class="score">6/10</td>
+    <td><span class="tag tag-maybe">QUEUED</span></td>
+  </tr>
+</table>
+
+<h3>Food &amp; Cooking — Awaiting Validation (TIVAAA-51)</h3>
+<table>
+  <tr><th>Finding</th><th>Signal</th><th>Est. Annual</th><th>Effort</th><th>Score</th><th>Verdict</th></tr>
+  <tr>
+    <td><strong>Offline Macro &amp; Nutrition Tracker</strong></td>
+    <td>SUBSCRIPTION_BACKLASH (MFP/Cronometer)</td>
+    <td class="good">~$300K</td>
+    <td>M</td>
+    <td class="score good">9/10</td>
+    <td><span class="tag tag-maybe">QUEUED</span></td>
+  </tr>
+  <tr>
+    <td><strong>Allergen &amp; Ingredient Scanner</strong></td>
+    <td>SUBSCRIPTION_BACKLASH (Yuka)</td>
+    <td class="good">~$200K</td>
+    <td>M</td>
+    <td class="score good">9/10</td>
+    <td><span class="tag tag-maybe">QUEUED</span></td>
+  </tr>
+  <tr>
+    <td><strong>Keto / Net Carb Calculator</strong></td>
+    <td>SUBSCRIPTION_BACKLASH (Carb Manager)</td>
+    <td class="good">~$175K</td>
+    <td>S–M</td>
+    <td class="score">8/10</td>
+    <td><span class="tag tag-maybe">QUEUED</span></td>
+  </tr>
+  <tr>
+    <td>Smart Multi-Timer for Cooking</td>
+    <td>MARKET_GAP</td>
+    <td>—</td>
+    <td>S (6–10 wk)</td>
+    <td class="score">—</td>
+    <td><span class="tag tag-maybe">QUEUED</span></td>
+  </tr>
+  <tr>
+    <td>Sous Vide Calculator</td>
+    <td>MARKET_GAP</td>
+    <td>—</td>
+    <td>S (6–10 wk)</td>
+    <td class="score">—</td>
+    <td><span class="tag tag-maybe">QUEUED</span></td>
+  </tr>
+</table>
+
+<h3>Trades — Validated (TIVAAA-36/45)</h3>
+<table>
+  <tr><th>Finding</th><th>Signal</th><th>Category</th><th>Est. MRR</th><th>Effort</th><th>Score</th><th>Verdict</th></tr>
   <tr>
     <td><strong>Contractor Estimate Maker</strong></td>
     <td>ABANDONED ×2</td>
@@ -258,7 +470,6 @@
     <td>M</td>
     <td class="score">—/10</td>
     <td><span class="tag tag-maybe">QUEUED</span></td>
-    <td><span class="status status-todo">TODO</span></td>
   </tr>
   <tr>
     <td><strong>Concrete Calculator Pro</strong></td>
@@ -268,17 +479,6 @@
     <td>S</td>
     <td class="score">—/10</td>
     <td><span class="tag tag-maybe">QUEUED</span></td>
-    <td><span class="status status-todo">TODO</span></td>
-  </tr>
-  <tr>
-    <td><strong>ShiftPay — Tip &amp; Income Tracker</strong></td>
-    <td>SUBSCRIPTION_BACKLASH</td>
-    <td>Finance</td>
-    <td class="good">$6,700</td>
-    <td>S</td>
-    <td class="score">82/100</td>
-    <td><span class="tag tag-validated">VALIDATED</span></td>
-    <td><span class="status status-todo">TODO</span></td>
   </tr>
   <tr>
     <td><strong>Roof Pitch &amp; Rafter Calculator</strong></td>
@@ -288,7 +488,56 @@
     <td>S</td>
     <td class="score">—/10</td>
     <td><span class="tag tag-maybe">QUEUED</span></td>
-    <td><span class="status status-todo">TODO</span></td>
+  </tr>
+  <tr>
+    <td><strong>NEC Electrician Conduit Suite</strong></td>
+    <td>ACCURACY_PAIN (Reddit)</td>
+    <td>Trades</td>
+    <td>—</td>
+    <td>M</td>
+    <td class="score">8/10</td>
+    <td><span class="tag tag-maybe">QUEUED</span></td>
+  </tr>
+  <tr>
+    <td><strong>Mobile Manual J Block Load (HVAC)</strong></td>
+    <td>MARKET_GAP (Reddit)</td>
+    <td>Trades / HVAC</td>
+    <td>—</td>
+    <td>M–L</td>
+    <td class="score">8/10</td>
+    <td><span class="tag tag-maybe">QUEUED</span></td>
+  </tr>
+  <tr>
+    <td>HVAC PT Chart + Superheat/Subcooling</td>
+    <td>SUBSCRIPTION_PIVOT (Bluon)</td>
+    <td>Trades / HVAC</td>
+    <td>—</td>
+    <td>S</td>
+    <td class="score">—</td>
+    <td><span class="tag tag-maybe">QUEUED</span></td>
+  </tr>
+</table>
+
+<h3>Finance — Validated (TIVAAA-37)</h3>
+<table>
+  <tr><th>Finding</th><th>Signal</th><th>Category</th><th>Est. MRR</th><th>Effort</th><th>Score</th><th>Verdict</th></tr>
+  <tr>
+    <td><strong>ShiftPay — Tip &amp; Income Tracker</strong></td>
+    <td>SUBSCRIPTION_BACKLASH</td>
+    <td>Finance</td>
+    <td class="good">$6,700</td>
+    <td>S</td>
+    <td class="score">82/100</td>
+    <td><span class="tag tag-validated">VALIDATED</span></td>
+  </tr>
+  <tr>
+    <td><strong>Tip-Out Calculator (Worker iOS)</strong></td>
+    <td>MARKET_GAP (Reddit)</td>
+    <td>Finance</td>
+    <td class="good">—</td>
+    <td>S</td>
+    <td class="score">9/10</td>
+    <td><span class="tag tag-maybe">QUEUED</span></td>
   </tr>
   <tr>
     <td><strong>SplitRight — Group Expense Splitter</strong></td>
@@ -298,7 +547,6 @@
     <td>M</td>
     <td class="score">61/100</td>
     <td><span class="tag tag-maybe">CAUTION</span></td>
-    <td><span class="status status-todo">TODO</span></td>
   </tr>
   <tr>
     <td><strong>SubList — Subscription Tracker</strong></td>
@@ -308,27 +556,53 @@
     <td>S</td>
     <td class="score">—/10</td>
     <td><span class="tag tag-maybe">QUEUED</span></td>
-    <td><span class="status status-todo">TODO</span></td>
+  </tr>
+</table>
+
+<h3>Reddit-Validated — New Signals (TIVAAA-50)</h3>
+<table>
+  <tr><th>Finding</th><th>Reddit Signal</th><th>Score</th><th>Category</th><th>Notes</th></tr>
+  <tr>
+    <td><strong>Tip-Out Calculator (Worker iOS)</strong></td>
+    <td>No iOS app exists</td>
+    <td class="score good">9/10</td>
+    <td>Finance</td>
+    <td>See Finance table above</td>
   </tr>
   <tr>
-    <td><strong>Habit Tracker</strong></td>
-    <td>UNHAPPY_MONEY</td>
-    <td>Productivity</td>
-    <td class="good">$3,000</td>
-    <td>S (2 wk)</td>
-    <td class="score">7.0/10</td>
-    <td><span class="tag tag-validated">VALIDATED</span></td>
-    <td><span class="status status-todo">TODO</span></td>
+    <td><strong>Paprika Replacement w/ Accurate Scaling</strong></td>
+    <td>Active user migration</td>
+    <td class="score good">9/10</td>
+    <td>Food</td>
+    <td>Distinct from RecipeScaler — multi-recipe + grocery consolidation</td>
   </tr>
   <tr>
-    <td>Sleep Tracker</td>
-    <td>SUBSCRIPTION_BACKLASH</td>
-    <td>Health</td>
-    <td>—</td>
-    <td>M–L</td>
-    <td class="score">5.5/10</td>
-    <td><span class="tag tag-pass">LOW PRI</span></td>
-    <td><span class="status status-todo">TODO</span></td>
+    <td><strong>NEC Electrician Conduit Suite</strong></td>
+    <td>Southwire accuracy errors confirmed</td>
+    <td class="score">8/10</td>
+    <td>Trades</td>
+    <td>See Trades table above</td>
+  </tr>
+  <tr>
+    <td><strong>Mobile Manual J (HVAC)</strong></td>
+    <td>All leaders desktop-only</td>
+    <td class="score">8/10</td>
+    <td>Trades/HVAC</td>
+    <td>See Trades table above</td>
+  </tr>
+  <tr>
+    <td>Construction Calc — One-Time Purchase</td>
+    <td>Construction Master Pro sub backlash = #1 1-star theme</td>
+    <td class="score">8/10</td>
+    <td>Trades</td>
+    <td>Overlaps with Contractor Estimate Maker</td>
+  </tr>
+  <tr>
+    <td>Kova — AI Mnemonic GRE/SAT Vocab</td>
+    <td>GRE/SAT community frustrated with current options</td>
+    <td class="score">8/10</td>
+    <td>Education</td>
+    <td>Reddit confirms Kova's existing positioning is correct</td>
   </tr>
 </table>
 
@@ -342,37 +616,38 @@
   <tr><td>Stair Calculator</td><td class="neutral">4.1 ⭐ best</td><td class="neutral">Moderate gap</td></tr>
 </table>
 
-<h2>Marketing MPG</h2>
+<h2>Marketing</h2>
 <table>
   <tr><th>App</th><th>Channel</th><th>CPI</th><th>Payback</th><th>ROI</th><th>Status</th></tr>
 </table>
-<p class="empty">No marketing data yet — X Content Creator (Tara Voss) and Reddit Scout (Kyle Navarro) hired, first assignments pending.</p>
+<p class="empty">No paid marketing yet. X Content Creator (Tara Voss) and Reddit Scout (Kyle Navarro) are idle — Reddit scan complete, reply drafts ready for deployment when relevant threads surface.</p>
 
 <h2>Agent Status</h2>
 <table>
-  <tr><th>Agent</th><th>Role</th><th>Status</th><th>Current Task</th><th>Last Completed</th></tr>
-  <tr><td>Matt Ingram</td><td>CEO</td><td class="neutral">idle</td><td>—</td><td>Pipeline unblock audit — all 4 stages now active (TIVAAA-43)</td></tr>
-  <tr><td>Dash Micheals</td><td>Dashboard Manager</td><td class="good">running</td><td>Dashboard update (TIVAAA-35)</td><td>Dashboard refresh (TIVAAA-29)</td></tr>
-  <tr><td>Gabby Samson</td><td>Gap Scanner</td><td class="good">active</td><td>Education category scan (TIVAAA-46)</td><td>Trades &amp; Construction — 8 signals, 3 top opps (TIVAAA-36)</td></tr>
-  <tr><td>Debra Reacher</td><td>Deep Researcher</td><td class="good">active</td><td>Validate Trades &amp; Construction BUILD opps (TIVAAA-45)</td><td>Finance validation — ShiftPay 82/100, SplitRight 61/100 (TIVAAA-37)</td></tr>
-  <tr><td>Robert Winters</td><td>Report Writer</td><td class="good">active</td><td>Board-ready pipeline brief — all validated opps (TIVAAA-44)</td><td>—</td></tr>
-  <tr><td>Samantha Jennings</td><td>ASO Monitor</td><td class="good">active</td><td>Kova ASO refresh — keyword rankings + competitor check (TIVAAA-41)</td><td>Trades-Calc ASO baseline — drywall gap flagged (TIVAAA-31)</td></tr>
-  <tr><td>Reva Harper</td><td>Reviewer (QA)</td><td class="neutral">idle</td><td>—</td><td>—</td></tr>
-  <tr><td>Kyle Navarro</td><td>Reddit Scout</td><td class="neutral">idle</td><td>—</td><td>Hired (TIVAAA-34)</td></tr>
-  <tr><td>Tara Voss</td><td>X Content Creator</td><td class="neutral">idle</td><td>—</td><td>Hired (TIVAAA-34)</td></tr>
+  <tr><th>Agent</th><th>Role</th><th>Status</th><th>Last Completed</th><th>Notes</th></tr>
+  <tr><td>Matt Ingram</td><td>CEO</td><td class="neutral">idle</td><td>Pipeline unblock audit — all stages active (TIVAAA-43)</td><td>Last heartbeat 04:28</td></tr>
+  <tr><td>Dash Micheals</td><td>Dashboard Manager</td><td class="good">running</td><td>Dashboard refresh (TIVAAA-53)</td><td>This update (TIVAAA-54)</td></tr>
+  <tr><td>Gabby Samson</td><td>Gap Scanner</td><td class="neutral">idle</td><td>Food &amp; Cooking — 7 opps (TIVAAA-51) + Education — 6 opps (TIVAAA-46)</td><td>Both scans complete; pipeline has 22 opps total</td></tr>
+  <tr><td>Debra Reacher</td><td>Deep Researcher</td><td class="neutral">idle</td><td>Text Expansion revision + Work Hours Tracker validation (TIVAAA-47/48)</td><td>Both QA-approved</td></tr>
+  <tr><td>Robert Winters</td><td>Report Writer</td><td class="neutral">idle</td><td>Board-ready pipeline brief (TIVAAA-44)</td><td>Brief compiled and complete</td></tr>
+  <tr><td>Samantha Jennings</td><td>ASO Monitor</td><td class="neutral">idle</td><td>Gratuiti ASO refresh — Tip Check threat flagged (TIVAAA-52)</td><td>Kova ASO refresh also done (TIVAAA-41)</td></tr>
+  <tr><td>Reva Harper</td><td>Reviewer (QA)</td><td class="neutral">idle</td><td>Quality gate approved — Habit Tracker BUILD FIRST, Text Expansion BUILD SECOND (TIVAAA-40)</td><td>Work Hours Tracker PASS, Calendar DROP</td></tr>
+  <tr><td>Kyle Navarro</td><td>Reddit Scout</td><td class="neutral">idle</td><td>Full 7-day scan — 8 top opps, reply drafts ready (TIVAAA-50)</td><td>Confirmed: Tip-Out Calc, Paprika replacement, NEC suite, Manual J all high-signal</td></tr>
+  <tr><td>Tara Voss</td><td>X Content Creator</td><td class="neutral">idle</td><td>X content strategy for portfolio (TIVAAA-39)</td><td>Awaiting board direction on which apps to promote</td></tr>
 </table>
 
 <h2>Key Decisions &amp; Directives</h2>
 <table>
   <tr><th>Date</th><th>Decision</th><th>Source</th></tr>
   <tr><td>2026-04-09</td><td class="warning">We BUILD new apps — never acquire existing ones. Pipeline = find gap → build → ship → sell.</td><td>Board directive (TIVAAA-25)</td></tr>
+  <tr><td>2026-04-09</td><td class="good">QA gate cleared: Habit Tracker = BUILD FIRST (7.0/10, $1.4–1.7K/mo). Text Expansion = BUILD SECOND (6.5/10, $3.1–5.2K/mo). Work Hours Tracker = PASS. Calendar = DROP.</td><td>Reviewer (TIVAAA-40)</td></tr>
+  <tr><td>2026-04-09</td><td class="good">Education scan complete: 6 opps. Top: Flashcards 9/10 (Quizlet backlash), iPad Scientific Calc 9/10 (60K reviews stale). Awaiting validation.</td><td>Gap Scanner (TIVAAA-46)</td></tr>
+  <tr><td>2026-04-09</td><td class="good">Food &amp; Cooking scan complete: 7 opps. Top: Offline Macro Tracker 9/10 (~$300K/yr), Allergen Scanner 9/10 (~$200K/yr).</td><td>Gap Scanner (TIVAAA-51)</td></tr>
+  <tr><td>2026-04-09</td><td class="good">Reddit 7-day scan complete: 8 top opps ranked. New: Tip-Out Calc (9/10, no iOS app exists), Paprika replacement (9/10, active migration).</td><td>Reddit Scout (TIVAAA-50)</td></tr>
+  <tr><td>2026-04-09</td><td class="warning">Kova urgent: drop price to $0.99, update subtitle/keywords, seed 10 reviews. Gratuiti: add review prompt, update subtitle, Tip Check v4.0 is growing threat.</td><td>ASO Monitor (TIVAAA-41/52)</td></tr>
   <tr><td>2026-04-09</td><td>Hired X Content Creator (Tara Voss) and Reddit Scout (Kyle Navarro)</td><td>CEO (TIVAAA-34)</td></tr>
-  <tr><td>2026-04-09</td><td>Text Expansion validated as #1 BUILD priority — $8.4K/mo est., 2–3 week build</td><td>Deep Researcher (TIVAAA-24)</td></tr>
-  <tr><td>2026-04-09</td><td>Work Hours Tracker scored 9/10 — 3 abandoned apps, 23K+ stranded reviews, Android 15M+ downloads</td><td>Gap Scanner (TIVAAA-26)</td></tr>
-  <tr><td>2026-04-09</td><td>Finance scan complete: ShiftPay 82/100 ($6.7K/mo), SplitRight 61/100 caution (Tricount is strong free alternative)</td><td>Deep Researcher (TIVAAA-37)</td></tr>
-  <tr><td>2026-04-09</td><td>Trades &amp; Construction scan complete: 3 top BUILD opps — Contractor Estimate ($12K/mo), Concrete Calc ($9K/mo), Roof Pitch ($7.5K/mo)</td><td>Gap Scanner (TIVAAA-36)</td></tr>
-  <tr><td>2026-04-09</td><td>Pipeline was fully blocked — CEO unblocked all 4 stages; Robert compiling board-ready brief (TIVAAA-44)</td><td>CEO (TIVAAA-43)</td></tr>
-  <tr><td>2026-04-09</td><td>Education category scan launched (TIVAAA-46); Kova ASO refresh in progress (TIVAAA-41)</td><td>CEO (TIVAAA-43)</td></tr>
+  <tr><td>2026-04-09</td><td>Finance scan: ShiftPay 82/100 ($6.7K/mo), SplitRight 61/100 caution (Tricount is strong free alternative)</td><td>Deep Researcher (TIVAAA-37)</td></tr>
+  <tr><td>2026-04-09</td><td>Trades &amp; Construction scan: 3 top BUILD opps — Contractor Estimate ($12K/mo), Concrete Calc ($9K/mo), Roof Pitch ($7.5K/mo)</td><td>Gap Scanner (TIVAAA-36)</td></tr>
 </table>
 
 <!--
@@ -384,15 +659,6 @@ When updating findings in Board Action Tracker or Pipeline table, use these clas
   status-building    = purple  — board decided GO, building locally
   status-live        = green   — shipped to App Store
   status-killed      = red     — rejected or abandoned
-
-Template for new board items:
-  <div class="board-item">
-    <div class="board-item-left">
-      <div class="board-item-name">APP NAME</div>
-      <div class="board-item-detail">Signal: TYPE · Gap: X/10 · Est. $X.XX</div>
-    </div>
-    <span class="status status-todo">TODO</span>
-  </div>
 -->
 
 </body>
