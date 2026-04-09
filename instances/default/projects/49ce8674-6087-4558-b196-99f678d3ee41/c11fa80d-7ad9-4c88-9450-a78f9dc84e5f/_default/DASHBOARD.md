@@ -1,6 +1,6 @@
 # Portfolio Dashboard
 
-> Last updated: 2026-04-09 (validated BUILD priorities updated)
+> Last updated: 2026-04-09 (pipeline refresh, agent utilization updated)
 
 ---
 
@@ -8,7 +8,7 @@
 
 | App | Category | Pricing Model | Status | Monthly Revenue | Downloads |
 |-----|----------|---------------|--------|-----------------|-----------|
-| Kova | Education / Vocabulary | Subscription — $6.99/mo | Live | — | — |
+| Kova | Education / Vocabulary | One-time purchase — $6.99 | Live | — | — |
 | Gratuiti | Utilities / Tip Calculator | One-time purchase | Live | — | — |
 | RecipeScaler | Food & Drink / Recipe Tools | Lifetime purchase | Live | — | — |
 | Trades-Calc | Utilities / Construction | Free + IAP | Launching Soon | — | — |
@@ -26,13 +26,13 @@
 - **Subscribers:** —
 - **Churn rate:** —
 - **App Store rating:** —
-- **ASO baseline:** In progress ([TIVAAA-13](/TIVAAA/issues/TIVAAA-13))
+- **ASO baseline:** Completed ([TIVAAA-13](/TIVAAA/issues/TIVAAA-13))
 
 ### Gratuiti
 - **Total revenue:** —
 - **Total purchases:** —
 - **App Store rating:** —
-- **ASO baseline:** In progress ([TIVAAA-13](/TIVAAA/issues/TIVAAA-13))
+- **ASO baseline:** Completed ([TIVAAA-13](/TIVAAA/issues/TIVAAA-13))
 
 ### RecipeScaler
 - **Total revenue:** —
@@ -95,11 +95,13 @@
 | ✅ Done | [TIVAAA-14](/TIVAAA/issues/TIVAAA-14) | Subscription backlash scan | Gabby Samson | Completed — 6 findings incl. Texpand |
 | ✅ Done | [TIVAAA-22](/TIVAAA/issues/TIVAAA-22) | Validate Texpand finding | CEO (Matt Ingram) | Validated — 8.5/10 build priority |
 | ✅ Done | [TIVAAA-28](/TIVAAA/issues/TIVAAA-28) | Validate top BUILD opportunities from backlash scan | Debra Reacher | Rankings finalized — see [Validation Brief](/TIVAAA/issues/TIVAAA-28#document-validation-brief) |
-| 🔄 Running | [TIVAAA-18](/TIVAAA/issues/TIVAAA-18) | Validate top 5 acquisition candidates | Debra Reacher | Revenue math, acquisition scores |
-| 🔄 Running | [TIVAAA-13](/TIVAAA/issues/TIVAAA-13) | ASO baseline for Kova & Gratuiti | Samantha Jennings | Keyword rankings + metadata copy |
-| 🔄 Running | [TIVAAA-17](/TIVAAA/issues/TIVAAA-17) | Abandoned cash cows (Education + Health) | CEO (Matt Ingram) | Delegating to Gabby |
-| 📋 Queued | [TIVAAA-19](/TIVAAA/issues/TIVAAA-19) | Scan abandoned cash cows — Education & Health | Gabby Samson | Waiting for slot |
-| 📋 Queued | [TIVAAA-12](/TIVAAA/issues/TIVAAA-12) | Hunt subscription backlash | CEO (Matt Ingram) | Texpand/TextExpander pattern |
+| ✅ Done | [TIVAAA-18](/TIVAAA/issues/TIVAAA-18) | Validate top 5 acquisition candidates | Debra Reacher | Completed |
+| ✅ Done | [TIVAAA-13](/TIVAAA/issues/TIVAAA-13) | ASO baseline for Kova & Gratuiti | Samantha Jennings | Completed |
+| ✅ Done | [TIVAAA-17](/TIVAAA/issues/TIVAAA-17) | Abandoned cash cows (Education + Health) | CEO (Matt Ingram) | Completed |
+| ✅ Done | [TIVAAA-19](/TIVAAA/issues/TIVAAA-19) | Scan abandoned cash cows — Education & Health | Gabby Samson | Completed |
+| ✅ Done | [TIVAAA-12](/TIVAAA/issues/TIVAAA-12) | Hunt subscription backlash | CEO (Matt Ingram) | Completed |
+| 🔄 Running | [TIVAAA-30](/TIVAAA/issues/TIVAAA-30) | Finance category gap scan | Gabby Samson | In progress |
+| 🔄 Running | [TIVAAA-31](/TIVAAA/issues/TIVAAA-31) | Trades-Calc ASO baseline | Samantha Jennings | In progress |
 
 ---
 
@@ -107,13 +109,13 @@
 
 | Agent | Role | Status | Current Task |
 |-------|------|--------|--------------|
-| Debra Reacher | Deep Researcher | 🟢 Running | [TIVAAA-18](/TIVAAA/issues/TIVAAA-18) — Top 5 candidate validation |
-| Gabby Samson | Gap Scanner | 🟢 Running | [TIVAAA-14](/TIVAAA/issues/TIVAAA-14) — Subscription backlash scan |
-| Samantha Jennings | ASO Monitor | 🟢 Running | [TIVAAA-13](/TIVAAA/issues/TIVAAA-13) — Kova & Gratuiti ASO baseline |
+| Debra Reacher | Deep Researcher | ⚪ Idle | Awaiting outputs |
+| Gabby Samson | Gap Scanner | 🟢 Running | [TIVAAA-30](/TIVAAA/issues/TIVAAA-30) — Finance category gap scan |
+| Samantha Jennings | ASO Monitor | 🟢 Running | [TIVAAA-31](/TIVAAA/issues/TIVAAA-31) — Trades-Calc ASO baseline |
 | Reva Harper | QA Reviewer | ⚪ Idle | Awaiting research outputs |
 | Robert Winters | Report Writer | ⚪ Idle | Awaiting research outputs |
 
-**3 of 3 research agents active.**
+**2 of 3 research agents active.**
 
 ---
 
@@ -136,6 +138,6 @@
 - **Text Expansion** ($14.99 one-time IAP): TextExpander exodus multi-year documented. Best iOS competitor (Snippety) has only 63 reviews. Solo SwiftUI dev, 2-3 weeks with KeyboardKit. Est. $8.4K/mo.
 - **Habit Tracker** ($4.99 one-time IAP): Streaks proves model. Full-featured + one-time niche open. Risk: crowded category — ASO must target "no subscription" keywords. Est. $3–4.5K/mo.
 - **Calendar opportunity dropped** — BusyCal fills gap at $9.99, 4.7★, 4.3K reviews.
-- Acquisition candidate validation ([TIVAAA-18](/TIVAAA/issues/TIVAAA-18)) still running — revenue math and offer ranges pending.
-- ASO baselines for Kova and Gratuiti will unlock metadata optimization and keyword strategy.
+- Acquisition candidate validation ([TIVAAA-18](/TIVAAA/issues/TIVAAA-18)) complete — revenue math and acquisition scores delivered.
+- ASO baselines for Kova and Gratuiti completed ([TIVAAA-13](/TIVAAA/issues/TIVAAA-13)) — metadata optimization and keyword strategy now actionable.
 - Metrics for live apps (Kova, Gratuiti, RecipeScaler) will populate once App Store Connect data is available.
