@@ -1,6 +1,6 @@
 # Portfolio Dashboard
 
-> Last updated: 2026-04-09 (Kova SAT QA approved ✅, 3 validations running, H&F scan restarted on TIVAAA-87)
+> Last updated: 2026-04-09 (Gratuiti tip pool 16/30 parked · RecipeScaler Yummly 10/30 failed · Trades-Calc HVAC 17/30 shelved · H&F scan done — 2 new opps queued for validation · Kova SAT 24/30 QA approved — board decision pending)
 
 ---
 
@@ -59,7 +59,7 @@
 | Overpriced | 4 |
 | **Total** | **75** |
 
-**Scans completed:** Finance ([TIVAAA-30](/TIVAAA/issues/TIVAAA-30)) · Trades & Construction ([TIVAAA-36](/TIVAAA/issues/TIVAAA-36)) · Education ([TIVAAA-46](/TIVAAA/issues/TIVAAA-46)) · Food & Cooking ([TIVAAA-51](/TIVAAA/issues/TIVAAA-51)) · Health & Fitness in progress ([TIVAAA-87](/TIVAAA/issues/TIVAAA-87))
+**Scans completed:** Finance ([TIVAAA-30](/TIVAAA/issues/TIVAAA-30)) · Trades & Construction ([TIVAAA-36](/TIVAAA/issues/TIVAAA-36)) · Education ([TIVAAA-46](/TIVAAA/issues/TIVAAA-46)) · Food & Cooking ([TIVAAA-51](/TIVAAA/issues/TIVAAA-51)) · Health & Fitness ✅ ([TIVAAA-87](/TIVAAA/issues/TIVAAA-87)) — 2 new opps found, validation queued
 
 ---
 
@@ -80,6 +80,17 @@
 
 **Sleep Tracker downgrade:** Gap narrower than reported — Sleep Cycle and SleepWatch both work iPhone-only. Hold post-launch.
 
+### Health & Fitness — New Opportunities (TIVAAA-87)
+
+> H&F scan complete — 2 high-signal gaps identified, validation queued
+
+| Priority | Opportunity | Scan Score | Est. Monthly Revenue | Build Effort | Status |
+|----------|------------|------------|---------------------|-------------|--------|
+| — | **Offline Macro/Calorie Tracker** | **9.5/10** | TBD | TBD | 🔄 Validation queued ([TIVAAA-89](/TIVAAA/issues/TIVAAA-89)) |
+| — | **Privacy-First Cycle Tracker** | **8.5/10** | TBD | TBD | 🔄 Validation queued ([TIVAAA-90](/TIVAAA/issues/TIVAAA-90)) |
+
+Both are privacy/offline angle plays — strong signal given MyFitnessPal and Flo subscription backlash.
+
 ---
 
 ## Feature Track — Existing App Enhancements
@@ -92,9 +103,9 @@
 | RecipeScaler | ReciMe paywall refugee destination | [TIVAAA-67](/TIVAAA/issues/TIVAAA-67) | 11/30 | ❌ Killed — gap filled by Recipe Notes (free) |
 | Gratuiti | Qualified tip split (No Tax on Tips) | [TIVAAA-66](/TIVAAA/issues/TIVAAA-66) | 14/30 | ❌ Killed — niche too narrow |
 | Kova | SAT in-context vocabulary training (post-2024) | [TIVAAA-68](/TIVAAA/issues/TIVAAA-68) | **24/30** | ✅ **QA APPROVED** — ~$20K/mo MRR, <7d payback — QA done ([TIVAAA-86](/TIVAAA/issues/TIVAAA-86)) — **board decision needed** |
-| RecipeScaler | Yummly replacement positioning | [TIVAAA-80](/TIVAAA/issues/TIVAAA-80) | — | 🔄 Validation running (Debra Reacher) |
-| Gratuiti | Tip pool verification feature | [TIVAAA-79](/TIVAAA/issues/TIVAAA-79) | — | 🔄 Validation running (Debra Reacher) |
-| Trades-Calc | Lean HVAC offline PT/superheat calc pack | [TIVAAA-81](/TIVAAA/issues/TIVAAA-81) | — | 🔄 Validation running (Debra Reacher) |
+| RecipeScaler | Yummly replacement positioning | [TIVAAA-80](/TIVAAA/issues/TIVAAA-80) | **10/30** | ❌ FAILED — gap already filled (PASS) |
+| Gratuiti | Tip pool verification feature | [TIVAAA-79](/TIVAAA/issues/TIVAAA-79) | **16/30** | ⚠️ PARKED — revenue model blocker (MAYBE) |
+| Trades-Calc | Lean HVAC offline PT/superheat calc pack | [TIVAAA-81](/TIVAAA/issues/TIVAAA-81) | **17/30** | ⚠️ SHELVED — ColdSnap competitor (MAYBE) |
 
 ---
 
@@ -122,9 +133,9 @@
 | ❌ Cancelled | [TIVAAA-70](/TIVAAA/issues/TIVAAA-70) | Validate: RecipeScaler Yummly replacement | — | Duplicate — replaced by [TIVAAA-80](/TIVAAA/issues/TIVAAA-80) |
 | ❌ Cancelled | [TIVAAA-71](/TIVAAA/issues/TIVAAA-71) | Validate: Gratuiti tip pool verification | — | Duplicate — replaced by [TIVAAA-79](/TIVAAA/issues/TIVAAA-79) |
 | ❌ Cancelled | [TIVAAA-72](/TIVAAA/issues/TIVAAA-72) | Validate: Trades-Calc HVAC offline calc | — | Duplicate — replaced by [TIVAAA-81](/TIVAAA/issues/TIVAAA-81) |
-| 🔄 Running | [TIVAAA-79](/TIVAAA/issues/TIVAAA-79) | Validate: Gratuiti tip pool verification | Debra Reacher | Active |
-| 🔄 Running | [TIVAAA-80](/TIVAAA/issues/TIVAAA-80) | Validate: RecipeScaler Yummly replacement | Debra Reacher | Active |
-| 🔄 Running | [TIVAAA-81](/TIVAAA/issues/TIVAAA-81) | Validate: Trades-Calc HVAC offline calc | Debra Reacher | Active |
+| ✅ Done | [TIVAAA-79](/TIVAAA/issues/TIVAAA-79) | Validate: Gratuiti tip pool verification | Debra Reacher | 16/30 — parked (revenue model blocker) |
+| ✅ Done | [TIVAAA-80](/TIVAAA/issues/TIVAAA-80) | Validate: RecipeScaler Yummly replacement | Debra Reacher | 10/30 — failed (gap already filled) |
+| ✅ Done | [TIVAAA-81](/TIVAAA/issues/TIVAAA-81) | Validate: Trades-Calc HVAC offline calc | Debra Reacher | 17/30 — shelved (ColdSnap competitor) |
 | ✅ Done | [TIVAAA-18](/TIVAAA/issues/TIVAAA-18) | Validate top acquisition candidates | Debra Reacher | Completed |
 | ✅ Done | [TIVAAA-13](/TIVAAA/issues/TIVAAA-13) | ASO baseline: Kova & Gratuiti | Samantha Jennings | Completed |
 | ✅ Done | [TIVAAA-31](/TIVAAA/issues/TIVAAA-31) | ASO baseline: Trades-Calc | Samantha Jennings | Completed |
@@ -135,7 +146,9 @@
 | ✅ Done | [TIVAAA-62](/TIVAAA/issues/TIVAAA-62) | Trades-Calc NEC 2026 positioning | CEO (Matt Ingram) | Done |
 | ✅ Done | [TIVAAA-50](/TIVAAA/issues/TIVAAA-50) | Reddit scout — full 7-day scan | Kyle Navarro | Completed |
 | ⚠️ Stalled | [TIVAAA-73](/TIVAAA/issues/TIVAAA-73) | Gap scan: Health & Fitness (original run) | Gabby Samson | Error state — superseded by TIVAAA-87 |
-| 🔄 Running | [TIVAAA-87](/TIVAAA/issues/TIVAAA-87) | Gap scan: Health & Fitness (restarted) | Gabby Samson | Active — new run |
+| ✅ Done | [TIVAAA-87](/TIVAAA/issues/TIVAAA-87) | Gap scan: Health & Fitness (restarted) | Gabby Samson | Complete — 2 new opps found (9.5/10 + 8.5/10) |
+| 🔄 Queued | [TIVAAA-89](/TIVAAA/issues/TIVAAA-89) | Validate: Offline Macro/Calorie Tracker | Debra Reacher | Queued — 9.5/10 H&F scan finding |
+| 🔄 Queued | [TIVAAA-90](/TIVAAA/issues/TIVAAA-90) | Validate: Privacy-First Cycle Tracker | Debra Reacher | Queued — 8.5/10 H&F scan finding |
 
 ---
 
@@ -143,15 +156,15 @@
 
 | Agent | Role | Status | Current Task |
 |-------|------|--------|--------------|
-| Debra Reacher | Deep Researcher | 🟢 Running | 3 validations active: [TIVAAA-79](/TIVAAA/issues/TIVAAA-79) (Gratuiti tip pool), [TIVAAA-80](/TIVAAA/issues/TIVAAA-80) (RecipeScaler Yummly), [TIVAAA-81](/TIVAAA/issues/TIVAAA-81) (Trades-Calc HVAC) |
-| Gabby Samson | Gap Scanner | 🟢 Running | [TIVAAA-87](/TIVAAA/issues/TIVAAA-87) — Health & Fitness gap scan (restarted) |
+| Debra Reacher | Deep Researcher | 🟡 Between tasks | 3 validations done (TIVAAA-79/80/81) — 2 new validations queued ([TIVAAA-89](/TIVAAA/issues/TIVAAA-89), [TIVAAA-90](/TIVAAA/issues/TIVAAA-90)) |
+| Gabby Samson | Gap Scanner | ✅ H&F done | [TIVAAA-87](/TIVAAA/issues/TIVAAA-87) — Health & Fitness scan complete (2 opps found) |
 | Samantha Jennings | ASO Monitor | 🟢 Running | [TIVAAA-85](/TIVAAA/issues/TIVAAA-85) — RecipeScaler ASO refresh |
 | Kyle Navarro | Reddit Scout | 🟢 Running | [TIVAAA-74](/TIVAAA/issues/TIVAAA-74) — Weekly portfolio + pipeline scan |
-| Reva Harper | Reviewer | ⚪ Idle | [TIVAAA-86](/TIVAAA/issues/TIVAAA-86) — Kova SAT QA ✅ Complete |
+| Reva Harper | Reviewer | ⚪ Idle | [TIVAAA-86](/TIVAAA/issues/TIVAAA-86) — Kova SAT QA ✅ Complete — awaiting next review task |
 | Tara Voss | X Content Creator | ⚪ Idle | Awaiting direction |
-| Dash Micheals | Dashboard Manager | 🟢 Running | [TIVAAA-88](/TIVAAA/issues/TIVAAA-88) — Dashboard update |
+| Dash Micheals | Dashboard Manager | 🟢 Running | [TIVAAA-92](/TIVAAA/issues/TIVAAA-92) — Dashboard update |
 
-**5 of 7 agents active. Gap Scanner recovered — new run active on [TIVAAA-87](/TIVAAA/issues/TIVAAA-87).**
+**4 of 7 agents active. H&F scan complete — 2 new validations queued. Kova SAT 24/30 QA approved — board decision is the only remaining gate.**
 
 ---
 
@@ -170,10 +183,13 @@
 ## Notes
 
 - **🚨 Two critical build decisions ready for board:** Text Expansion (25.5/30) and Kova SAT feature (24/30, QA approved). Both unblocked — board approval is the only remaining gate.
-- **Kova SAT feature QA complete** ([TIVAAA-86](/TIVAAA/issues/TIVAAA-86)) — ~$20K/mo MRR, <7 day payback. Reddit + TikTok channels confirmed. No remaining blockers.
-- **Feature track:** 3 new validations running ([TIVAAA-79](/TIVAAA/issues/TIVAAA-79), [TIVAAA-80](/TIVAAA/issues/TIVAAA-80), [TIVAAA-81](/TIVAAA/issues/TIVAAA-81)) — Debra Reacher handling all three.
+- **Kova SAT feature QA complete** ([TIVAAA-86](/TIVAAA/issues/TIVAAA-86)) — ~$20K/mo MRR, <7 day payback. Reddit + TikTok channels confirmed. No remaining blockers. **This is top pipeline item — board decision needed.**
+- **Feature track results (3 validations done):**
+  - Gratuiti tip pool ([TIVAAA-79](/TIVAAA/issues/TIVAAA-79)): **16/30 MAYBE — parked** (revenue model blocker)
+  - RecipeScaler Yummly ([TIVAAA-80](/TIVAAA/issues/TIVAAA-80)): **10/30 PASS — failed** (gap already filled)
+  - Trades-Calc HVAC ([TIVAAA-81](/TIVAAA/issues/TIVAAA-81)): **17/30 MAYBE — shelved** (ColdSnap competitor)
+- **Health & Fitness scan complete** ([TIVAAA-87](/TIVAAA/issues/TIVAAA-87)) — 2 new high-signal opps: Offline Macro/Calorie Tracker (9.5/10) and Privacy-First Cycle Tracker (8.5/10). Validation queued ([TIVAAA-89](/TIVAAA/issues/TIVAAA-89), [TIVAAA-90](/TIVAAA/issues/TIVAAA-90)).
 - **Trades-Calc NEC 2026 positioning complete** — [TIVAAA-62](/TIVAAA/issues/TIVAAA-62) & [TIVAAA-69](/TIVAAA/issues/TIVAAA-69). Kova ASO analysis also done ([TIVAAA-78](/TIVAAA/issues/TIVAAA-78)). App ready for launch push.
-- **Gap scanner recovered** — Health & Fitness scan restarted on [TIVAAA-87](/TIVAAA/issues/TIVAAA-87), Gabby Samson running.
 - **Text Expansion** ($14.99 one-time IAP): TextExpander exodus multi-year documented. Best iOS competitor (Snippety) has only 63 reviews.
 - **Habit Tracker** ($4.99 one-time IAP): Streaks proves model. Risk: crowded — ASO must target "no subscription" keywords.
 - Board directive: build only, no acquisitions.
