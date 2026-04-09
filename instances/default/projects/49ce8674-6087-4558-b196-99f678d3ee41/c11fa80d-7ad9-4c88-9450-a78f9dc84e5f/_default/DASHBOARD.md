@@ -1,6 +1,6 @@
 # Portfolio Dashboard
 
-> Last updated: 2026-04-09 (pipeline refresh, agent utilization updated)
+> Last updated: 2026-04-09 (Concrete Calculator Pro removed; all scores normalized to /30 scale)
 
 ---
 
@@ -66,7 +66,6 @@
 | Groovy Grader | 48,462 | 4.9★ | 2019-03-25 | Abandoned cash cow |
 | QR Code & Barcode Scanner | 90,737 | 4.6★ | 2023-02-13 | Abandoned cash cow |
 | Calculator for iPad! | 60,745 | 4.7★ | 2020-12-09 | Abandoned cash cow |
-| Concrete Calculator Plus | 23,616 | 4.8★ | 2024-03-15 | Abandoned, trades niche |
 
 ### Top Build Opportunities — Validated Rankings
 
@@ -74,9 +73,9 @@
 
 | Priority | Opportunity | Score | Est. Monthly Revenue | Build Effort | Status |
 |----------|------------|-------|---------------------|-------------|--------|
-| **1** | **Text Expansion** (Texpand clone) | **8.5/10** | $8,400/mo | S (2-3 weeks) | **BUILD FIRST** |
-| **2** | **Habit Tracker** (one-time purchase) | **7.0/10** | $3,000–$4,500/mo | S-M (3-4 weeks) | **BUILD SECOND** |
-| 3 | Sleep Tracker (iPhone-only) | 5.5/10 | $4,000–$5,400/mo | M (4-6 weeks) | HOLD |
+| **1** | **Text Expansion** (Texpand clone) | **25.5/30** | $8,400/mo | S (2-3 weeks) | **BUILD FIRST** |
+| **2** | **Habit Tracker** (one-time purchase) | **21.0/30** | $3,000–$4,500/mo | S-M (3-4 weeks) | **BUILD SECOND** |
+| 3 | Sleep Tracker (iPhone-only) | 16.5/30 | $4,000–$5,400/mo | M (4-6 weeks) | HOLD |
 | — | Calendar (Fantastical backlash) | N/A | — | L | DROPPED — BusyCal fills gap |
 
 **Key finding:** Text Expansion has the strongest validated gap — best competitor (Snippety) has only 63 reviews. TextExpander exodus ongoing since subscription switch. Recommended pricing: $14.99 one-time IAP.
@@ -93,7 +92,7 @@
 |--------|-------|------|-------|-------|
 | ✅ Done | [TIVAAA-11](/TIVAAA/issues/TIVAAA-11) | Smart scan — all categories | Gabby Samson | 75 opportunities found |
 | ✅ Done | [TIVAAA-14](/TIVAAA/issues/TIVAAA-14) | Subscription backlash scan | Gabby Samson | Completed — 6 findings incl. Texpand |
-| ✅ Done | [TIVAAA-22](/TIVAAA/issues/TIVAAA-22) | Validate Texpand finding | CEO (Matt Ingram) | Validated — 8.5/10 build priority |
+| ✅ Done | [TIVAAA-22](/TIVAAA/issues/TIVAAA-22) | Validate Texpand finding | CEO (Matt Ingram) | Validated — 25.5/30 build priority |
 | ✅ Done | [TIVAAA-28](/TIVAAA/issues/TIVAAA-28) | Validate top BUILD opportunities from backlash scan | Debra Reacher | Rankings finalized — see [Validation Brief](/TIVAAA/issues/TIVAAA-28#document-validation-brief) |
 | ✅ Done | [TIVAAA-18](/TIVAAA/issues/TIVAAA-18) | Validate top 5 acquisition candidates | Debra Reacher | Completed |
 | ✅ Done | [TIVAAA-13](/TIVAAA/issues/TIVAAA-13) | ASO baseline for Kova & Gratuiti | Samantha Jennings | Completed |
@@ -123,11 +122,11 @@
 
 | # | Decision | Context | Urgency | Owner |
 |---|----------|---------|---------|-------|
-| 1 | **Approve build: Text Expansion app** | 8.5/10 validated score. $8.4K/mo est. revenue. 2-3 week build. Strongest gap in iOS. [TIVAAA-28](/TIVAAA/issues/TIVAAA-28#document-validation-brief) | **Critical** | Board — ready now |
-| 2 | **Approve build: Habit Tracker** | 7.0/10 validated score. $3–4.5K/mo est. Streaks proves model. After Text Expansion ships. [TIVAAA-28](/TIVAAA/issues/TIVAAA-28#document-validation-brief) | High | Board — queue after #1 |
+| 1 | **Approve build: Text Expansion app** | 25.5/30 validated score. $8.4K/mo est. revenue. 2-3 week build. Strongest gap in iOS. [TIVAAA-28](/TIVAAA/issues/TIVAAA-28#document-validation-brief) | **Critical** | Board — ready now |
+| 2 | **Approve build: Habit Tracker** | 21.0/30 validated score. $3–4.5K/mo est. Streaks proves model. After Text Expansion ships. [TIVAAA-28](/TIVAAA/issues/TIVAAA-28#document-validation-brief) | High | Board — queue after #1 |
 | 3 | Acquisition offers — top 3 candidates | Pending validation results from [TIVAAA-18](/TIVAAA/issues/TIVAAA-18) | High | Board — after Debra's report |
 | 4 | ASO metadata updates for Kova & Gratuiti | Pending Samantha's baseline ([TIVAAA-13](/TIVAAA/issues/TIVAAA-13)) | Medium | Board — after ASO report |
-| 5 | Sleep Tracker — revisit after #1 and #2 ship | Gap narrower than reported (5.5/10). Hold for now. Revisit once Text Expansion + Habit Tracker are live | Low | Board — post-launch |
+| 5 | Sleep Tracker — revisit after #1 and #2 ship | Gap narrower than reported (16.5/30). Hold for now. Revisit once Text Expansion + Habit Tracker are live | Low | Board — post-launch |
 
 ---
 
