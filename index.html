@@ -58,28 +58,42 @@ const PORTFOLIO = [
 ];
 
 // ── API Layer ──
-// Session token stored in localStorage after first successful auth
-function getSessionToken(){return localStorage.getItem('paperclip_session')}
-function setSessionToken(t){localStorage.setItem('paperclip_session',t)}
+let _loggedIn = false;
+let _loginPromise = null;
+
+async function doLogin(){
+  if(_loginPromise) return _loginPromise;
+  _loginPromise = (async()=>{
+    const email = prompt('Paperclip email:');
+    if(!email){_loginPromise=null;return false}
+    const password = prompt('Paperclip password:');
+    if(!password){_loginPromise=null;return false}
+    try{
+      const res = await fetch('/api/auth/sign-in/email',{
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        credentials:'include',
+        body:JSON.stringify({email,password})
+      });
+      _loginPromise=null;
+      if(res.ok){_loggedIn=true;return true}
+      alert('Login failed — check email/password');
+      return false;
+    }catch(e){_loginPromise=null;alert('Login error: '+e.message);return false}
+  })();
+  return _loginPromise;
+}
 
 async function api(path, opts={}){
-  const url = `${API_BASE}/api/companies/${COMPANY_ID}${path}`;
-  const headers = {'Content-Type':'application/json',...(opts.headers||{})};
-  // When cross-origin, use cookie header; same-origin uses credentials
-  const fetchOpts = API_BASE ? {
+  const url = `/api/companies/${COMPANY_ID}${path}`;
+  const res = await fetch(url, {
     ...opts,
-    headers,
+    headers:{'Content-Type':'application/json',...(opts.headers||{})},
     credentials:'include',
-  } : {
-    ...opts,
-    headers,
-    credentials:'include',
-  };
-  const res = await fetch(url, fetchOpts);
+  });
   if(res.status===401||res.status===403){
-    // Auth failed — prompt for login
     const ok = await doLogin();
-    if(ok) return api(path, opts); // retry
+    if(ok) return api(path, opts);
     throw new Error('Authentication required');
   }
   if(!res.ok) throw new Error(`${res.status} ${res.statusText}`);
@@ -87,27 +101,6 @@ async function api(path, opts={}){
 }
 async function apiMutate(path, body){
   return api(path, {method:'POST',body:JSON.stringify(body)});
-}
-async function doLogin(){
-  const email = prompt('Paperclip email:');
-  if(!email) return false;
-  const password = prompt('Paperclip password:');
-  if(!password) return false;
-  try{
-    const res = await fetch(`${API_BASE}/api/auth/sign-in/email`,{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      credentials:'include',
-      body:JSON.stringify({email,password})
-    });
-    if(res.ok){
-      const data = await res.json();
-      if(data.token) setSessionToken(data.token);
-      return true;
-    }
-    alert('Login failed');
-    return false;
-  }catch(e){alert('Login error: '+e.message);return false}
 }
 
 // ── Helpers ──
