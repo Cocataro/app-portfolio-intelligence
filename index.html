@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tiven Labs — Portfolio Dashboard</title>
+<meta http-equiv="refresh" content="300">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro', system-ui, sans-serif; background: #0a0a0a; color: #e0e0e0; padding: 24px; max-width: 1200px; margin: 0 auto; }
+  h1 { font-size: 22px; font-weight: 600; margin-bottom: 4px; color: #fff; }
+  .updated { font-size: 13px; color: #666; margin-bottom: 24px; }
+  h2 { font-size: 16px; font-weight: 600; color: #fff; margin: 24px 0 12px; padding-bottom: 8px; border-bottom: 1px solid #222; }
+  h3 { font-size: 14px; font-weight: 500; color: #999; margin: 16px 0 8px; }
+  table { width: 100%; border-collapse: collapse; margin-bottom: 16px; font-size: 13px; }
+  th { text-align: left; padding: 8px 12px; background: #141414; color: #888; font-weight: 500; text-transform: uppercase; font-size: 11px; letter-spacing: 0.5px; }
+  td { padding: 8px 12px; border-bottom: 1px solid #1a1a1a; }
+  tr:hover td { background: #111; }
+  .good { color: #4ade80; }
+  .warning { color: #fbbf24; }
+  .bad { color: #f87171; }
+  .neutral { color: #888; }
+  .score { font-weight: 600; font-size: 15px; }
+  .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 12px; margin-bottom: 24px; }
+  .card { background: #141414; border: 1px solid #222; border-radius: 8px; padding: 16px; }
+  .card-label { font-size: 11px; color: #666; text-transform: uppercase; letter-spacing: 0.5px; }
+  .card-value { font-size: 24px; font-weight: 600; margin-top: 4px; }
+  .card-sub { font-size: 12px; color: #666; margin-top: 4px; }
+  .decision { background: #1a1a0a; border: 1px solid #333300; border-radius: 8px; padding: 12px 16px; margin-bottom: 8px; }
+  .decision-title { font-weight: 500; color: #fbbf24; }
+  .decision-action { font-size: 12px; color: #888; margin-top: 4px; }
+  .tag { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 500; }
+  .tag-go { background: #052e16; color: #4ade80; }
+  .tag-maybe { background: #1a1a0a; color: #fbbf24; }
+  .tag-pass { background: #1c0a0a; color: #f87171; }
+  .tag-active { background: #0a1a2e; color: #60a5fa; }
+  .empty { color: #444; font-style: italic; font-size: 13px; padding: 16px 0; }
+</style>
+</head>
+<body>
+
+<h1>Tiven Labs — Portfolio Dashboard</h1>
+<div class="updated">Last updated: April 8, 2026 — initial deploy</div>
+
+<h2>Decision Queue</h2>
+<div class="decision">
+  <div class="decision-title">Texpand / Text Expansion App — Build or skip?</div>
+  <div class="decision-action">Exit score 8.0/10. Awaiting Deep Researcher validation. Signal: SUBSCRIPTION_BACKLASH (TextExpander refugees)</div>
+</div>
+<p class="empty">Awaiting more validated findings</p>
+
+<h2>Portfolio Health</h2>
+<div class="card-grid">
+  <div class="card">
+    <div class="card-label">Kova</div>
+    <div class="card-value">$—</div>
+    <div class="card-sub">MRR est. · Vocabulary flashcards · $6.99</div>
+  </div>
+  <div class="card">
+    <div class="card-label">Gratuiti</div>
+    <div class="card-value">$—</div>
+    <div class="card-sub">MRR est. · Tip calculator · one-time</div>
+  </div>
+  <div class="card">
+    <div class="card-label">RecipeScaler</div>
+    <div class="card-value">$—</div>
+    <div class="card-sub">MRR est. · Recipe scaling + OCR · lifetime</div>
+  </div>
+  <div class="card">
+    <div class="card-label">Trades-Calc</div>
+    <div class="card-value">$—</div>
+    <div class="card-sub">MRR est. · Construction calcs · free + IAP</div>
+  </div>
+  <div class="card">
+    <div class="card-label">GrainSizer</div>
+    <div class="card-value">—</div>
+    <div class="card-sub">Early development · not shipped</div>
+  </div>
+</div>
+
+<h2>Shipped Apps</h2>
+<table>
+  <tr><th>App</th><th>MRR</th><th>Trend</th><th>Payback</th><th>Organic %</th><th>Acq. Score</th><th>Top Issue</th></tr>
+  <tr><td>Kova</td><td>—</td><td class="neutral">—</td><td>—</td><td>—</td><td>—</td><td class="neutral">ASO report queued</td></tr>
+  <tr><td>Gratuiti</td><td>—</td><td class="neutral">—</td><td>—</td><td>—</td><td>—</td><td class="neutral">ASO report queued</td></tr>
+  <tr><td>RecipeScaler</td><td>—</td><td class="neutral">—</td><td>—</td><td>—</td><td>—</td><td class="neutral">No data yet</td></tr>
+  <tr><td>Trades-Calc</td><td>—</td><td class="neutral">—</td><td>—</td><td>—</td><td>—</td><td class="neutral">Launching soon</td></tr>
+</table>
+
+<h2>App Gap Pipeline</h2>
+<table>
+  <tr><th>Finding</th><th>Signal</th><th>Category</th><th>Gap</th><th>Acq. Score</th><th>Verdict</th><th>Status</th></tr>
+  <tr>
+    <td>Text Expansion App</td>
+    <td>SUBSCRIPTION_BACKLASH</td>
+    <td>Productivity</td>
+    <td>8/10</td>
+    <td>—/30</td>
+    <td><span class="tag tag-maybe">MAYBE</span></td>
+    <td>Awaiting deep research</td>
+  </tr>
+</table>
+
+<h3>Top 3 Opportunities</h3>
+<p class="empty">Awaiting first approved findings</p>
+
+<h2>Marketing MPG</h2>
+<table>
+  <tr><th>App</th><th>Channel</th><th>CPI</th><th>Payback</th><th>ROI</th><th>Status</th></tr>
+</table>
+<p class="empty">No marketing data yet</p>
+
+<h2>Agent Status</h2>
+<table>
+  <tr><th>Agent</th><th>Role</th><th>Status</th><th>Current Task</th><th>Last Completed</th></tr>
+  <tr><td>Dash Micheals</td><td>Gap Scanner</td><td class="good">active</td><td>Category scans</td><td>Utilities scan (timed out — requeued)</td></tr>
+  <tr><td>Debra Reacher</td><td>Deep Researcher</td><td class="neutral">idle</td><td>—</td><td>—</td></tr>
+  <tr><td>Gabby Samson</td><td>ASO Monitor</td><td class="good">active</td><td>ASO reports</td><td>—</td></tr>
+  <tr><td>Reva Harper</td><td>Report Writer</td><td class="neutral">idle</td><td>—</td><td>—</td></tr>
+  <tr><td>Robert Winters</td><td>Reviewer</td><td class="neutral">idle</td><td>—</td><td>—</td></tr>
+  <tr><td>Samantha Jennings</td><td>Dashboard Manager</td><td class="good">active</td><td>—</td><td>Created DASHBOARD.md</td></tr>
+</table>
+
+</body>
+</html>
