@@ -36,7 +36,9 @@ button:active{transform:scale(0.97)}
 const {useState,useEffect,useMemo,useCallback,useRef} = React;
 
 // ── Config ──
-const API_BASE = '';
+// Auto-detect: if served from Paperclip domain, use same origin. Otherwise use full URL.
+const PAPERCLIP_HOST = 'https://paperclip-1gza.srv1377312.hstgr.cloud';
+const API_BASE = location.hostname.includes('srv1377312') ? '' : PAPERCLIP_HOST;
 const COMPANY_ID = '49ce8674-6087-4558-b196-99f678d3ee41';
 const AGENTS = {
   '5425b0a6-051d-4cc5-a86b-e47021a983a9': {name:'Matt Ingram',role:'CEO',short:'CEO'},
