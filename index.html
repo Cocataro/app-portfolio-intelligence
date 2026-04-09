@@ -1,692 +1,602 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
+<html lang="en"><head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Tiven Labs — Portfolio Dashboard</title>
-<meta http-equiv="refresh" content="300">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#09090b">
+<title>Tiven Labs</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<script>tailwind.config={theme:{extend:{colors:{bg:'#09090b',surface:'#18181b',border:'#27272a',muted:'#71717a'}}}}</script>
 <style>
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro', system-ui, sans-serif; background: #0a0a0a; color: #e0e0e0; padding: 24px; max-width: 1200px; margin: 0 auto; }
-  h1 { font-size: 22px; font-weight: 600; margin-bottom: 4px; color: #fff; }
-  .updated { font-size: 13px; color: #666; margin-bottom: 24px; }
-  h2 { font-size: 16px; font-weight: 600; color: #fff; margin: 24px 0 12px; padding-bottom: 8px; border-bottom: 1px solid #222; }
-  h3 { font-size: 14px; font-weight: 500; color: #999; margin: 16px 0 8px; }
-  table { width: 100%; border-collapse: collapse; margin-bottom: 16px; font-size: 13px; }
-  th { text-align: left; padding: 8px 12px; background: #141414; color: #888; font-weight: 500; text-transform: uppercase; font-size: 11px; letter-spacing: 0.5px; }
-  td { padding: 8px 12px; border-bottom: 1px solid #1a1a1a; }
-  tr:hover td { background: #111; }
-  .good { color: #4ade80; }
-  .warning { color: #fbbf24; }
-  .bad { color: #f87171; }
-  .neutral { color: #888; }
-  .score { font-weight: 600; font-size: 15px; }
-  .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin-bottom: 24px; }
-  .card { background: #141414; border: 1px solid #222; border-radius: 8px; padding: 16px; }
-  .card-label { font-size: 11px; color: #666; text-transform: uppercase; letter-spacing: 0.5px; }
-  .card-value { font-size: 24px; font-weight: 600; margin-top: 4px; }
-  .card-sub { font-size: 12px; color: #666; margin-top: 4px; }
-  .decision { background: #1a1a0a; border: 1px solid #333300; border-radius: 8px; padding: 12px 16px; margin-bottom: 8px; }
-  .decision-title { font-weight: 500; color: #fbbf24; }
-  .decision-action { font-size: 12px; color: #888; margin-top: 4px; }
-  .tag { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 500; cursor: default; }
-  .tag-go { background: #052e16; color: #4ade80; }
-  .tag-maybe { background: #1a1a0a; color: #fbbf24; }
-  .tag-pass { background: #1c0a0a; color: #f87171; }
-  .tag-active { background: #0a1a2e; color: #60a5fa; }
-  .tag-validated { background: #0d2b0d; color: #4ade80; }
-  .empty { color: #444; font-style: italic; font-size: 13px; padding: 16px 0; }
-  .rank { font-weight: 700; color: #fbbf24; margin-right: 4px; }
-
-  /* Board Status Tags */
-  .status { display: inline-block; padding: 3px 10px; border-radius: 4px; font-size: 11px; font-weight: 600; letter-spacing: 0.3px; }
-  .status-todo { background: #1a1a1a; color: #888; border: 1px solid #333; }
-  .status-in-progress { background: #0a1a2e; color: #60a5fa; border: 1px solid #1e3a5f; }
-  .status-in-review { background: #1a1a0a; color: #fbbf24; border: 1px solid #4a3f0a; }
-  .status-building { background: #1a0a2e; color: #a78bfa; border: 1px solid #3b1f6e; }
-  .status-live { background: #052e16; color: #4ade80; border: 1px solid #166534; }
-  .status-killed { background: #1c0a0a; color: #f87171; border: 1px solid #5c1a1a; }
-
-  /* Board Actions Section */
-  .board-section { background: #0d0d0d; border: 1px solid #1a1a1a; border-radius: 8px; padding: 20px; margin-bottom: 24px; }
-  .board-title { font-size: 14px; font-weight: 600; color: #fbbf24; margin-bottom: 12px; }
-  .board-item { display: flex; align-items: center; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #1a1a1a; }
-  .board-item:last-child { border-bottom: none; }
-  .board-item-name { font-size: 13px; font-weight: 500; }
-  .board-item-detail { font-size: 11px; color: #666; margin-top: 2px; }
-  .board-item-left { flex: 1; }
-  .status-legend { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
-  .section-header { font-size: 11px; color: #555; text-transform: uppercase; letter-spacing: 0.5px; padding: 8px 0 4px; margin-top: 8px; }
+html{background:#09090b;color:#fafafa;font-family:system-ui,-apple-system,sans-serif;overscroll-behavior:none}
+body{margin:0;padding:0;padding-bottom:env(safe-area-inset-bottom,0)}
+*{-webkit-tap-highlight-color:transparent;box-sizing:border-box}
+.mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+.fade-in{animation:fadeIn .2s ease-out}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+.pulse{animation:pulse 2s infinite}
+@keyframes slideUp{from{opacity:0;transform:translateY(100%)}to{opacity:1;transform:translateY(0)}}
+.slide-up{animation:slideUp .3s ease-out}
+button:active{transform:scale(0.97)}
+::-webkit-scrollbar{width:4px;height:4px}
+::-webkit-scrollbar-track{background:#09090b}
+::-webkit-scrollbar-thumb{background:#3f3f46;border-radius:2px}
+.kanban-col{min-height:200px}
+.card-enter{animation:fadeIn .3s ease-out}
+@media(max-width:640px){.hide-mobile{display:none}}
 </style>
-</head>
-<body>
+</head><body>
+<div id="root"></div>
+<script type="text/babel">
+const {useState,useEffect,useMemo,useCallback,useRef} = React;
 
-<h1>Tiven Labs — Portfolio Dashboard</h1>
-<div class="updated">Last updated: April 9, 2026 — TIVAAA-69 ASO done · Gratuiti No Tax on Tips validated + building · RecipeScaler ReciMe capture building · Health &amp; Fitness scan + Reddit weekly scan + Kova ASO active</div>
+// ── Config ──
+const API_BASE = '';
+const COMPANY_ID = '49ce8674-6087-4558-b196-99f678d3ee41';
+const AGENTS = {
+  '5425b0a6-051d-4cc5-a86b-e47021a983a9': {name:'Matt Ingram',role:'CEO',short:'CEO'},
+  'a2f98d0f-7cb8-4370-805e-71d71b513d4e': {name:'Debra Reacher',role:'Deep Researcher',short:'Research'},
+  'f49f3229-340a-4584-9428-91fa9422546e': {name:'Samantha Jennings',role:'ASO Monitor',short:'ASO'},
+  '78cc6468-746c-4f78-9a47-fb54d3096862': {name:'Gabby Samson',role:'Gap Scanner',short:'Scanner'},
+  'ae6d8682-1a10-4c95-af27-28860ab9d0ac': {name:'Reva Harper',role:'Reviewer',short:'QA'},
+  '28911c32-b396-4223-8092-249ca3a10666': {name:'Robert Winters',role:'Report Writer',short:'Writer'},
+  '27089fdb-5654-4c38-b814-18cc25545f70': {name:'Dash Micheals',role:'Dashboard Manager',short:'Dash'},
+  '51b1ef44-5ccb-4726-8d47-6f2939a89c63': {name:'Tara Voss',role:'X Content',short:'X'},
+  'eae61a82-7f4d-4f4a-96c6-fdde7f673388': {name:'Kyle Navarro',role:'Reddit Scout',short:'Reddit'},
+};
+const CEO_ID = '5425b0a6-051d-4cc5-a86b-e47021a983a9';
+const PORTFOLIO = [
+  {name:'Kova',desc:'GRE & SAT Vocabulary',price:'$0.99',model:'One-time + $0.99 packs'},
+  {name:'Gratuiti',desc:'Tip Calculator',price:'$1.99 pro',model:'Free + one-time pro'},
+  {name:'RecipeScaler',desc:'Recipe Scaling + OCR',price:'$1.99 pro',model:'Free + one-time pro'},
+  {name:'Trades-Calc',desc:'Construction Calculators',price:'$9.99 core',model:'Free + IAP packs'},
+];
 
-<!-- BOARD ACTION TRACKER -->
-<div class="board-section">
-  <div class="board-title">Board Action Tracker</div>
-  <div class="status-legend">
-    <span class="status status-todo">TODO</span>
-    <span class="status status-in-progress">IN PROGRESS</span>
-    <span class="status status-in-review">IN REVIEW</span>
-    <span class="status status-building">BUILDING</span>
-    <span class="status status-live">LIVE</span>
-    <span class="status status-killed">KILLED</span>
-  </div>
+// ── API Layer ──
+async function api(path, opts={}){
+  const url = `${API_BASE}/api/companies/${COMPANY_ID}${path}`;
+  const res = await fetch(url, {credentials:'include',...opts,headers:{'Content-Type':'application/json','Origin':location.origin,...(opts.headers||{})}});
+  if(!res.ok) throw new Error(`${res.status} ${res.statusText}`);
+  return res.json();
+}
+async function apiMutate(path, body){
+  return api(path, {method:'POST',body:JSON.stringify(body)});
+}
 
-  <div class="section-header">— Active Builds (CEO) —</div>
+// ── Helpers ──
+const agentName = id => AGENTS[id]?.name || 'Unassigned';
+const agentShort = id => AGENTS[id]?.short || '?';
+const timeAgo = d => {if(!d)return'--';const s=Math.floor((Date.now()-new Date(d))/1000);if(s<60)return s+'s';if(s<3600)return Math.floor(s/60)+'m';if(s<86400)return Math.floor(s/3600)+'h';return Math.floor(s/86400)+'d'};
+const statusColor = s => ({todo:'bg-zinc-800 text-zinc-400 border-zinc-600',in_progress:'bg-sky-900/60 text-sky-400 border-sky-700',in_review:'bg-amber-900/60 text-amber-400 border-amber-700',done:'bg-emerald-900/60 text-emerald-400 border-emerald-700',blocked:'bg-red-900/60 text-red-400 border-red-700',cancelled:'bg-zinc-800 text-zinc-500 border-zinc-700'}[s]||'bg-zinc-800 text-zinc-400 border-zinc-600');
+const priorityIcon = p => ({critical:'!!!',high:'!!',medium:'!',low:''}[p]||'');
+const statusDot = s => ({idle:'bg-zinc-600',running:'bg-emerald-500 pulse',error:'bg-red-500'}[s]||'bg-zinc-600');
 
-  <div class="board-item">
-    <div class="board-item-left">
-      <div class="board-item-name">Gratuiti — No Tax on Tips Feature <strong style="color:#a78bfa">▶ BUILDING</strong></div>
-      <div class="board-item-detail">Validated: qualified tip-split on no-tax-on-tips meals · Signal: legislative tailwind · TIVAAA-66 validation done · Build: TIVAAA-59</div>
+function Badge({text,cls}){return <span className={`inline-block px-2 py-0.5 text-xs font-semibold rounded border ${cls} whitespace-nowrap`}>{text}</span>}
+
+// ── Data Hook ──
+function useData(){
+  const [issues,setIssues]=useState([]);
+  const [agents,setAgents]=useState([]);
+  const [loading,setLoading]=useState(true);
+  const [error,setError]=useState(null);
+  const [lastRefresh,setLastRefresh]=useState(null);
+
+  const refresh = useCallback(async()=>{
+    try{
+      const [iss,ags]=await Promise.all([api('/issues'),api('/agents')]);
+      setIssues(iss);
+      setAgents(ags);
+      setLastRefresh(new Date());
+      setError(null);
+    }catch(e){setError(e.message)}
+    finally{setLoading(false)}
+  },[]);
+
+  useEffect(()=>{refresh();const t=setInterval(refresh,30000);return()=>clearInterval(t)},[refresh]);
+  return {issues,agents,loading,error,lastRefresh,refresh};
+}
+
+// ── Toast ──
+function Toast({msg,type='success',onDone}){
+  useEffect(()=>{const t=setTimeout(onDone,3000);return()=>clearTimeout(t)},[]);
+  const cls = type==='success'?'bg-emerald-900 text-emerald-200 border-emerald-700':'bg-red-900 text-red-200 border-red-700';
+  return <div className={`fixed top-4 left-1/2 -translate-x-1/2 ${cls} px-6 py-3 rounded-lg border z-50 text-sm font-medium slide-up`}>{msg}</div>;
+}
+
+// ── Issue Detail Modal ──
+function IssueModal({issue,onClose,onAction}){
+  const [comments,setComments]=useState([]);
+  const [loadingComments,setLoadingComments]=useState(true);
+
+  useEffect(()=>{
+    api(`/issues/${issue.identifier}/comments`).then(c=>{
+      setComments(Array.isArray(c)?c:c.comments||[]);
+      setLoadingComments(false);
+    }).catch(()=>setLoadingComments(false));
+  },[issue.identifier]);
+
+  return(
+    <div className="fixed inset-0 bg-black/80 z-50 flex items-end sm:items-center justify-center" onClick={onClose}>
+      <div className="bg-surface w-full sm:max-w-2xl sm:rounded-xl rounded-t-xl max-h-[90vh] overflow-y-auto border border-border slide-up" onClick={e=>e.stopPropagation()}>
+        <div className="sticky top-0 bg-surface border-b border-border p-4 flex justify-between items-start z-10">
+          <div className="flex-1 min-w-0 pr-3">
+            <div className="flex items-center gap-2 mb-1">
+              <span className="mono text-xs text-muted">{issue.identifier}</span>
+              <Badge text={issue.status} cls={statusColor(issue.status)}/>
+              {issue.priority && issue.priority!=='medium' && <Badge text={issue.priority} cls={issue.priority==='high'||issue.priority==='critical'?'bg-red-900/60 text-red-400 border-red-700':'bg-zinc-800 text-zinc-400 border-zinc-600'}/>}
+            </div>
+            <h2 className="font-semibold text-base leading-tight">{issue.title}</h2>
+          </div>
+          <button onClick={onClose} className="text-muted text-2xl leading-none p-2 -mr-2 -mt-1">&times;</button>
+        </div>
+
+        <div className="p-4 space-y-4">
+          <div className="flex flex-wrap gap-3 text-xs text-muted">
+            <span>Assigned: <span className="text-zinc-300">{agentName(issue.assigneeAgentId)}</span></span>
+            <span>Created: <span className="text-zinc-300">{timeAgo(issue.createdAt)} ago</span></span>
+            {issue.completedAt && <span>Done: <span className="text-zinc-300">{timeAgo(issue.completedAt)} ago</span></span>}
+          </div>
+
+          {issue.description && <div className="bg-zinc-900 rounded-lg p-4 text-sm text-zinc-300 whitespace-pre-wrap leading-relaxed">{issue.description}</div>}
+
+          <div className="flex gap-2 flex-wrap">
+            {issue.status==='todo' && <button onClick={()=>onAction('start',issue)} className="px-4 py-3 text-sm rounded-lg bg-sky-900/60 text-sky-300 border border-sky-700 font-medium min-h-[48px]">Start</button>}
+            {(issue.status==='in_progress'||issue.status==='in_review') && <button onClick={()=>onAction('done',issue)} className="px-4 py-3 text-sm rounded-lg bg-emerald-900/60 text-emerald-300 border border-emerald-700 font-medium min-h-[48px]">Complete</button>}
+            {issue.status!=='cancelled'&&issue.status!=='done' && <button onClick={()=>onAction('cancel',issue)} className="px-4 py-3 text-sm rounded-lg bg-red-900/60 text-red-300 border border-red-700 font-medium min-h-[48px]">Cancel</button>}
+          </div>
+
+          <div>
+            <h3 className="text-sm font-semibold text-muted mb-3">Comments {comments.length>0&&`(${comments.length})`}</h3>
+            {loadingComments && <div className="text-muted text-sm">Loading...</div>}
+            {!loadingComments && comments.length===0 && <div className="text-muted text-sm">No comments yet</div>}
+            <div className="space-y-3">
+              {comments.map((c,i)=>(
+                <div key={c.id||i} className="bg-zinc-900 rounded-lg p-3 border border-border">
+                  <div className="flex justify-between text-xs text-muted mb-2">
+                    <span className="font-medium text-zinc-400">{agentName(c.agentId||c.createdByAgentId)}</span>
+                    <span>{timeAgo(c.createdAt)} ago</span>
+                  </div>
+                  <div className="text-sm text-zinc-300 whitespace-pre-wrap leading-relaxed break-words">{c.body}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-    <span class="status status-building">BUILDING</span>
-  </div>
-  <div class="board-item">
-    <div class="board-item-left">
-      <div class="board-item-name">RecipeScaler — ReciMe Paywall Refugee Capture <strong style="color:#a78bfa">▶ BUILDING</strong></div>
-      <div class="board-item-detail">ReciMe went subscription — active user migration to free alternatives · Validating: TIVAAA-67 (Debra, in progress) · Build: TIVAAA-60</div>
-    </div>
-    <span class="status status-building">BUILDING</span>
-  </div>
-  <div class="board-item">
-    <div class="board-item-left">
-      <div class="board-item-name">Trades-Calc — NEC 2026 Electrician All-in-One Positioning</div>
-      <div class="board-item-detail">ASO complete (TIVAAA-69 · Samantha) · NEC 2026 electrician positioning applied (TIVAAA-62 · done) · X content batch in review (TIVAAA-42)</div>
-    </div>
-    <span class="status status-live">DONE</span>
-  </div>
+  );
+}
 
-  <div class="section-header">— QA Approved — Build Queue —</div>
-
-  <div class="board-item">
-    <div class="board-item-left">
-      <div class="board-item-name">Habit Tracker <strong style="color:#4ade80">★ BUILD FIRST</strong></div>
-      <div class="board-item-detail">Signal: UNHAPPY_MONEY · Score: 7.0/10 · Est. $1,400–1,700/mo · $5.99 one-time · S effort (2 wk) · QA approved (TIVAAA-40)</div>
+// ── Issue Card (compact) ──
+function IssueCard({issue,onClick}){
+  const age = timeAgo(issue.createdAt);
+  const isUrgent = issue.priority==='critical'||issue.priority==='high';
+  return(
+    <div onClick={()=>onClick(issue)} className={`bg-surface rounded-lg border ${isUrgent?'border-red-900/50':'border-border'} p-3 cursor-pointer active:bg-zinc-800 transition-colors card-enter`}>
+      <div className="flex justify-between items-start gap-2 mb-1">
+        <span className="mono text-xs text-muted">{issue.identifier}</span>
+        <div className="flex items-center gap-1.5">
+          {isUrgent && <span className="text-red-400 text-xs font-bold">{priorityIcon(issue.priority)}</span>}
+          <Badge text={issue.status} cls={statusColor(issue.status)}/>
+        </div>
+      </div>
+      <div className="font-medium text-sm leading-snug mb-2">{issue.title}</div>
+      <div className="flex justify-between text-xs text-muted">
+        <span>{agentShort(issue.assigneeAgentId)}</span>
+        <span>{age}</span>
+      </div>
     </div>
-    <span class="status status-todo">TODO</span>
-  </div>
-  <div class="board-item">
-    <div class="board-item-left">
-      <div class="board-item-name">Text Expansion App (Texpand) — BUILD SECOND</div>
-      <div class="board-item-detail">Signal: SUBSCRIPTION_BACKLASH · Score: 6.5/10 (revised — WordBoard competitor confirmed) · Est. $3,100–5,200/mo · $14.99 one-time · S effort (2–3 wk) · QA approved</div>
-    </div>
-    <span class="status status-todo">TODO</span>
-  </div>
-  <div class="board-item">
-    <div class="board-item-left">
-      <div class="board-item-name">Sleep Tracker — HOLD</div>
-      <div class="board-item-detail">Signal: SUBSCRIPTION_BACKLASH · Score: 5.0/10 · Est. $1,000–1,300/mo · QA verdict: HOLD (revisit after Habit Tracker ships)</div>
-    </div>
-    <span class="status status-in-review">IN REVIEW</span>
-  </div>
+  );
+}
 
-  <div class="section-header">— Awaiting Validation —</div>
+// ── TAB: Inbox ──
+function InboxView({issues,onSelect,onAction}){
+  const inbox = useMemo(()=>{
+    const active = issues.filter(i=>i.status==='in_progress'||i.status==='in_review');
+    const todo = issues.filter(i=>i.status==='todo');
+    const recentDone = issues.filter(i=>i.status==='done').sort((a,b)=>new Date(b.completedAt||b.updatedAt)-new Date(a.completedAt||a.updatedAt)).slice(0,10);
+    return {active,todo,recentDone};
+  },[issues]);
 
-  <div class="board-item">
-    <div class="board-item-left">
-      <div class="board-item-name">Spaced Repetition Flashcards (Education)</div>
-      <div class="board-item-detail">Signal: SUBSCRIPTION_BACKLASH · Score: 9/10 · Quizlet 1M+ reviews on subscription · $4.99–7.99 one-time · S effort (2–3 wk) — Education scan</div>
+  return(
+    <div className="space-y-6 fade-in">
+      {inbox.active.length>0 && <Section title={`Active (${inbox.active.length})`} color="text-sky-400">
+        <div className="space-y-2">{inbox.active.map(i=><IssueCard key={i.id} issue={i} onClick={onSelect}/>)}</div>
+      </Section>}
+
+      {inbox.todo.length>0 && <Section title={`Todo (${inbox.todo.length})`} color="text-zinc-400">
+        <div className="space-y-2">{inbox.todo.map(i=><IssueCard key={i.id} issue={i} onClick={onSelect}/>)}</div>
+      </Section>}
+
+      <Section title="Recently Completed" color="text-emerald-400">
+        {inbox.recentDone.length===0?<div className="text-muted text-sm">Nothing yet</div>:
+        <div className="space-y-2">{inbox.recentDone.map(i=><IssueCard key={i.id} issue={i} onClick={onSelect}/>)}</div>}
+      </Section>
     </div>
-    <span class="status status-todo">TODO</span>
-  </div>
-  <div class="board-item">
-    <div class="board-item-left">
-      <div class="board-item-name">Scientific Calculator for iPad (Education)</div>
-      <div class="board-item-detail">Signal: ABANDONED · Score: 9/10 · 60,746 reviews, 65 months stale · $2.99–4.99 one-time · S effort (2–3 wk) — Education scan</div>
+  );
+}
+
+// ── TAB: Pipeline (Kanban) ──
+function PipelineView({issues,onSelect}){
+  const columns = useMemo(()=>{
+    const cols = {
+      todo:{label:'Scouted',color:'text-zinc-400',items:[]},
+      in_progress:{label:'Researching',color:'text-sky-400',items:[]},
+      in_review:{label:'Validated',color:'text-amber-400',items:[]},
+      done:{label:'Complete',color:'text-emerald-400',items:[]},
+    };
+    // Only show research/validation issues in pipeline, not meta tasks
+    const pipeline = issues.filter(i=>
+      i.status!=='cancelled' && (
+        i.title.toLowerCase().includes('validate') ||
+        i.title.toLowerCase().includes('gap scan') ||
+        i.title.toLowerCase().includes('aso') ||
+        i.title.toLowerCase().includes('reddit') ||
+        i.title.toLowerCase().includes('research') ||
+        i.title.toLowerCase().includes('build') ||
+        i.title.toLowerCase().includes('position') ||
+        i.title.toLowerCase().includes('capture') ||
+        i.title.toLowerCase().includes('investigate') ||
+        i.title.toLowerCase().includes('evaluate')
+      )
+    );
+    pipeline.forEach(i=>{
+      const col = cols[i.status];
+      if(col) col.items.push(i);
+    });
+    // Sort: in_progress by startedAt, todo by createdAt, done by completedAt desc
+    cols.todo.items.sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt));
+    cols.in_progress.items.sort((a,b)=>new Date(a.startedAt||a.createdAt)-new Date(b.startedAt||b.createdAt));
+    cols.done.items.sort((a,b)=>new Date(b.completedAt||b.updatedAt)-new Date(a.completedAt||a.updatedAt));
+    cols.done.items = cols.done.items.slice(0,15); // cap done items
+    return cols;
+  },[issues]);
+
+  return(
+    <div className="fade-in">
+      {/* Mobile: stacked */}
+      <div className="sm:hidden space-y-6">
+        {Object.entries(columns).map(([key,col])=>(
+          <Section key={key} title={`${col.label} (${col.items.length})`} color={col.color}>
+            {col.items.length===0?<div className="text-muted text-xs py-4">Empty</div>:
+            <div className="space-y-2">{col.items.map(i=><IssueCard key={i.id} issue={i} onClick={onSelect}/>)}</div>}
+          </Section>
+        ))}
+      </div>
+      {/* Desktop: horizontal kanban */}
+      <div className="hidden sm:grid sm:grid-cols-4 gap-4">
+        {Object.entries(columns).map(([key,col])=>(
+          <div key={key} className="kanban-col">
+            <div className={`text-sm font-semibold ${col.color} mb-3 flex justify-between`}>
+              <span>{col.label}</span>
+              <span className="text-muted font-normal">{col.items.length}</span>
+            </div>
+            <div className="space-y-2">
+              {col.items.map(i=><IssueCard key={i.id} issue={i} onClick={onSelect}/>)}
+              {col.items.length===0 && <div className="text-muted text-xs py-8 text-center border border-dashed border-border rounded-lg">Empty</div>}
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
-    <span class="status status-todo">TODO</span>
-  </div>
-  <div class="board-item">
-    <div class="board-item-left">
-      <div class="board-item-name">Offline Macro &amp; Nutrition Tracker (Food)</div>
-      <div class="board-item-detail">Signal: SUBSCRIPTION_BACKLASH · Score: 9/10 · MFP/Cronometer backlash massive · USDA public domain · Est. ~$25K/mo — Food &amp; Cooking scan</div>
+  );
+}
+
+// ── TAB: Portfolio ──
+function PortfolioView({issues,onSelect}){
+  const appIssues = useCallback((appName)=>{
+    return issues.filter(i=>i.title.toLowerCase().includes(appName.toLowerCase()) && i.status!=='cancelled')
+      .sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt));
+  },[issues]);
+
+  const [expandedApp,setExpandedApp]=useState(null);
+
+  return(
+    <div className="space-y-4 fade-in">
+      {PORTFOLIO.map(app=>{
+        const related = appIssues(app.name);
+        const active = related.filter(i=>i.status==='in_progress'||i.status==='todo');
+        const done = related.filter(i=>i.status==='done');
+        const isOpen = expandedApp===app.name;
+        return(
+          <div key={app.name} className="bg-surface rounded-xl border border-border overflow-hidden">
+            <div className="p-4 cursor-pointer active:bg-zinc-800 transition-colors" onClick={()=>setExpandedApp(isOpen?null:app.name)}>
+              <div className="flex justify-between items-center">
+                <div>
+                  <div className="font-bold text-lg">{app.name}</div>
+                  <div className="text-xs text-muted">{app.desc}</div>
+                </div>
+                <div className="text-right">
+                  <div className="mono text-lg font-bold text-emerald-400">{app.price}</div>
+                  <div className="text-xs text-muted">{app.model}</div>
+                </div>
+              </div>
+              <div className="flex gap-4 mt-3 text-xs">
+                <span className="text-sky-400">{active.length} active</span>
+                <span className="text-emerald-400">{done.length} done</span>
+                <span className="text-muted">{related.length} total</span>
+              </div>
+            </div>
+            {isOpen && <div className="border-t border-border p-4 space-y-2 fade-in">
+              {related.length===0 && <div className="text-muted text-sm">No issues for this app yet</div>}
+              {related.slice(0,20).map(i=><IssueCard key={i.id} issue={i} onClick={onSelect}/>)}
+            </div>}
+          </div>
+        );
+      })}
     </div>
-    <span class="status status-todo">TODO</span>
-  </div>
-  <div class="board-item">
-    <div class="board-item-left">
-      <div class="board-item-name">Tip-Out Calculator (Worker iOS)</div>
-      <div class="board-item-detail">Signal: MARKET_GAP · Score: 9/10 · No iOS app exists for tip-out calculation · Reddit confirmed — Reddit Scout scan</div>
+  );
+}
+
+// ── TAB: Agents ──
+function AgentsView({agents:liveAgents,issues,onSelect}){
+  const agentList = useMemo(()=>{
+    return liveAgents.map(a=>{
+      const myIssues = issues.filter(i=>i.assigneeAgentId===a.id && i.status!=='cancelled');
+      const active = myIssues.filter(i=>i.status==='in_progress');
+      const todo = myIssues.filter(i=>i.status==='todo');
+      const done = myIssues.filter(i=>i.status==='done');
+      return {...a,myIssues,active,todo,done};
+    }).sort((a,b)=>{
+      // CEO first, then running agents, then by name
+      if(a.role==='ceo') return -1;
+      if(b.role==='ceo') return 1;
+      if(a.status==='running'&&b.status!=='running') return -1;
+      if(b.status==='running'&&a.status!=='running') return 1;
+      return a.name.localeCompare(b.name);
+    });
+  },[liveAgents,issues]);
+
+  const [expandedAgent,setExpandedAgent]=useState(null);
+
+  return(
+    <div className="space-y-3 fade-in">
+      {agentList.map(a=>{
+        const isOpen = expandedAgent===a.id;
+        return(
+          <div key={a.id} className="bg-surface rounded-xl border border-border overflow-hidden">
+            <div className="p-4 cursor-pointer active:bg-zinc-800 transition-colors" onClick={()=>setExpandedAgent(isOpen?null:a.id)}>
+              <div className="flex items-center gap-3">
+                <div className={`w-3 h-3 rounded-full shrink-0 ${statusDot(a.status)}`}/>
+                <div className="flex-1 min-w-0">
+                  <div className="font-semibold">{a.name}</div>
+                  <div className="text-xs text-muted">{a.title}</div>
+                </div>
+                <div className="text-right text-xs">
+                  <div className={a.status==='running'?'text-emerald-400 font-semibold':'text-muted'}>{a.status}</div>
+                  <div className="text-muted">{a.active.length} active / {a.todo.length} todo</div>
+                </div>
+              </div>
+            </div>
+            {isOpen && <div className="border-t border-border p-4 space-y-2 fade-in">
+              {a.active.length>0 && <div className="text-xs text-sky-400 font-semibold mb-2">Active</div>}
+              {a.active.map(i=><IssueCard key={i.id} issue={i} onClick={onSelect}/>)}
+              {a.todo.length>0 && <div className="text-xs text-zinc-400 font-semibold mb-2 mt-3">Todo</div>}
+              {a.todo.map(i=><IssueCard key={i.id} issue={i} onClick={onSelect}/>)}
+              {a.done.length>0 && <div className="text-xs text-emerald-400 font-semibold mb-2 mt-3">Recent ({a.done.length})</div>}
+              {a.done.slice(0,5).map(i=><IssueCard key={i.id} issue={i} onClick={onSelect}/>)}
+              {a.active.length===0&&a.todo.length===0&&a.done.length===0 && <div className="text-muted text-sm">No issues assigned</div>}
+            </div>}
+          </div>
+        );
+      })}
     </div>
-    <span class="status status-todo">TODO</span>
-  </div>
-  <div class="board-item">
-    <div class="board-item-left">
-      <div class="board-item-name">Paprika Replacement (Accurate Recipe Scaling)</div>
-      <div class="board-item-detail">Signal: ACTIVE_USER_MIGRATION · Score: 9/10 · Paprika users actively migrating due to scaling bugs · Reddit confirmed — distinct from RecipeScaler (single-recipe)</div>
+  );
+}
+
+// ── TAB: Money ──
+function MoneyView({issues}){
+  const stats = useMemo(()=>{
+    const total = issues.length;
+    const done = issues.filter(i=>i.status==='done').length;
+    const active = issues.filter(i=>i.status==='in_progress').length;
+    const todo = issues.filter(i=>i.status==='todo').length;
+    const cancelled = issues.filter(i=>i.status==='cancelled').length;
+    return {total,done,active,todo,cancelled};
+  },[issues]);
+
+  return(
+    <div className="space-y-6 fade-in">
+      <div className="grid grid-cols-2 gap-3">
+        <StatCard label="Portfolio Apps" value="4" sub="Shipped"/>
+        <StatCard label="Pipeline Items" value={stats.active+stats.todo} sub="Active + Todo"/>
+        <StatCard label="Completed" value={stats.done} sub={`of ${stats.total} total`}/>
+        <StatCard label="Completion Rate" value={stats.total?Math.round(stats.done/stats.total*100)+'%':'--'} sub="Issues closed"/>
+      </div>
+
+      <Section title="Portfolio Pricing" color="text-emerald-400">
+        <div className="space-y-2">
+          {PORTFOLIO.map(app=>(
+            <div key={app.name} className="bg-surface rounded-lg border border-border p-4 flex justify-between items-center">
+              <div>
+                <div className="font-semibold">{app.name}</div>
+                <div className="text-xs text-muted">{app.desc}</div>
+              </div>
+              <div className="text-right">
+                <div className="mono text-lg font-bold text-emerald-400">{app.price}</div>
+                <div className="text-xs text-muted">{app.model}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </Section>
+
+      <Section title="Agent Productivity" color="text-sky-400">
+        <div className="bg-surface rounded-lg border border-border overflow-x-auto">
+          <table className="w-full text-sm">
+            <thead><tr className="text-muted text-xs text-left border-b border-border">
+              <th className="p-3">Agent</th><th className="p-3 mono">Done</th><th className="p-3 mono">Active</th><th className="p-3 mono">Todo</th>
+            </tr></thead>
+            <tbody>
+              {Object.entries(AGENTS).map(([id,a])=>{
+                const myIssues = issues.filter(i=>i.assigneeAgentId===id&&i.status!=='cancelled');
+                const d = myIssues.filter(i=>i.status==='done').length;
+                const act = myIssues.filter(i=>i.status==='in_progress').length;
+                const t = myIssues.filter(i=>i.status==='todo').length;
+                if(d+act+t===0)return null;
+                return <tr key={id} className="border-b border-border/30">
+                  <td className="p-3"><span className="font-medium">{a.name}</span><span className="text-muted text-xs ml-2">{a.role}</span></td>
+                  <td className="p-3 mono text-emerald-400">{d}</td>
+                  <td className="p-3 mono text-sky-400">{act}</td>
+                  <td className="p-3 mono text-zinc-400">{t}</td>
+                </tr>;
+              })}
+            </tbody>
+          </table>
+        </div>
+      </Section>
     </div>
-    <span class="status status-todo">TODO</span>
-  </div>
-  <div class="board-item">
-    <div class="board-item-left">
-      <div class="board-item-name">Homework Planner (Education)</div>
-      <div class="board-item-detail">Signal: ABANDONED · Score: 8/10 · 7K+ reviews, 81–92 months stale · $2.99–3.99 one-time · S effort (2–3 wk) — Education scan</div>
+  );
+}
+
+// ── Shared Components ──
+function Section({title,color,children}){
+  return <div><h2 className={`text-sm font-semibold ${color||'text-zinc-400'} mb-3 uppercase tracking-wider`}>{title}</h2>{children}</div>;
+}
+
+function StatCard({label,value,sub}){
+  return <div className="bg-surface rounded-xl border border-border p-4">
+    <div className="text-muted text-xs uppercase tracking-wider">{label}</div>
+    <div className="mono text-3xl font-bold mt-1">{value}</div>
+    {sub && <div className="text-muted text-xs mt-1">{sub}</div>}
+  </div>;
+}
+
+// ── Bottom Nav ──
+const TABS = [
+  {id:'inbox',label:'Inbox',icon:'M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z'},
+  {id:'pipeline',label:'Pipeline',icon:'M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2'},
+  {id:'portfolio',label:'Apps',icon:'M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z'},
+  {id:'agents',label:'Team',icon:'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z'},
+  {id:'money',label:'Money',icon:'M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z'},
+];
+
+function NavIcon({d,active}){
+  return <svg className={`w-6 h-6 ${active?'text-emerald-400':'text-muted'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={active?2:1.5}><path strokeLinecap="round" strokeLinejoin="round" d={d}/></svg>;
+}
+
+// ── Create Issue Modal ──
+function CreateIssueModal({onClose,onCreated}){
+  const [title,setTitle]=useState('');
+  const [desc,setDesc]=useState('');
+  const [submitting,setSubmitting]=useState(false);
+
+  const submit = async()=>{
+    if(!title.trim())return;
+    setSubmitting(true);
+    try{
+      await apiMutate('/issues',{title:title.trim(),description:desc.trim(),assigneeAgentId:CEO_ID,status:'todo'});
+      onCreated();
+      onClose();
+    }catch(e){alert('Failed: '+e.message)}
+    finally{setSubmitting(false)}
+  };
+
+  return(
+    <div className="fixed inset-0 bg-black/80 z-50 flex items-end sm:items-center justify-center" onClick={onClose}>
+      <div className="bg-surface w-full sm:max-w-lg sm:rounded-xl rounded-t-xl border border-border slide-up p-4 space-y-4" onClick={e=>e.stopPropagation()}>
+        <div className="flex justify-between items-center">
+          <h2 className="font-semibold text-lg">New Issue</h2>
+          <button onClick={onClose} className="text-muted text-2xl p-2">&times;</button>
+        </div>
+        <input value={title} onChange={e=>setTitle(e.target.value)} placeholder="Title" className="w-full bg-zinc-900 border border-border rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-emerald-700" autoFocus/>
+        <textarea value={desc} onChange={e=>setDesc(e.target.value)} placeholder="Description (optional)" rows={4} className="w-full bg-zinc-900 border border-border rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-emerald-700 resize-none"/>
+        <div className="text-xs text-muted">Assigned to CEO (Matt) for delegation</div>
+        <button onClick={submit} disabled={submitting||!title.trim()} className="w-full py-3 rounded-lg bg-emerald-900/60 text-emerald-300 border border-emerald-700 font-semibold text-sm min-h-[48px] disabled:opacity-50">{submitting?'Creating...':'Create Issue'}</button>
+      </div>
     </div>
-    <span class="status status-todo">TODO</span>
-  </div>
-  <div class="board-item">
-    <div class="board-item-left">
-      <div class="board-item-name">SAT/ACT Test Prep (Education)</div>
-      <div class="board-item-detail">Signal: ABANDONED · Score: 8/10 · 4K+ reviews, 85 months stale, evergreen demand · $4.99–9.99 one-time · 3–4 wk — Education scan</div>
+  );
+}
+
+// ── App ──
+function App(){
+  const {issues,agents,loading,error,lastRefresh,refresh} = useData();
+  const [tab,setTab]=useState('inbox');
+  const [selectedIssue,setSelectedIssue]=useState(null);
+  const [toast,setToast]=useState(null);
+  const [showCreate,setShowCreate]=useState(false);
+
+  const handleAction = async(action,issue)=>{
+    const statusMap = {start:'in_progress',done:'done',cancel:'cancelled'};
+    const newStatus = statusMap[action];
+    if(!newStatus)return;
+    if(action==='cancel'&&!confirm(`Cancel "${issue.title}"?`))return;
+    try{
+      await api(`/issues/${issue.id}`,{method:'PATCH',body:JSON.stringify({status:newStatus}),headers:{'Origin':location.origin}});
+      setToast({msg:`${issue.identifier} → ${newStatus}`,type:'success'});
+      setSelectedIssue(null);
+      refresh();
+    }catch(e){
+      setToast({msg:`Failed: ${e.message}`,type:'error'});
+    }
+  };
+
+  const counts = useMemo(()=>{
+    const active = issues.filter(i=>i.status==='in_progress'||i.status==='in_review').length;
+    const todo = issues.filter(i=>i.status==='todo').length;
+    return {inbox:active+todo};
+  },[issues]);
+
+  if(loading) return <div className="flex items-center justify-center h-screen"><div className="text-muted">Loading...</div></div>;
+  if(error && issues.length===0) return <div className="flex items-center justify-center h-screen flex-col gap-4"><div className="text-red-400">Failed to connect</div><div className="text-xs text-muted">{error}</div><button onClick={refresh} className="px-4 py-2 rounded bg-surface border border-border text-sm">Retry</button></div>;
+
+  return(
+    <div className="min-h-screen pb-20">
+      {/* Header */}
+      <div className="sticky top-0 bg-bg/95 backdrop-blur-sm z-40 border-b border-border px-4 py-3">
+        <div className="flex justify-between items-center max-w-4xl mx-auto">
+          <div>
+            <h1 className="font-bold text-lg">Tiven Labs</h1>
+            <div className="text-xs text-muted flex items-center gap-2">
+              {lastRefresh && <span>Updated {timeAgo(lastRefresh)}</span>}
+              {error && <span className="text-red-400">Offline</span>}
+              {agents.filter(a=>a.status==='running').length>0 && <span className="text-emerald-400">{agents.filter(a=>a.status==='running').length} running</span>}
+            </div>
+          </div>
+          <div className="flex gap-2">
+            <button onClick={()=>setShowCreate(true)} className="w-10 h-10 rounded-full bg-emerald-900/60 text-emerald-300 border border-emerald-700 flex items-center justify-center text-xl font-bold">+</button>
+            <button onClick={refresh} className="w-10 h-10 rounded-full bg-surface border border-border flex items-center justify-center">
+              <svg className="w-5 h-5 text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Content */}
+      <div className="max-w-4xl mx-auto px-4 py-4">
+        {tab==='inbox' && <InboxView issues={issues} onSelect={setSelectedIssue} onAction={handleAction}/>}
+        {tab==='pipeline' && <PipelineView issues={issues} onSelect={setSelectedIssue}/>}
+        {tab==='portfolio' && <PortfolioView issues={issues} onSelect={setSelectedIssue}/>}
+        {tab==='agents' && <AgentsView agents={agents} issues={issues} onSelect={setSelectedIssue}/>}
+        {tab==='money' && <MoneyView issues={issues}/>}
+      </div>
+
+      {/* Bottom Nav */}
+      <nav className="fixed bottom-0 left-0 right-0 bg-bg/95 backdrop-blur-sm border-t border-border z-40" style={{paddingBottom:'env(safe-area-inset-bottom,0)'}}>
+        <div className="max-w-4xl mx-auto flex">
+          {TABS.map(t=>(
+            <button key={t.id} onClick={()=>setTab(t.id)} className={`flex-1 flex flex-col items-center py-2 pt-3 relative ${tab===t.id?'text-emerald-400':'text-muted'}`}>
+              <NavIcon d={t.icon} active={tab===t.id}/>
+              <span className="text-[10px] mt-0.5 font-medium">{t.label}</span>
+              {t.id==='inbox'&&counts.inbox>0 && <span className="absolute top-1.5 right-1/2 translate-x-4 bg-red-500 text-white text-[9px] font-bold rounded-full w-4 h-4 flex items-center justify-center">{counts.inbox>9?'9+':counts.inbox}</span>}
+            </button>
+          ))}
+        </div>
+      </nav>
+
+      {/* Modals */}
+      {selectedIssue && <IssueModal issue={selectedIssue} onClose={()=>setSelectedIssue(null)} onAction={handleAction}/>}
+      {showCreate && <CreateIssueModal onClose={()=>setShowCreate(false)} onCreated={refresh}/>}
+      {toast && <Toast msg={toast.msg} type={toast.type} onDone={()=>setToast(null)}/>}
     </div>
-    <span class="status status-todo">TODO</span>
-  </div>
-  <div class="board-item">
-    <div class="board-item-left">
-      <div class="board-item-name">Allergen &amp; Ingredient Scanner (Food)</div>
-      <div class="board-item-detail">Signal: SUBSCRIPTION_BACKLASH · Yuka buggy offline mode · Open Food Facts enables fully offline one-time app · Est. ~$17K/mo — Food &amp; Cooking scan</div>
-    </div>
-    <span class="status status-todo">TODO</span>
-  </div>
-  <div class="board-item">
-    <div class="board-item-left">
-      <div class="board-item-name">NEC Electrician Conduit Suite (Trades)</div>
-      <div class="board-item-detail">Signal: ACCURACY_PAIN · Score: 8/10 · Southwire accuracy errors, no existing-conduit audit mode · Offline-first one-time · Reddit confirmed</div>
-    </div>
-    <span class="status status-todo">TODO</span>
-  </div>
-  <div class="board-item">
-    <div class="board-item-left">
-      <div class="board-item-name">Mobile Manual J Block Load (HVAC/Trades)</div>
-      <div class="board-item-detail">Signal: MARKET_GAP · Score: 8/10 · All leaders desktop-only · PDF quote output · $14.99–19.99 one-time · Reddit confirmed</div>
-    </div>
-    <span class="status status-todo">TODO</span>
-  </div>
-  <div class="board-item">
-    <div class="board-item-left">
-      <div class="board-item-name">Keto / Net Carb Calculator (Food)</div>
-      <div class="board-item-detail">Signal: SUBSCRIPTION_BACKLASH · Carb Manager backlash · Keto.app Android proves one-time model · Est. ~$15K/mo — Food &amp; Cooking scan</div>
-    </div>
-    <span class="status status-todo">TODO</span>
-  </div>
-  <div class="board-item">
-    <div class="board-item-left">
-      <div class="board-item-name">Typing Trainer / WPM Practice (Education)</div>
-      <div class="board-item-detail">Signal: ABANDONED · Score: 7/10 · TapTyping 109 months stale (longest gap found) · Android 10M+ installs · $1.99–3.99 one-time · 2 wk build</div>
-    </div>
-    <span class="status status-todo">TODO</span>
-  </div>
+  );
+}
 
-  <div class="section-header">— Existing Pipeline — Awaiting Board Decision —</div>
-
-  <div class="board-item">
-    <div class="board-item-left">
-      <div class="board-item-name">Contractor Estimate Maker</div>
-      <div class="board-item-detail">Signal: ABANDONED ×2 · Est. $12,000/mo · $5.99–$7.99 one-time · M effort — Trades &amp; Construction scan, validation complete</div>
-    </div>
-    <span class="status status-todo">TODO</span>
-  </div>
-  <div class="board-item">
-    <div class="board-item-left">
-      <div class="board-item-name">Concrete Calculator Pro</div>
-      <div class="board-item-detail">Signal: ABANDONED · Est. $9,000/mo · $3.99 one-time · S effort — 23K reviews, stale since Mar 2024</div>
-    </div>
-    <span class="status status-todo">TODO</span>
-  </div>
-  <div class="board-item">
-    <div class="board-item-left">
-      <div class="board-item-name">ShiftPay — Tip &amp; Income Tracker</div>
-      <div class="board-item-detail">Signal: SUBSCRIPTION_BACKLASH · Score: 82/100 · Est. $6,700/mo · $2.99 one-time · S effort — VALIDATED</div>
-    </div>
-    <span class="status status-todo">TODO</span>
-  </div>
-  <div class="board-item">
-    <div class="board-item-left">
-      <div class="board-item-name">Roof Pitch &amp; Rafter Calculator</div>
-      <div class="board-item-detail">Signal: UNHAPPY_MONEY + ABANDONED · Est. $7,500/mo · $2.99–$4.99 one-time · S effort — 11-yr-old 3.8★ incumbent</div>
-    </div>
-    <span class="status status-todo">TODO</span>
-  </div>
-  <div class="board-item">
-    <div class="board-item-left">
-      <div class="board-item-name">SplitRight — Group Expense Splitter</div>
-      <div class="board-item-detail">Signal: SUBSCRIPTION_BACKLASH · Score: 61/100 · Est. $6,000/mo · $4.99 one-time · M effort — CAUTION: Tricount is strong free competitor</div>
-    </div>
-    <span class="status status-todo">TODO</span>
-  </div>
-  <div class="board-item">
-    <div class="board-item-left">
-      <div class="board-item-name">SubList — Subscription Tracker</div>
-      <div class="board-item-detail">Signal: SUBSCRIPTION_BACKLASH · Est. $5,000/mo · $1.99 one-time · S effort</div>
-    </div>
-    <span class="status status-todo">TODO</span>
-  </div>
-
-  <div class="section-header">— Passed / Dropped —</div>
-
-  <div class="board-item">
-    <div class="board-item-left">
-      <div class="board-item-name">Work Hours Tracker — PASS</div>
-      <div class="board-item-detail">Acq. Score 15/30 · 8+ active competitors (33K–74K reviews each) · Zero defensibility · Commodity app · One-time purchase kills recurring revenue for 7-fig exits · QA verdict: PASS (TIVAAA-40/48)</div>
-    </div>
-    <span class="status status-killed">PASS</span>
-  </div>
-  <div class="board-item">
-    <div class="board-item-left">
-      <div class="board-item-name">Calendar App — DROPPED</div>
-      <div class="board-item-detail">BusyCal fills gap — no viable differentiation · QA verdict: DROP (TIVAAA-40)</div>
-    </div>
-    <span class="status status-killed">KILLED</span>
-  </div>
-</div>
-<!-- END BOARD ACTION TRACKER -->
-
-<h2>Decision Queue</h2>
-<div class="decision">
-  <div class="decision-title"><span class="rank">#1</span> Habit Tracker — BUILD FIRST (QA Approved)</div>
-  <div class="decision-action">Score 7.0/10. Est. $1,400–1,700/mo at $5.99 one-time. Streaks proves model (27K reviews). UNHAPPY_MONEY signal. S effort 2 wk. <strong>QA gate cleared — awaiting board GO.</strong></div>
-</div>
-<div class="decision">
-  <div class="decision-title"><span class="rank">#2</span> Text Expansion — BUILD SECOND (QA Approved, Score Revised)</div>
-  <div class="decision-action">Score revised to 6.5/10 (WordBoard competitor confirmed — free, 5.4K reviews, 4.9★). Est. $3,100–5,200/mo at $14.99 one-time. TextExpander refugees still strong signal. <strong>QA gate cleared — awaiting board GO.</strong></div>
-</div>
-<div class="decision">
-  <div class="decision-title"><span class="rank">#3</span> Spaced Repetition Flashcards (Education)</div>
-  <div class="decision-action">Score 9/10. Quizlet 1M+ reviews on subscription — backlash is massive (Trustpilot 1.4/5). $4.99–7.99 one-time. S effort 2–3 wk. <strong>Awaiting deep research validation.</strong></div>
-</div>
-<div class="decision">
-  <div class="decision-title"><span class="rank">#4</span> Offline Macro &amp; Nutrition Tracker (Food)</div>
-  <div class="decision-action">Score 9/10. Est. ~$25K/mo (annual ~$300K). MFP/Cronometer subscription backlash is massive; no one-time-purchase iOS alternative exists. USDA database is public domain. <strong>Awaiting deep research validation.</strong></div>
-</div>
-<div class="decision">
-  <div class="decision-title"><span class="rank">#5</span> Contractor Estimate Maker (Trades)</div>
-  <div class="decision-action">Est. $12,000/mo — highest revenue in existing pipeline. Two abandoned 4.9★ apps (4,374 combined reviews). Subscription tools cost $50–150/mo. $5.99–$7.99 one-time. Trades validation complete. <strong>Awaiting board GO/NO-GO.</strong></div>
-</div>
-
-<h2>Portfolio Health</h2>
-<div class="card-grid">
-  <div class="card">
-    <div class="card-label">Kova</div>
-    <div class="card-value warning">⚠ Action</div>
-    <div class="card-sub">Vocabulary flashcards · Price is #1 blocker: drop to $0.99 immediately · Update subtitle + keywords · Seed 10 reviews — ASO refresh done (TIVAAA-41)</div>
-  </div>
-  <div class="card">
-    <div class="card-label">Gratuiti</div>
-    <div class="card-value warning">74 reviews</div>
-    <div class="card-sub">4.3★ · #1 for "gratuity calculator" · ⚠ Tip Check v4.0 is new threat (162× our review base) · Add SKStoreReviewRequestAPI prompt — ASO refresh done (TIVAAA-52)</div>
-  </div>
-  <div class="card">
-    <div class="card-label">RecipeScaler</div>
-    <div class="card-value">$—</div>
-    <div class="card-sub">Recipe scaling + OCR · Lifetime · ASO baseline done · Safe from Food &amp; Cooking pipeline (different scope)</div>
-  </div>
-  <div class="card">
-    <div class="card-label">Trades-Calc</div>
-    <div class="card-value good">Launching</div>
-    <div class="card-sub">NEC 2026 electrician positioning applied (TIVAAA-62) · ASO done (TIVAAA-69) · X content in review (TIVAAA-42) · Drywall, roofing, tile gaps wide open</div>
-  </div>
-</div>
-
-<h2>Shipped Apps</h2>
-<table>
-  <tr><th>App</th><th>MRR</th><th>Trend</th><th>Reviews</th><th>Rating</th><th>Top Issue / Notes</th></tr>
-  <tr>
-    <td>Kova</td><td>—</td><td class="neutral">—</td><td>0</td><td>—</td>
-    <td class="bad">URGENT: Drop price to $0.99 · Update subtitle/keywords · Seed 10 reviews to unlock star display · 3 new competitors appeared this week (Noji, WordPal, Gizmo AI)</td>
-  </tr>
-  <tr>
-    <td>Gratuiti</td><td>—</td><td class="good">+3 reviews</td><td>74</td><td class="good">4.3★</td>
-    <td class="warning">⚠ Tip Check v4.0.0 (Mar 18) now matches on receipt scan + iCloud sync — 162× our review base. Add post-split review prompt. Update subtitle: "Split Bills, Scan &amp; No Ads"</td>
-  </tr>
-  <tr>
-    <td>RecipeScaler</td><td>—</td><td class="neutral">—</td><td>—</td><td>—</td>
-    <td class="neutral">ASO baseline done. Pipeline Paprika replacement is architecturally distinct — no cannibalization risk.</td>
-  </tr>
-  <tr>
-    <td>Trades-Calc</td><td>—</td><td class="neutral">—</td><td>—</td><td>—</td>
-    <td class="warning">ASO done — drywall gap (2.8★, 2018) is prime opportunity; roofing, tile, plumbing also wide open. Reddit confirms Construction Master Pro subscription backlash is #1 1-star theme.</td>
-  </tr>
-</table>
-
-<h2>App Gap Pipeline</h2>
-
-<h3>QA Cleared — Ready to Build</h3>
-<table>
-  <tr><th>Finding</th><th>Signal</th><th>Category</th><th>Est. MRR</th><th>Effort</th><th>Score</th><th>Verdict</th></tr>
-  <tr>
-    <td><strong>Habit Tracker ★</strong></td>
-    <td>UNHAPPY_MONEY</td>
-    <td>Productivity</td>
-    <td class="good">$1,400–1,700</td>
-    <td>S (2 wk)</td>
-    <td class="score good">7.0/10</td>
-    <td><span class="tag tag-go">BUILD FIRST</span></td>
-  </tr>
-  <tr>
-    <td><strong>Text Expansion (Texpand)</strong></td>
-    <td>SUBSCRIPTION_BACKLASH</td>
-    <td>Productivity</td>
-    <td class="good">$3,100–5,200</td>
-    <td>S (2–3 wk)</td>
-    <td class="score">6.5/10</td>
-    <td><span class="tag tag-go">BUILD SECOND</span></td>
-  </tr>
-  <tr>
-    <td>Sleep Tracker</td>
-    <td>SUBSCRIPTION_BACKLASH</td>
-    <td>Health</td>
-    <td>$1,000–1,300</td>
-    <td>M–L</td>
-    <td class="score">5.0/10</td>
-    <td><span class="tag tag-maybe">HOLD</span></td>
-  </tr>
-  <tr>
-    <td><del>Work Hours Tracker</del></td>
-    <td>ABANDONED_APPS</td>
-    <td>Productivity</td>
-    <td>—</td>
-    <td>—</td>
-    <td class="score bad">15/30</td>
-    <td><span class="tag tag-pass">PASS</span></td>
-  </tr>
-</table>
-
-<h3>Education — Awaiting Validation (TIVAAA-46)</h3>
-<table>
-  <tr><th>Finding</th><th>Signal</th><th>Est. MRR</th><th>Effort</th><th>Score</th><th>Verdict</th></tr>
-  <tr>
-    <td><strong>Spaced Repetition Flashcards</strong></td>
-    <td>SUBSCRIPTION_BACKLASH (Quizlet)</td>
-    <td class="good">—</td>
-    <td>S (2–3 wk)</td>
-    <td class="score good">9/10</td>
-    <td><span class="tag tag-maybe">QUEUED</span></td>
-  </tr>
-  <tr>
-    <td><strong>Scientific Calculator for iPad</strong></td>
-    <td>ABANDONED (60K reviews, 65mo stale)</td>
-    <td class="good">—</td>
-    <td>S (2–3 wk)</td>
-    <td class="score good">9/10</td>
-    <td><span class="tag tag-maybe">QUEUED</span></td>
-  </tr>
-  <tr>
-    <td><strong>Homework Planner</strong></td>
-    <td>ABANDONED (7K reviews, 81–92mo stale)</td>
-    <td>—</td>
-    <td>S (2–3 wk)</td>
-    <td class="score">8/10</td>
-    <td><span class="tag tag-maybe">QUEUED</span></td>
-  </tr>
-  <tr>
-    <td><strong>SAT/ACT Test Prep</strong></td>
-    <td>ABANDONED (4K reviews, 85mo stale)</td>
-    <td>—</td>
-    <td>M (3–4 wk)</td>
-    <td class="score">8/10</td>
-    <td><span class="tag tag-maybe">QUEUED</span></td>
-  </tr>
-  <tr>
-    <td>Typing Trainer / WPM</td>
-    <td>ABANDONED (109 months! Android 10M+)</td>
-    <td>—</td>
-    <td>S (2 wk)</td>
-    <td class="score">7/10</td>
-    <td><span class="tag tag-maybe">QUEUED</span></td>
-  </tr>
-  <tr>
-    <td>Citation &amp; Bibliography Generator</td>
-    <td>UNHAPPY + ABANDONED (3.95★)</td>
-    <td>—</td>
-    <td>M (3–4 wk)</td>
-    <td class="score">6/10</td>
-    <td><span class="tag tag-maybe">QUEUED</span></td>
-  </tr>
-</table>
-
-<h3>Food &amp; Cooking — Awaiting Validation (TIVAAA-51)</h3>
-<table>
-  <tr><th>Finding</th><th>Signal</th><th>Est. Annual</th><th>Effort</th><th>Score</th><th>Verdict</th></tr>
-  <tr>
-    <td><strong>Offline Macro &amp; Nutrition Tracker</strong></td>
-    <td>SUBSCRIPTION_BACKLASH (MFP/Cronometer)</td>
-    <td class="good">~$300K</td>
-    <td>M</td>
-    <td class="score good">9/10</td>
-    <td><span class="tag tag-maybe">QUEUED</span></td>
-  </tr>
-  <tr>
-    <td><strong>Allergen &amp; Ingredient Scanner</strong></td>
-    <td>SUBSCRIPTION_BACKLASH (Yuka)</td>
-    <td class="good">~$200K</td>
-    <td>M</td>
-    <td class="score good">9/10</td>
-    <td><span class="tag tag-maybe">QUEUED</span></td>
-  </tr>
-  <tr>
-    <td><strong>Keto / Net Carb Calculator</strong></td>
-    <td>SUBSCRIPTION_BACKLASH (Carb Manager)</td>
-    <td class="good">~$175K</td>
-    <td>S–M</td>
-    <td class="score">8/10</td>
-    <td><span class="tag tag-maybe">QUEUED</span></td>
-  </tr>
-  <tr>
-    <td>Smart Multi-Timer for Cooking</td>
-    <td>MARKET_GAP</td>
-    <td>—</td>
-    <td>S (6–10 wk)</td>
-    <td class="score">—</td>
-    <td><span class="tag tag-maybe">QUEUED</span></td>
-  </tr>
-  <tr>
-    <td>Sous Vide Calculator</td>
-    <td>MARKET_GAP</td>
-    <td>—</td>
-    <td>S (6–10 wk)</td>
-    <td class="score">—</td>
-    <td><span class="tag tag-maybe">QUEUED</span></td>
-  </tr>
-</table>
-
-<h3>Trades — Validated (TIVAAA-36/45)</h3>
-<table>
-  <tr><th>Finding</th><th>Signal</th><th>Category</th><th>Est. MRR</th><th>Effort</th><th>Score</th><th>Verdict</th></tr>
-  <tr>
-    <td><strong>Contractor Estimate Maker</strong></td>
-    <td>ABANDONED ×2</td>
-    <td>Trades</td>
-    <td class="good">$12,000</td>
-    <td>M</td>
-    <td class="score">—/10</td>
-    <td><span class="tag tag-maybe">QUEUED</span></td>
-  </tr>
-  <tr>
-    <td><strong>Concrete Calculator Pro</strong></td>
-    <td>ABANDONED</td>
-    <td>Trades</td>
-    <td class="good">$9,000</td>
-    <td>S</td>
-    <td class="score">—/10</td>
-    <td><span class="tag tag-maybe">QUEUED</span></td>
-  </tr>
-  <tr>
-    <td><strong>Roof Pitch &amp; Rafter Calculator</strong></td>
-    <td>UNHAPPY_MONEY + ABANDONED</td>
-    <td>Trades</td>
-    <td class="good">$7,500</td>
-    <td>S</td>
-    <td class="score">—/10</td>
-    <td><span class="tag tag-maybe">QUEUED</span></td>
-  </tr>
-  <tr>
-    <td><strong>NEC Electrician Conduit Suite</strong></td>
-    <td>ACCURACY_PAIN (Reddit)</td>
-    <td>Trades</td>
-    <td>—</td>
-    <td>M</td>
-    <td class="score">8/10</td>
-    <td><span class="tag tag-maybe">QUEUED</span></td>
-  </tr>
-  <tr>
-    <td><strong>Mobile Manual J Block Load (HVAC)</strong></td>
-    <td>MARKET_GAP (Reddit)</td>
-    <td>Trades / HVAC</td>
-    <td>—</td>
-    <td>M–L</td>
-    <td class="score">8/10</td>
-    <td><span class="tag tag-maybe">QUEUED</span></td>
-  </tr>
-  <tr>
-    <td>HVAC PT Chart + Superheat/Subcooling</td>
-    <td>SUBSCRIPTION_PIVOT (Bluon)</td>
-    <td>Trades / HVAC</td>
-    <td>—</td>
-    <td>S</td>
-    <td class="score">—</td>
-    <td><span class="tag tag-maybe">QUEUED</span></td>
-  </tr>
-</table>
-
-<h3>Finance — Validated (TIVAAA-37)</h3>
-<table>
-  <tr><th>Finding</th><th>Signal</th><th>Category</th><th>Est. MRR</th><th>Effort</th><th>Score</th><th>Verdict</th></tr>
-  <tr>
-    <td><strong>ShiftPay — Tip &amp; Income Tracker</strong></td>
-    <td>SUBSCRIPTION_BACKLASH</td>
-    <td>Finance</td>
-    <td class="good">$6,700</td>
-    <td>S</td>
-    <td class="score">82/100</td>
-    <td><span class="tag tag-validated">VALIDATED</span></td>
-  </tr>
-  <tr>
-    <td><strong>Tip-Out Calculator (Worker iOS)</strong></td>
-    <td>MARKET_GAP (Reddit)</td>
-    <td>Finance</td>
-    <td class="good">—</td>
-    <td>S</td>
-    <td class="score">9/10</td>
-    <td><span class="tag tag-maybe">QUEUED</span></td>
-  </tr>
-  <tr>
-    <td><strong>SplitRight — Group Expense Splitter</strong></td>
-    <td>SUBSCRIPTION_BACKLASH</td>
-    <td>Finance</td>
-    <td class="good">$6,000</td>
-    <td>M</td>
-    <td class="score">61/100</td>
-    <td><span class="tag tag-maybe">CAUTION</span></td>
-  </tr>
-  <tr>
-    <td><strong>SubList — Subscription Tracker</strong></td>
-    <td>SUBSCRIPTION_BACKLASH</td>
-    <td>Finance</td>
-    <td class="good">$5,000</td>
-    <td>S</td>
-    <td class="score">—/10</td>
-    <td><span class="tag tag-maybe">QUEUED</span></td>
-  </tr>
-</table>
-
-<h3>Reddit-Validated — New Signals (TIVAAA-50)</h3>
-<table>
-  <tr><th>Finding</th><th>Reddit Signal</th><th>Score</th><th>Category</th><th>Notes</th></tr>
-  <tr>
-    <td><strong>Tip-Out Calculator (Worker iOS)</strong></td>
-    <td>No iOS app exists</td>
-    <td class="score good">9/10</td>
-    <td>Finance</td>
-    <td>See Finance table above</td>
-  </tr>
-  <tr>
-    <td><strong>Paprika Replacement w/ Accurate Scaling</strong></td>
-    <td>Active user migration</td>
-    <td class="score good">9/10</td>
-    <td>Food</td>
-    <td>Distinct from RecipeScaler — multi-recipe + grocery consolidation</td>
-  </tr>
-  <tr>
-    <td><strong>NEC Electrician Conduit Suite</strong></td>
-    <td>Southwire accuracy errors confirmed</td>
-    <td class="score">8/10</td>
-    <td>Trades</td>
-    <td>See Trades table above</td>
-  </tr>
-  <tr>
-    <td><strong>Mobile Manual J (HVAC)</strong></td>
-    <td>All leaders desktop-only</td>
-    <td class="score">8/10</td>
-    <td>Trades/HVAC</td>
-    <td>See Trades table above</td>
-  </tr>
-  <tr>
-    <td>Construction Calc — One-Time Purchase</td>
-    <td>Construction Master Pro sub backlash = #1 1-star theme</td>
-    <td class="score">8/10</td>
-    <td>Trades</td>
-    <td>Overlaps with Contractor Estimate Maker</td>
-  </tr>
-  <tr>
-    <td>Kova — AI Mnemonic GRE/SAT Vocab</td>
-    <td>GRE/SAT community frustrated with current options</td>
-    <td class="score">8/10</td>
-    <td>Education</td>
-    <td>Reddit confirms Kova's existing positioning is correct</td>
-  </tr>
-</table>
-
-<h3>Trades-Calc — Upsell / Expansion Opportunities</h3>
-<table>
-  <tr><th>Niche</th><th>Competition</th><th>Opportunity</th></tr>
-  <tr><td>Drywall Calculator</td><td class="good">2.8 ⭐ best, last updated 2018</td><td class="good">Near-zero competition — prime build</td></tr>
-  <tr><td>Concrete Calculator</td><td class="warning">23K reviews but stale since Mar 2024</td><td class="warning">Displacement target</td></tr>
-  <tr><td>Roofing Calculator</td><td class="warning">3.9 ⭐ best</td><td class="warning">Strong gap</td></tr>
-  <tr><td>Tile / Plumbing</td><td class="good">Essentially no apps</td><td class="good">Wide open</td></tr>
-  <tr><td>Stair Calculator</td><td class="neutral">4.1 ⭐ best</td><td class="neutral">Moderate gap</td></tr>
-</table>
-
-<h2>Marketing</h2>
-<table>
-  <tr><th>App</th><th>Channel</th><th>CPI</th><th>Payback</th><th>ROI</th><th>Status</th></tr>
-</table>
-<p class="empty">No paid marketing yet. Tara Voss drafted Trades-Calc launch campaign (5 tweets + 1 thread — TIVAAA-42, in review). Kyle Navarro running weekly Reddit scan (TIVAAA-74). Reply drafts from prior scan ready for deployment.</p>
-
-<h2>Agent Status</h2>
-<table>
-  <tr><th>Agent</th><th>Role</th><th>Status</th><th>Last Completed</th><th>Notes</th></tr>
-  <tr><td>Matt Ingram</td><td>CEO</td><td class="good">building</td><td>Gratuiti No Tax on Tips (TIVAAA-59) + RecipeScaler ReciMe capture (TIVAAA-60)</td><td>Both builds in progress · Trades-Calc NEC 2026 positioning done (TIVAAA-62)</td></tr>
-  <tr><td>Dash Micheals</td><td>Dashboard Manager</td><td class="good">running</td><td>Dashboard refresh (TIVAAA-53)</td><td>This update (TIVAAA-76)</td></tr>
-  <tr><td>Gabby Samson</td><td>Gap Scanner</td><td class="good">running</td><td>Health &amp; Fitness gap scan (TIVAAA-73)</td><td>In progress — new opps expected</td></tr>
-  <tr><td>Debra Reacher</td><td>Deep Researcher</td><td class="good">running</td><td>Gratuiti No Tax on Tips validation complete (TIVAAA-66)</td><td>Now validating RecipeScaler ReciMe refugee (TIVAAA-67) · Queue: TIVAAA-68/70/71/72</td></tr>
-  <tr><td>Robert Winters</td><td>Report Writer</td><td class="neutral">idle</td><td>Board-ready pipeline brief (TIVAAA-44)</td><td>Brief compiled and complete</td></tr>
-  <tr><td>Samantha Jennings</td><td>ASO Monitor</td><td class="good">running</td><td>Trades-Calc NEC 2026 ASO complete (TIVAAA-69)</td><td>Now running Kova GRE/SAT keyword analysis (TIVAAA-75)</td></tr>
-  <tr><td>Reva Harper</td><td>Reviewer (QA)</td><td class="neutral">idle</td><td>Quality gate approved — Habit Tracker BUILD FIRST, Text Expansion BUILD SECOND (TIVAAA-40)</td><td>Work Hours Tracker PASS, Calendar DROP</td></tr>
-  <tr><td>Kyle Navarro</td><td>Reddit Scout</td><td class="good">running</td><td>Full 7-day scan — 8 top opps, reply drafts ready (TIVAAA-50)</td><td>Weekly scan in progress (TIVAAA-74) — portfolio + pipeline subreddits</td></tr>
-  <tr><td>Tara Voss</td><td>X Content Creator</td><td class="warning">in review</td><td>Trades-Calc launch campaign — 5 tweets + 1 thread drafted (TIVAAA-42)</td><td>In review — awaiting board approval</td></tr>
-</table>
-
-<h2>Key Decisions &amp; Directives</h2>
-<table>
-  <tr><th>Date</th><th>Decision</th><th>Source</th></tr>
-  <tr><td>2026-04-09</td><td class="warning">We BUILD new apps — never acquire existing ones. Pipeline = find gap → build → ship → sell.</td><td>Board directive (TIVAAA-25)</td></tr>
-  <tr><td>2026-04-09</td><td class="good">QA gate cleared: Habit Tracker = BUILD FIRST (7.0/10, $1.4–1.7K/mo). Text Expansion = BUILD SECOND (6.5/10, $3.1–5.2K/mo). Work Hours Tracker = PASS. Calendar = DROP.</td><td>Reviewer (TIVAAA-40)</td></tr>
-  <tr><td>2026-04-09</td><td class="good">Education scan complete: 6 opps. Top: Flashcards 9/10 (Quizlet backlash), iPad Scientific Calc 9/10 (60K reviews stale). Awaiting validation.</td><td>Gap Scanner (TIVAAA-46)</td></tr>
-  <tr><td>2026-04-09</td><td class="good">Food &amp; Cooking scan complete: 7 opps. Top: Offline Macro Tracker 9/10 (~$300K/yr), Allergen Scanner 9/10 (~$200K/yr).</td><td>Gap Scanner (TIVAAA-51)</td></tr>
-  <tr><td>2026-04-09</td><td class="good">Reddit 7-day scan complete: 8 top opps ranked. New: Tip-Out Calc (9/10, no iOS app exists), Paprika replacement (9/10, active migration).</td><td>Reddit Scout (TIVAAA-50)</td></tr>
-  <tr><td>2026-04-09</td><td class="warning">Kova urgent: drop price to $0.99, update subtitle/keywords, seed 10 reviews. Gratuiti: add review prompt, update subtitle, Tip Check v4.0 is growing threat.</td><td>ASO Monitor (TIVAAA-41/52)</td></tr>
-  <tr><td>2026-04-09</td><td>Hired X Content Creator (Tara Voss) and Reddit Scout (Kyle Navarro)</td><td>CEO (TIVAAA-34)</td></tr>
-  <tr><td>2026-04-09</td><td>Finance scan: ShiftPay 82/100 ($6.7K/mo), SplitRight 61/100 caution (Tricount is strong free alternative)</td><td>Deep Researcher (TIVAAA-37)</td></tr>
-  <tr><td>2026-04-09</td><td class="good">Gratuiti No Tax on Tips qualified tip-split validated (TIVAAA-66) — building now (TIVAAA-59). Legislative tailwind is strong signal.</td><td>Deep Researcher (TIVAAA-66) · CEO (TIVAAA-59)</td></tr>
-  <tr><td>2026-04-09</td><td class="good">Trades-Calc NEC 2026 electrician all-in-one ASO complete (TIVAAA-69) · Positioning applied (TIVAAA-62) · X content batch in review (TIVAAA-42)</td><td>ASO Monitor (TIVAAA-69) · CEO (TIVAAA-62)</td></tr>
-  <tr><td>2026-04-09</td><td>Health &amp; Fitness gap scan (TIVAAA-73), Reddit weekly scan (TIVAAA-74), Kova GRE/SAT ASO analysis (TIVAAA-75) all in progress</td><td>Gabby Samson / Kyle Navarro / Samantha Jennings</td></tr>
-  <tr><td>2026-04-09</td><td>Trades &amp; Construction scan: 3 top BUILD opps — Contractor Estimate ($12K/mo), Concrete Calc ($9K/mo), Roof Pitch ($7.5K/mo)</td><td>Gap Scanner (TIVAAA-36)</td></tr>
-</table>
-
-<!--
-STATUS REFERENCE FOR DASH (Dashboard Manager):
-When updating findings in Board Action Tracker or Pipeline table, use these classes:
-  status-todo        = gray    — finding identified, not yet acted on
-  status-in-progress = blue    — board is actively working on this
-  status-in-review   = yellow  — awaiting deep research or reviewer verdict
-  status-building    = purple  — board decided GO, building locally
-  status-live        = green   — shipped to App Store
-  status-killed      = red     — rejected or abandoned
--->
-
-</body>
-</html>
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+</script>
+</body></html>
