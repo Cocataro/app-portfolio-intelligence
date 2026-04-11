@@ -1,0 +1,84 @@
+PCOS Wellness Tracker
+Track patterns. Own your data. No cloud required.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+WHAT YOU GET
+• One HTML file — your complete PCOS Wellness Tracker
+• Works in any browser (Chrome, Firefox, Safari, Edge)
+• One-page PDF instruction guide
+• Lifetime use, no subscriptions
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+FEATURES
+• Quick daily logging — symptoms, pain level, triggers, medications, and notes in under 30 seconds
+• Calendar view — color-coded month grid to spot patterns at a glance
+• Charts & visualizations — pain trends, symptom frequency bars, trigger-symptom heatmap
+• Smart Insights — plain-English pattern analysis after 7+ days of data
+• Doctor-ready reports — printable summaries with date ranges and trends
+• CSV export — your data in spreadsheet format
+• JSON backup & restore — never lose your data
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+TRACKS
+• Symptoms: Bloating, Cramps, Acne, Fatigue, Mood swings, Hair thinning, and more
+• Triggers: Stress, Poor sleep, Sugar/carbs, Dairy, and more
+• Medications: Metformin, Spironolactone, Birth control pill, Letrozole, and more
+• Pain level (0-10 scale)
+• Cycle phases and day tracking
+• Free-form notes
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PRIVACY PROMISE
+Your data is stored ONLY on your device. This tracker:
+✓ Has no accounts or logins
+✓ Makes zero network requests
+✓ Never sends data anywhere
+✓ Works completely offline
+✓ Requires no app installation
+
+Your health data belongs to you. Period.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+HOW IT WORKS
+1. Download the HTML file
+2. Open it in your browser
+3. Start logging — that's it!
+
+Your data saves automatically in your browser's local storage. Back up anytime with the built-in JSON export.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+DESIGN
+• Beautiful, calm interface — no guilt, no streaks, no gamification
+• Dark mode (auto-detects your system preference + manual toggle)
+• Fully responsive — works on phone, tablet, and desktop
+• Accessible — keyboard navigation, screen reader support, WCAG AA contrast
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+FAQ
+Q: Is my data safe?
+A: Yes. Everything stays in your browser. Nothing is ever sent online.
+
+Q: What if I clear my browser?
+A: Use the JSON backup feature to save your data. You can restore it anytime.
+
+Q: Can I use this on multiple devices?
+A: Yes — use JSON export/import to transfer data between devices.
+
+Q: Do I need internet to use this?
+A: No. Once you open the file, it works completely offline.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+MEDICAL DISCLAIMER
+This tracker is for personal wellness logging only. It does not provide medical advice, diagnosis, or treatment. Always consult a qualified healthcare provider for medical decisions.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Keywords: PCOS, PCOS tracker, symptom tracker, health tracker, wellness tracker, period tracker, cycle tracker, pain tracker, digital health, privacy health app, offline tracker, no account health, symptom diary, medication tracker, trigger tracker

@@ -1,0 +1,16 @@
+{
+  "name": "quiet-health-tracker",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Privacy-first health tracker builder",
+  "main": "build.js",
+  "scripts": {
+    "build": "node build.js pcos",
+    "ship": "node ship.js pcos"
+  },
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "puppeteer": "^24.40.0"
+  }
+}
