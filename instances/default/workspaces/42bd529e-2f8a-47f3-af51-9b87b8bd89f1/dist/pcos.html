@@ -7,43 +7,60 @@
   <style>
     /* === CSS Variables === */
 :root {
-  --primary: #7C6AA0;
-  --primary-light: #9B8EC4;
-  --primary-dark: #5A4D7A;
-  --accent: #E8A87C;
-  --bg: #FAFAFA;
+  --primary: #8B6F8E;
+  --primary-light: #B89FBA;
+  --primary-dark: #6B4F6E;
+  --accent: #C8907E;
+  --bg: #FAF7F5;
   --surface: #FFFFFF;
-  --text: #2D2D2D;
-  --text-secondary: #6B6B6B;
-  --success: #4CAF50;
-  --warning: #FF9800;
-  --error: #F44336;
-  --border: #E0E0E0;
+  --surface-alt: #F3EDE8;
+  --text: #2E2631;
+  --text-secondary: #6E6175;
+  --text-muted: #9E8FA5;
+  --accent-warm: #C8907E;
+  --success: #7A9E7E;
+  --warning: #C8907E;
+  --error: #A85D5D;
+  --border: #E5DDD6;
   --shadow: rgba(0,0,0,0.08);
   --radius: 8px;
   --radius-lg: 12px;
   --nav-height: 64px;
   --header-height: 56px;
-  --feeling-1: #C0626F;
-  --feeling-2: #D4956B;
-  --feeling-3: #9E9E9E;
-  --feeling-4: #6BA3A0;
-  --feeling-5: #6BAF6E;
+  --severity-none: #B89FBA;
+  --severity-mild: #D4A88C;
+  --severity-moderate: #C8907E;
+  --severity-high: #A85D5D;
+  --severity-extreme: #8B3A3A;
+  --feeling-1: #A85D5D;
+  --feeling-2: #C8907E;
+  --feeling-3: #B89FBA;
+  --feeling-4: #7A9E7E;
+  --feeling-5: #6B4F6E;
 }
 
 [data-theme="dark"] {
-  --bg: #1A1A2E;
-  --surface: #25253E;
-  --text: #E8E8E8;
-  --text-secondary: #A0A0B8;
-  --border: #3A3A5C;
+  --bg: #1A1518;
+  --surface: #252029;
+  --surface-alt: #302A33;
+  --text: #EDE6F0;
+  --text-secondary: #B0A3B8;
+  --text-muted: #7A6E82;
+  --border: #3D3541;
   --shadow: rgba(0,0,0,0.3);
   --primary-light: #A899C8;
-  --feeling-1: #D4737F;
-  --feeling-2: #DDA87A;
-  --feeling-3: #A8A8A8;
-  --feeling-4: #7BB5B2;
-  --feeling-5: #7BC17E;
+  --accent-warm: #D4A08E;
+  --success: #8FB893;
+  --severity-none: #9B87A0;
+  --severity-mild: #C8A890;
+  --severity-moderate: #D4A08E;
+  --severity-high: #C47474;
+  --severity-extreme: #D45555;
+  --feeling-1: #C47474;
+  --feeling-2: #D4A08E;
+  --feeling-3: #9B87A0;
+  --feeling-4: #8FB893;
+  --feeling-5: #B0A3B8;
 }
 
 /* === Reset & Base === */
@@ -1762,7 +1779,7 @@ select:focus:not(:focus-visible) {
   </footer>
 
   <script>
-    var APP_CONFIG = {"variant":"pcos","name":"PCOS Wellness Tracker","tagline":"Track patterns. Own your data. No cloud required.","theme":{"primary":"#8B6F8E","primaryLight":"#B89FBA","primaryDark":"#6A5269","accent":"#C4956A","background":"#FAF7F5","surface":"#FFFFFF","text":"#2D2A2E","textSecondary":"#6B636B","success":"#5A9E6F","warning":"#C4956A","error":"#C07070","dark":{"background":"#1A1518","surface":"#252022","text":"#E8E4E8","textSecondary":"#A09BA0"}},"symptoms":["Bloating","Cramps","Acne","Fatigue","Mood swings","Hair thinning","Weight changes","Brain fog","Irregular periods","Heavy bleeding","Spotting","Pelvic pain","Headache","Insomnia","Anxiety","Hot flashes","Cravings","Nausea"],"triggers":["Stress","Poor sleep","Sugar/carbs","Dairy","Skipped medication","Dehydration","Alcohol","Intense exercise","Sedentary day","Weather change","Hormonal cycle phase","Caffeine"],"medications":["Metformin","Spironolactone","Birth control pill","Letrozole","Clomid","Inositol","Vitamin D","Omega-3","Berberine","Progesterone","Ovasitol"],"mealOptions":["Breakfast","Lunch","Dinner","Snack"],"exerciseTypes":["Walking","Yoga","Strength training","Swimming","Cycling","HIIT","Pilates","Stretching","Rest day"],"cyclePhases":["Menstrual","Follicular","Ovulatory","Luteal"],"insightRules":[{"id":"sleep-symptom-correlation","label":"Sleep and symptom patterns","description":"Tracks whether poor sleep nights correlate with higher symptom days"},{"id":"trigger-frequency","label":"Most common triggers","description":"Ranks triggers by frequency over the selected period"},{"id":"cycle-symptom-map","label":"Symptoms by cycle phase","description":"Shows which symptoms cluster in each cycle phase"},{"id":"medication-adherence","label":"Medication consistency","description":"Tracks daily medication check-in rate"}],"feelingScale":[{"value":1,"label":"Rough","color":"#C0626F"},{"value":2,"label":"Okay","color":"#D4956B"},{"value":3,"label":"Steady","color":"#9E9E9E"},{"value":4,"label":"Good","color":"#6BA3A0"},{"value":5,"label":"Great","color":"#6BAF6E"}]};
+    var APP_CONFIG = {"variant":"pcos","name":"PCOS Wellness Tracker","tagline":"Track patterns. Own your data. No cloud required.","theme":{"primary":"#8B6F8E","primaryLight":"#B89FBA","primaryDark":"#6B4F6E","accent":"#C8907E","background":"#FAF7F5","surface":"#FFFFFF","surfaceAlt":"#F3EDE8","text":"#2E2631","textSecondary":"#6E6175","textMuted":"#9E8FA5","border":"#E5DDD6","accentWarm":"#C8907E","success":"#7A9E7E","warning":"#C8907E","error":"#A85D5D","severityNone":"#B89FBA","severityMild":"#D4A88C","severityModerate":"#C8907E","severityHigh":"#A85D5D","severityExtreme":"#8B3A3A","dark":{"background":"#1A1518","surface":"#252029","surfaceAlt":"#302A33","text":"#EDE6F0","textSecondary":"#B0A3B8","textMuted":"#7A6E82","border":"#3D3541","accentWarm":"#D4A08E","success":"#8FB893","severityNone":"#9B87A0","severityMild":"#C8A890","severityModerate":"#D4A08E","severityHigh":"#C47474","severityExtreme":"#D45555"}},"symptoms":["Bloating","Cramps","Acne","Fatigue","Mood swings","Hair thinning","Weight changes","Brain fog","Irregular periods","Heavy bleeding","Spotting","Pelvic pain","Headache","Insomnia","Anxiety","Hot flashes","Cravings","Nausea"],"triggers":["Stress","Poor sleep","Sugar/carbs","Dairy","Skipped medication","Dehydration","Alcohol","Intense exercise","Sedentary day","Weather change","Hormonal cycle phase","Caffeine"],"medications":["Metformin","Spironolactone","Birth control pill","Letrozole","Clomid","Inositol","Vitamin D","Omega-3","Berberine","Progesterone","Ovasitol"],"mealOptions":["Breakfast","Lunch","Dinner","Snack"],"exerciseTypes":["Walking","Yoga","Strength training","Swimming","Cycling","HIIT","Pilates","Stretching","Rest day"],"cyclePhases":["Menstrual","Follicular","Ovulatory","Luteal"],"insightRules":[{"id":"sleep-symptom-correlation","label":"Sleep and symptom patterns","description":"Tracks whether poor sleep nights correlate with higher symptom days"},{"id":"trigger-frequency","label":"Most common triggers","description":"Ranks triggers by frequency over the selected period"},{"id":"cycle-symptom-map","label":"Symptoms by cycle phase","description":"Shows which symptoms cluster in each cycle phase"},{"id":"medication-adherence","label":"Medication consistency","description":"Tracks daily medication check-in rate"}],"feelingScale":[{"value":1,"label":"Rough","color":"#A85D5D"},{"value":2,"label":"Okay","color":"#C8907E"},{"value":3,"label":"Steady","color":"#B89FBA"},{"value":4,"label":"Good","color":"#7A9E7E"},{"value":5,"label":"Great","color":"#6B4F6E"}]};
     // === Storage Module ===
 var Storage = (function() {
   var VARIANT = APP_CONFIG.variant;

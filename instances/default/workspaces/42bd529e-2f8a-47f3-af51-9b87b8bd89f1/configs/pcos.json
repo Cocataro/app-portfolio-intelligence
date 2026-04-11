@@ -5,20 +5,39 @@
   "theme": {
     "primary": "#8B6F8E",
     "primaryLight": "#B89FBA",
-    "primaryDark": "#6A5269",
-    "accent": "#C4956A",
+    "primaryDark": "#6B4F6E",
+    "accent": "#C8907E",
     "background": "#FAF7F5",
     "surface": "#FFFFFF",
-    "text": "#2D2A2E",
-    "textSecondary": "#6B636B",
-    "success": "#5A9E6F",
-    "warning": "#C4956A",
-    "error": "#C07070",
+    "surfaceAlt": "#F3EDE8",
+    "text": "#2E2631",
+    "textSecondary": "#6E6175",
+    "textMuted": "#9E8FA5",
+    "border": "#E5DDD6",
+    "accentWarm": "#C8907E",
+    "success": "#7A9E7E",
+    "warning": "#C8907E",
+    "error": "#A85D5D",
+    "severityNone": "#B89FBA",
+    "severityMild": "#D4A88C",
+    "severityModerate": "#C8907E",
+    "severityHigh": "#A85D5D",
+    "severityExtreme": "#8B3A3A",
     "dark": {
       "background": "#1A1518",
-      "surface": "#252022",
-      "text": "#E8E4E8",
-      "textSecondary": "#A09BA0"
+      "surface": "#252029",
+      "surfaceAlt": "#302A33",
+      "text": "#EDE6F0",
+      "textSecondary": "#B0A3B8",
+      "textMuted": "#7A6E82",
+      "border": "#3D3541",
+      "accentWarm": "#D4A08E",
+      "success": "#8FB893",
+      "severityNone": "#9B87A0",
+      "severityMild": "#C8A890",
+      "severityModerate": "#D4A08E",
+      "severityHigh": "#C47474",
+      "severityExtreme": "#D45555"
     }
   },
   "symptoms": [
@@ -68,10 +87,10 @@
     }
   ],
   "feelingScale": [
-    { "value": 1, "label": "Rough", "color": "#C0626F" },
-    { "value": 2, "label": "Okay", "color": "#D4956B" },
-    { "value": 3, "label": "Steady", "color": "#9E9E9E" },
-    { "value": 4, "label": "Good", "color": "#6BA3A0" },
-    { "value": 5, "label": "Great", "color": "#6BAF6E" }
+    { "value": 1, "label": "Rough", "color": "#A85D5D" },
+    { "value": 2, "label": "Okay", "color": "#C8907E" },
+    { "value": 3, "label": "Steady", "color": "#B89FBA" },
+    { "value": 4, "label": "Good", "color": "#7A9E7E" },
+    { "value": 5, "label": "Great", "color": "#6B4F6E" }
   ]
 }
