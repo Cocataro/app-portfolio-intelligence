@@ -47,7 +47,7 @@
   --surface-alt: #2F2B25;
   --text: #E2D9CC;
   --text-secondary: #9E9487;
-  --text-muted: #6E655A;
+  --text-muted: #928779;
   --border: #3D3730;
   --border-accent: #4D463D;
   --shadow: rgba(0,0,0,0.3);
@@ -526,16 +526,19 @@ button:focus:not(:focus-visible), a:focus:not(:focus-visible), input:focus:not(:
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 20px;
-  height: 20px;
+  width: 32px;
+  height: 32px;
+  min-width: 44px;
+  min-height: 44px;
   border-radius: 50%;
   background: rgba(0,0,0,0.15);
   border: none;
   color: inherit;
   font-size: 0.75rem;
   cursor: pointer;
-  padding: 0;
+  padding: 6px;
   line-height: 1;
+  margin: -6px -6px -6px 0;
 }
 
 .add-custom-row {
@@ -1142,8 +1145,10 @@ button:focus:not(:focus-visible), a:focus:not(:focus-visible), input:focus:not(:
 }
 .bag-item:last-child { border-bottom: none; }
 .bag-checkbox {
-  width: 24px;
-  height: 24px;
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  min-height: 44px;
   border: 2px solid var(--border);
   border-radius: 6px;
   background: var(--bg);

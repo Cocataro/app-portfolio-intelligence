@@ -4,9 +4,10 @@ var Setup = (function() {
 
   var SETUP_KEY = 'healthtracker_' + APP_CONFIG.variant + '_settings';
   var currentStep = 0;
-  var totalSteps = 4;
+  var totalSteps = 5;
   var selectedSymptoms = [];
   var userName = '';
+  var dueDate = '';
 
   function isFirstTime() {
     try {
@@ -62,9 +63,12 @@ var Setup = (function() {
         html = renderName();
         break;
       case 2:
-        html = renderSymptoms();
+        html = renderDueDate();
         break;
       case 3:
+        html = renderSymptoms();
+        break;
+      case 4:
         html = renderDone();
         break;
     }
@@ -101,6 +105,17 @@ var Setup = (function() {
       '<div class="setup-input-group">' +
         '<label for="setup-name-input" class="sr-only">Your name (optional)</label>' +
         '<input type="text" id="setup-name-input" class="setup-input" placeholder="Your name (optional)" maxlength="30" aria-label="Your name (optional)" value="' + escapeHtml(userName) + '">' +
+      '</div>' +
+    '</div>';
+  }
+
+  function renderDueDate() {
+    return '<div class="setup-step setup-due-date">' +
+      '<h2 tabindex="-1" class="setup-heading">When is your due date?</h2>' +
+      '<p class="setup-text">This helps calculate your trimester and week. You can update it anytime in Settings.</p>' +
+      '<div class="setup-input-group">' +
+        '<label for="setup-due-date-input" class="sr-only">Expected due date</label>' +
+        '<input type="date" id="setup-due-date-input" class="setup-input" aria-label="Expected due date" value="' + escapeHtml(dueDate) + '">' +
       '</div>' +
     '</div>';
   }
@@ -197,6 +212,11 @@ var Setup = (function() {
           var input = document.getElementById('setup-name-input');
           if (input) userName = input.value.trim();
         }
+        // Save due date from step 2
+        if (currentStep === 2) {
+          var dateInput = document.getElementById('setup-due-date-input');
+          if (dateInput) dueDate = dateInput.value.trim();
+        }
 
         if (currentStep < totalSteps - 1) {
           renderStep(currentStep + 1);
@@ -214,6 +234,10 @@ var Setup = (function() {
           var input = document.getElementById('setup-name-input');
           if (input) userName = input.value.trim();
         }
+        if (currentStep === 2) {
+          var dateInput = document.getElementById('setup-due-date-input');
+          if (dateInput) dueDate = dateInput.value.trim();
+        }
         if (currentStep > 0) {
           renderStep(currentStep - 1);
         }
@@ -226,6 +250,9 @@ var Setup = (function() {
       skipBtn.addEventListener('click', function() {
         if (currentStep === 1) {
           userName = '';
+        }
+        if (currentStep === 2) {
+          dueDate = '';
         }
         if (currentStep < totalSteps - 1) {
           renderStep(currentStep + 1);
@@ -263,7 +290,7 @@ var Setup = (function() {
 
     // Keyboard: Enter on name input advances
     overlay.addEventListener('keydown', function(e) {
-      if (e.key === 'Enter' && e.target.id === 'setup-name-input') {
+      if (e.key === 'Enter' && (e.target.id === 'setup-name-input' || e.target.id === 'setup-due-date-input')) {
         e.preventDefault();
         if (nextBtn) nextBtn.click();
       }
@@ -283,6 +310,7 @@ var Setup = (function() {
     settings.setupComplete = true;
     settings.userName = userName;
     settings.activeSymptoms = activeSymptoms;
+    if (dueDate) settings.dueDate = dueDate;
     Storage.saveSettings(settings);
 
     // Transition out
