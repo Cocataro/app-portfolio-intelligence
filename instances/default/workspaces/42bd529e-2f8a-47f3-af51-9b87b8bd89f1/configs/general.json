@@ -1,0 +1,92 @@
+{
+  "variant": "general",
+  "name": "Symptom Tracker",
+  "tagline": "Track anything. See patterns. Own your data.",
+  "theme": {
+    "primary": "#4A7C8A",
+    "primaryLight": "#7AABB8",
+    "primaryDark": "#34606C",
+    "accent": "#D4915E",
+    "background": "#F4F5F7",
+    "surface": "#FFFFFF",
+    "surfaceAlt": "#ECEEF1",
+    "text": "#1C2024",
+    "textSecondary": "#5F6B76",
+    "textMuted": "#8F99A3",
+    "border": "#D8DBE0",
+    "accentGreen": "#4CAF7D",
+    "accentAmber": "#D4915E",
+    "success": "#4CAF7D",
+    "warning": "#D4915E",
+    "error": "#C45B5B",
+    "severityLow": "#7AABB8",
+    "severityMid": "#D4915E",
+    "severityHigh": "#C45B5B",
+    "dark": {
+      "background": "#141618",
+      "surface": "#1E2124",
+      "surfaceAlt": "#262A2E",
+      "text": "#E8EAED",
+      "textSecondary": "#9AA0A8",
+      "textMuted": "#636B74",
+      "border": "#34393E",
+      "primary": "#7AABB8",
+      "primaryLight": "#9DC5CF",
+      "primaryDark": "#4A7C8A",
+      "accentGreen": "#5CC08E",
+      "accentAmber": "#E0A574",
+      "success": "#5CC08E",
+      "severityLow": "#6B9BA8",
+      "severityMid": "#E0A574",
+      "severityHigh": "#D47070"
+    }
+  },
+  "symptoms": [
+    "Fatigue", "Pain", "Headache", "Nausea", "Brain fog",
+    "Dizziness", "Muscle ache", "Joint stiffness",
+    "Digestive issues", "Insomnia", "Anxiety", "Low mood",
+    "Shortness of breath", "Skin irritation", "Swelling",
+    "Numbness/tingling"
+  ],
+  "triggers": [
+    "Stress", "Poor sleep", "Weather change", "Certain foods",
+    "Alcohol", "Caffeine", "Skipped medication", "Dehydration",
+    "Intense exercise", "Sedentary day", "Hormonal changes",
+    "Allergens"
+  ],
+  "medications": [],
+  "mealOptions": ["Breakfast", "Lunch", "Dinner", "Snack"],
+  "exerciseTypes": [
+    "Walking", "Yoga", "Strength training", "Swimming",
+    "Cycling", "HIIT", "Pilates", "Stretching", "Rest day"
+  ],
+  "insightRules": [
+    {
+      "id": "sleep-symptom-correlation",
+      "label": "Sleep and symptom patterns",
+      "description": "Tracks whether poor sleep nights correlate with higher symptom days"
+    },
+    {
+      "id": "trigger-frequency",
+      "label": "Most common triggers",
+      "description": "Ranks triggers by frequency over the selected period"
+    },
+    {
+      "id": "medication-adherence",
+      "label": "Medication consistency",
+      "description": "Tracks daily medication check-in rate"
+    }
+  ],
+  "severityLevels": [
+    { "key": "low", "label": "Low", "cssVar": "--severity-low" },
+    { "key": "mid", "label": "Mid", "cssVar": "--severity-mid" },
+    { "key": "high", "label": "High", "cssVar": "--severity-high" }
+  ],
+  "feelingScale": [
+    { "value": 1, "label": "Rough", "color": "#C45B5B" },
+    { "value": 2, "label": "Okay", "color": "#D4915E" },
+    { "value": 3, "label": "Steady", "color": "#7AABB8" },
+    { "value": 4, "label": "Good", "color": "#4CAF7D" },
+    { "value": 5, "label": "Great", "color": "#34606C" }
+  ]
+}

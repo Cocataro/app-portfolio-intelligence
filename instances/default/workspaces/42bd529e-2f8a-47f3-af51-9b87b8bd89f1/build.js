@@ -19,7 +19,12 @@ if (!fs.existsSync(configPath)) {
 
 const config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
 const template = fs.readFileSync(path.join(__dirname, 'src', 'template.html'), 'utf8');
-const styles = fs.readFileSync(path.join(__dirname, 'src', 'styles.css'), 'utf8');
+
+// Use variant-specific CSS if it exists, otherwise fall back to base styles.css
+const variantStylesPath = path.join(__dirname, 'src', 'styles-' + variant + '.css');
+const baseStylesPath = path.join(__dirname, 'src', 'styles.css');
+const stylesPath = fs.existsSync(variantStylesPath) ? variantStylesPath : baseStylesPath;
+const styles = fs.readFileSync(stylesPath, 'utf8');
 
 // Read component scripts in dependency order
 const componentOrder = [

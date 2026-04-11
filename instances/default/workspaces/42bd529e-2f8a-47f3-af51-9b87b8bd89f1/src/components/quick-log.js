@@ -139,7 +139,7 @@ var QuickLog = (function() {
     });
   }
 
-  var severityLevels = [
+  var severityLevels = APP_CONFIG.severityLevels || [
     { key: 'none', label: 'None', cssVar: '--severity-none' },
     { key: 'mild', label: 'Mild', cssVar: '--severity-mild' },
     { key: 'moderate', label: 'Moderate', cssVar: '--severity-moderate' },
