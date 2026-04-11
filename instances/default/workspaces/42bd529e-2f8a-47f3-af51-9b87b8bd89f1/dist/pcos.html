@@ -4483,8 +4483,8 @@ var Reports = (function() {
       restoreInput.addEventListener('change', function() {
         var file = this.files[0];
         if (!file) return;
-        Storage.restoreFromFile(file, function(count) {
-          if (count >= 0) {
+        Storage.restoreFromFile(file, function(err, count) {
+          if (!err && count >= 0) {
             showToast('Restored ' + count + ' entries');
             render();
           } else {
