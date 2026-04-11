@@ -10,7 +10,7 @@
   --surface-alt: #EDE7DC;
   --text: #3A3229;
   --text-secondary: #7B7164;
-  --text-muted: #A89E90;
+  --text-muted: #7A7168;
   --border: #DDD5C8;
   --border-accent: #CBBFAE;
   --shadow: rgba(0,0,0,0.06);
@@ -35,6 +35,10 @@
   --feeling-4: #7D9474;
   --accent-subtle: #F7EFE2;
   --secondary: #8A7B6A;
+  --bg-secondary: #F0EAE0;
+  --chart-fill: rgba(196, 147, 80, 0.15);
+  --chart-line: #C49350;
+  --chart-line-alt: #7D9474;
 }
 
 [data-theme="dark"] {
@@ -68,6 +72,10 @@
   --feeling-4: #8FB893;
   --accent-subtle: #2C2620;
   --secondary: #A09080;
+  --bg-secondary: #2F2B25;
+  --chart-fill: rgba(217, 168, 94, 0.2);
+  --chart-line: #D9A85E;
+  --chart-line-alt: #8FB893;
 }
 
 /* === Reset & Base === */
@@ -131,7 +139,7 @@ button:focus:not(:focus-visible), a:focus:not(:focus-visible), input:focus:not(:
 .app-title {
   font-size: 1.125rem;
   font-weight: 600;
-  color: var(--primary);
+  color: var(--text);
   letter-spacing: -0.01em;
   white-space: nowrap;
   overflow: hidden;
@@ -488,7 +496,7 @@ button:focus:not(:focus-visible), a:focus:not(:focus-visible), input:focus:not(:
 .wellness-btn.selected {
   background: var(--wellness-color, var(--primary));
   border-color: var(--wellness-color, var(--primary));
-  color: #fff;
+  color: #2A2420;
 }
 
 /* === Chip List === */
@@ -737,7 +745,7 @@ button:focus:not(:focus-visible), a:focus:not(:focus-visible), input:focus:not(:
   line-height: 1;
 }
 .timeline-week-size {
-  font-size: 0.5625rem;
+  font-size: 0.75rem;
   color: var(--text-muted);
   line-height: 1.1;
   max-width: 42px;

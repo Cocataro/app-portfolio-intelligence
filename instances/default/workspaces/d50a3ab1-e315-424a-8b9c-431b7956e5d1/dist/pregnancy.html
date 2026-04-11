@@ -17,7 +17,7 @@
   --surface-alt: #EDE7DC;
   --text: #3A3229;
   --text-secondary: #7B7164;
-  --text-muted: #A89E90;
+  --text-muted: #7A7168;
   --border: #DDD5C8;
   --border-accent: #CBBFAE;
   --shadow: rgba(0,0,0,0.06);
@@ -42,6 +42,10 @@
   --feeling-4: #7D9474;
   --accent-subtle: #F7EFE2;
   --secondary: #8A7B6A;
+  --bg-secondary: #F0EAE0;
+  --chart-fill: rgba(196, 147, 80, 0.15);
+  --chart-line: #C49350;
+  --chart-line-alt: #7D9474;
 }
 
 [data-theme="dark"] {
@@ -75,6 +79,10 @@
   --feeling-4: #8FB893;
   --accent-subtle: #2C2620;
   --secondary: #A09080;
+  --bg-secondary: #2F2B25;
+  --chart-fill: rgba(217, 168, 94, 0.2);
+  --chart-line: #D9A85E;
+  --chart-line-alt: #8FB893;
 }
 
 /* === Reset & Base === */
@@ -138,7 +146,7 @@ button:focus:not(:focus-visible), a:focus:not(:focus-visible), input:focus:not(:
 .app-title {
   font-size: 1.125rem;
   font-weight: 600;
-  color: var(--primary);
+  color: var(--text);
   letter-spacing: -0.01em;
   white-space: nowrap;
   overflow: hidden;
@@ -495,7 +503,7 @@ button:focus:not(:focus-visible), a:focus:not(:focus-visible), input:focus:not(:
 .wellness-btn.selected {
   background: var(--wellness-color, var(--primary));
   border-color: var(--wellness-color, var(--primary));
-  color: #fff;
+  color: #2A2420;
 }
 
 /* === Chip List === */
@@ -744,7 +752,7 @@ button:focus:not(:focus-visible), a:focus:not(:focus-visible), input:focus:not(:
   line-height: 1;
 }
 .timeline-week-size {
-  font-size: 0.5625rem;
+  font-size: 0.75rem;
   color: var(--text-muted);
   line-height: 1.1;
   max-width: 42px;
@@ -1954,7 +1962,7 @@ button:focus:not(:focus-visible), a:focus:not(:focus-visible), input:focus:not(:
   </footer>
 
   <script>
-    var APP_CONFIG = {"variant":"pregnancy","name":"Pregnancy Wellness Tracker","tagline":"Your pregnancy journey, beautifully organized. Your data never leaves this device.","defaultDarkMode":"auto","template":"template-pregnancy.html","components":["storage.js","pregnancy/pregnancy-storage.js","setup.js","theme.js","pregnancy/navigation.js","settings.js","pregnancy/dashboard.js","pregnancy/daily-checkin.js","pregnancy/timeline.js","pregnancy/appointments.js","pregnancy/kick-counter.js","pregnancy/contraction-timer.js","pregnancy/birth-plan.js","pregnancy/hospital-bag.js","pregnancy/calendar.js","pregnancy/charts.js","pregnancy/reports.js"],"theme":{"primary":"#C49350","primaryLight":"#D4A85C","primaryDark":"#B08342","accent":"#7D9474","background":"#FBF8F3","surface":"#F5F0E8","surfaceAlt":"#EDE7DC","text":"#3A3229","textSecondary":"#7B7164","textMuted":"#A89E90","border":"#DDD5C8","borderAccent":"#CBBFAE","success":"#7D9474","warning":"#D4A85C","error":"#B8655A","trimester1":"#C49350","trimester2":"#B8805A","trimester3":"#A06B4A","wellnessGreat":"#7D9474","wellnessGood":"#9AAE8E","wellnessTough":"#C49350","wellnessRough":"#B87B6B","milestone":"#D4A85C","dark":{"primary":"#D9A85E","primaryLight":"#E5B870","primaryDark":"#C49350","accent":"#8FB893","background":"#1C1915","surface":"#25221D","surfaceAlt":"#2F2B25","text":"#E2D9CC","textSecondary":"#9E9487","textMuted":"#928779","border":"#3D3730","borderAccent":"#4D463D","success":"#8FB893","warning":"#E5BE6A","error":"#C87070","trimester1":"#D9A85E","trimester2":"#C8926A","trimester3":"#B07D5A","wellnessGreat":"#8FB893","wellnessGood":"#A8C89E","wellnessTough":"#D9A85E","wellnessRough":"#C8907A","milestone":"#E5BE6A"}},"symptoms":["Morning sickness","Fatigue","Back pain","Heartburn","Swelling","Braxton Hicks","Insomnia","Mood swings","Round ligament pain","Food aversions","Cravings","Headache","Constipation","Shortness of breath","Pelvic pressure","Frequent urination","Dizziness","Anxiety"],"triggers":["Stress","Poor sleep","Dehydration","Skipped meals","Weather change","Overexertion","Certain foods","Lack of movement","Hormonal surges","Caffeine"],"medications":["Prenatal vitamins","Folic acid","Iron supplement","Calcium supplement","Magnesium","DHA/Omega-3","Vitamin D","Ginger supplement","Antacid","Acetaminophen"],"exerciseTypes":["Walking","Swimming","Prenatal yoga","Stretching","Pelvic floor exercises","Light strength","Rest day"],"wellnessLevels":[{"value":4,"label":"Great","key":"great"},{"value":3,"label":"Good","key":"good"},{"value":2,"label":"Tough","key":"tough"},{"value":1,"label":"Rough","key":"rough"}],"feelingScale":[{"value":1,"label":"Rough","color":"#B87B6B"},{"value":2,"label":"Tough","color":"#C49350"},{"value":3,"label":"Good","color":"#9AAE8E"},{"value":4,"label":"Great","color":"#7D9474"}],"babySizes":["","Poppy seed","Sesame seed","Lentil","Blueberry","Raspberry","Cherry","Olive","Prune","Strawberry","Lime","Plum","Lemon","Nectarine","Apple","Avocado","Pear","Sweet potato","Mango","Banana","Pomegranate","Papaya","Grapefruit","Corn ear","Cantaloupe","Cauliflower","Lettuce head","Eggplant","Butternut squash","Acorn squash","Cabbage","Coconut","Jicama","Pineapple","Honeydew melon","Canary melon","Swiss chard","Winter melon","Leek","Mini watermelon","Watermelon"],"hospitalBagItems":{"mom":["Insurance card and ID","Birth plan copies","Comfortable robe","Nursing bra","Warm socks","Toiletries","Hair ties","Phone charger","Snacks","Going-home outfit","Pillow from home","Lip balm"],"partner":["Snacks and drinks","Phone charger","Change of clothes","Toiletries","Pillow","Camera","Entertainment","Cash for vending"],"baby":["Going-home outfit","Car seat (installed)","Swaddle blanket","Newborn diapers","Hat and mittens","Burp cloths"]},"birthPlanSections":[{"id":"environment","title":"Labor environment","options":["Dim lighting","Music playing","Quiet room","Freedom to move","Aromatherapy","Birth ball available"]},{"id":"pain","title":"Pain management","options":["Epidural","Natural/unmedicated","Open to either","IV medication","Nitrous oxide","Breathing techniques","Water therapy"]},{"id":"delivery","title":"Delivery preferences","options":["Vaginal delivery preferred","Delayed cord clamping","Skin-to-skin immediately","Partner cuts cord","Mirror to watch","Gentle cesarean if needed"]},{"id":"postpartum","title":"After delivery","options":["Breastfeed immediately","Formula feeding","Combo feeding","Delayed bathing","Rooming in","Visitors welcome","Limited visitors"]},{"id":"people","title":"Who is present","options":["Partner","Doula","Parent(s)","Sibling(s)","Friend","No additional visitors during labor"]}],"insightRules":[{"id":"symptom-trimester","label":"Symptoms by trimester","description":"Shows which symptoms cluster in each trimester"},{"id":"wellness-trend","label":"Wellness trend","description":"Tracks your overall wellness over time"},{"id":"sleep-wellness","label":"Sleep and wellness","description":"Correlates sleep quality with daily wellness"},{"id":"medication-adherence","label":"Prenatal vitamin consistency","description":"Tracks daily prenatal vitamin intake"}]};
+    var APP_CONFIG = {"variant":"pregnancy","name":"Pregnancy Wellness Tracker","tagline":"Your pregnancy journey, beautifully organized. Your data never leaves this device.","defaultDarkMode":"auto","template":"template-pregnancy.html","components":["storage.js","pregnancy/pregnancy-storage.js","setup.js","theme.js","pregnancy/navigation.js","settings.js","pregnancy/dashboard.js","pregnancy/daily-checkin.js","pregnancy/timeline.js","pregnancy/appointments.js","pregnancy/kick-counter.js","pregnancy/contraction-timer.js","pregnancy/birth-plan.js","pregnancy/hospital-bag.js","pregnancy/tools.js","pregnancy/calendar.js","pregnancy/charts.js","pregnancy/reports.js"],"theme":{"primary":"#C49350","primaryLight":"#D4A85C","primaryDark":"#B08342","accent":"#7D9474","background":"#FBF8F3","surface":"#F5F0E8","surfaceAlt":"#EDE7DC","text":"#3A3229","textSecondary":"#7B7164","textMuted":"#A89E90","border":"#DDD5C8","borderAccent":"#CBBFAE","success":"#7D9474","warning":"#D4A85C","error":"#B8655A","trimester1":"#C49350","trimester2":"#B8805A","trimester3":"#A06B4A","wellnessGreat":"#7D9474","wellnessGood":"#9AAE8E","wellnessTough":"#C49350","wellnessRough":"#B87B6B","milestone":"#D4A85C","dark":{"primary":"#D9A85E","primaryLight":"#E5B870","primaryDark":"#C49350","accent":"#8FB893","background":"#1C1915","surface":"#25221D","surfaceAlt":"#2F2B25","text":"#E2D9CC","textSecondary":"#9E9487","textMuted":"#928779","border":"#3D3730","borderAccent":"#4D463D","success":"#8FB893","warning":"#E5BE6A","error":"#C87070","trimester1":"#D9A85E","trimester2":"#C8926A","trimester3":"#B07D5A","wellnessGreat":"#8FB893","wellnessGood":"#A8C89E","wellnessTough":"#D9A85E","wellnessRough":"#C8907A","milestone":"#E5BE6A"}},"symptoms":["Morning sickness","Fatigue","Back pain","Heartburn","Swelling","Braxton Hicks","Insomnia","Mood swings","Round ligament pain","Food aversions","Cravings","Headache","Constipation","Shortness of breath","Pelvic pressure","Frequent urination","Dizziness","Anxiety"],"triggers":["Stress","Poor sleep","Dehydration","Skipped meals","Weather change","Overexertion","Certain foods","Lack of movement","Hormonal surges","Caffeine"],"medications":["Prenatal vitamins","Folic acid","Iron supplement","Calcium supplement","Magnesium","DHA/Omega-3","Vitamin D","Ginger supplement","Antacid","Acetaminophen"],"exerciseTypes":["Walking","Swimming","Prenatal yoga","Stretching","Pelvic floor exercises","Light strength","Rest day"],"wellnessLevels":[{"value":4,"label":"Great","key":"great"},{"value":3,"label":"Good","key":"good"},{"value":2,"label":"Tough","key":"tough"},{"value":1,"label":"Rough","key":"rough"}],"feelingScale":[{"value":1,"label":"Rough","color":"#B87B6B"},{"value":2,"label":"Tough","color":"#C49350"},{"value":3,"label":"Good","color":"#9AAE8E"},{"value":4,"label":"Great","color":"#7D9474"}],"babySizes":["","Poppy seed","Sesame seed","Lentil","Blueberry","Raspberry","Cherry","Olive","Prune","Strawberry","Lime","Plum","Lemon","Nectarine","Apple","Avocado","Pear","Sweet potato","Mango","Banana","Pomegranate","Papaya","Grapefruit","Corn ear","Cantaloupe","Cauliflower","Lettuce head","Eggplant","Butternut squash","Acorn squash","Cabbage","Coconut","Jicama","Pineapple","Honeydew melon","Canary melon","Swiss chard","Winter melon","Leek","Mini watermelon","Watermelon"],"hospitalBagItems":{"mom":["Insurance card and ID","Birth plan copies","Comfortable robe","Nursing bra","Warm socks","Toiletries","Hair ties","Phone charger","Snacks","Going-home outfit","Pillow from home","Lip balm"],"partner":["Snacks and drinks","Phone charger","Change of clothes","Toiletries","Pillow","Camera","Entertainment","Cash for vending"],"baby":["Going-home outfit","Car seat (installed)","Swaddle blanket","Newborn diapers","Hat and mittens","Burp cloths"]},"birthPlanSections":[{"id":"environment","title":"Labor environment","options":["Dim lighting","Music playing","Quiet room","Freedom to move","Aromatherapy","Birth ball available"]},{"id":"pain","title":"Pain management","options":["Epidural","Natural/unmedicated","Open to either","IV medication","Nitrous oxide","Breathing techniques","Water therapy"]},{"id":"delivery","title":"Delivery preferences","options":["Vaginal delivery preferred","Delayed cord clamping","Skin-to-skin immediately","Partner cuts cord","Mirror to watch","Gentle cesarean if needed"]},{"id":"postpartum","title":"After delivery","options":["Breastfeed immediately","Formula feeding","Combo feeding","Delayed bathing","Rooming in","Visitors welcome","Limited visitors"]},{"id":"people","title":"Who is present","options":["Partner","Doula","Parent(s)","Sibling(s)","Friend","No additional visitors during labor"]}],"insightRules":[{"id":"symptom-trimester","label":"Symptoms by trimester","description":"Shows which symptoms cluster in each trimester"},{"id":"wellness-trend","label":"Wellness trend","description":"Tracks your overall wellness over time"},{"id":"sleep-wellness","label":"Sleep and wellness","description":"Correlates sleep quality with daily wellness"},{"id":"medication-adherence","label":"Prenatal vitamin consistency","description":"Tracks daily prenatal vitamin intake"}]};
     // === Storage Module ===
 var Storage = (function() {
   var VARIANT = APP_CONFIG.variant;
@@ -3115,6 +3123,16 @@ var Dashboard = (function() {
     html += '</div>';
 
     container.innerHTML = html;
+
+    // C7: Add keyboard activation for dashboard cards with role="button"
+    container.querySelectorAll('[role="button"]').forEach(function(card) {
+      card.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          card.click();
+        }
+      });
+    });
   }
 
   function init() {
@@ -4411,6 +4429,69 @@ var HospitalBag = (function() {
 })();
 
 
+// === Tools View Orchestrator ===
+var Tools = (function() {
+  'use strict';
+
+  var currentTool = 'appointments';
+  var tools = [
+    { key: 'appointments', label: 'Appointments' },
+    { key: 'kicks', label: 'Kick counter' },
+    { key: 'contractions', label: 'Contractions' },
+    { key: 'birthplan', label: 'Birth plan' },
+    { key: 'hospitalbag', label: 'Hospital bag' }
+  ];
+
+  function render() {
+    var container = document.getElementById('tools-container');
+    if (!container) return;
+
+    var html = '<div class="tools-tabs" role="tablist" aria-label="Pregnancy tools">';
+    tools.forEach(function(tool) {
+      html += '<button class="tool-tab' + (currentTool === tool.key ? ' active' : '') + '" ' +
+        'data-tool="' + tool.key + '" role="tab" aria-selected="' + (currentTool === tool.key ? 'true' : 'false') + '">' +
+        tool.label + '</button>';
+    });
+    html += '</div>';
+
+    tools.forEach(function(tool) {
+      html += '<div class="tool-panel' + (currentTool === tool.key ? ' active' : '') + '" id="tool-' + tool.key + '" role="tabpanel"></div>';
+    });
+
+    container.innerHTML = html;
+
+    // Bind tab clicks
+    container.querySelectorAll('.tool-tab').forEach(function(tab) {
+      tab.addEventListener('click', function() {
+        currentTool = this.getAttribute('data-tool');
+        render();
+      });
+    });
+
+    // Render active tool
+    var panel = container.querySelector('#tool-' + currentTool);
+    if (panel) {
+      switch (currentTool) {
+        case 'appointments': Appointments.render(panel); break;
+        case 'kicks': KickCounter.render(panel); break;
+        case 'contractions': ContractionTimer.render(panel); break;
+        case 'birthplan': BirthPlan.render(panel); break;
+        case 'hospitalbag': HospitalBag.render(panel); break;
+      }
+    }
+  }
+
+  function init() {
+    render();
+    document.addEventListener('viewchange', function(e) {
+      if (e.detail.view === 'tools') render();
+    });
+  }
+
+  return { init: init };
+})();
+
+
 // === Calendar Module (Pregnancy) ===
 var Calendar = (function() {
   'use strict';
@@ -4510,16 +4591,22 @@ var Calendar = (function() {
   }
 
   function init() {
-    document.getElementById('cal-prev').addEventListener('click', function() {
-      currentMonth--;
-      if (currentMonth < 0) { currentMonth = 11; currentYear--; }
-      render();
-    });
-    document.getElementById('cal-next').addEventListener('click', function() {
-      currentMonth++;
-      if (currentMonth > 11) { currentMonth = 0; currentYear++; }
-      render();
-    });
+    var prevBtn = document.getElementById('cal-prev');
+    var nextBtn = document.getElementById('cal-next');
+    if (prevBtn) {
+      prevBtn.addEventListener('click', function() {
+        currentMonth--;
+        if (currentMonth < 0) { currentMonth = 11; currentYear--; }
+        render();
+      });
+    }
+    if (nextBtn) {
+      nextBtn.addEventListener('click', function() {
+        currentMonth++;
+        if (currentMonth > 11) { currentMonth = 0; currentYear++; }
+        render();
+      });
+    }
     render();
     document.addEventListener('viewchange', function(e) {
       if (e.detail.view === 'calendar') render();

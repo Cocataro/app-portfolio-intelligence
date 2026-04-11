@@ -126,6 +126,16 @@ var Dashboard = (function() {
     html += '</div>';
 
     container.innerHTML = html;
+
+    // C7: Add keyboard activation for dashboard cards with role="button"
+    container.querySelectorAll('[role="button"]').forEach(function(card) {
+      card.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          card.click();
+        }
+      });
+    });
   }
 
   function init() {

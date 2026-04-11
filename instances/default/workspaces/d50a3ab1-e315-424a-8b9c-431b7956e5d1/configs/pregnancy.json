@@ -19,6 +19,7 @@
     "pregnancy/contraction-timer.js",
     "pregnancy/birth-plan.js",
     "pregnancy/hospital-bag.js",
+    "pregnancy/tools.js",
     "pregnancy/calendar.js",
     "pregnancy/charts.js",
     "pregnancy/reports.js"

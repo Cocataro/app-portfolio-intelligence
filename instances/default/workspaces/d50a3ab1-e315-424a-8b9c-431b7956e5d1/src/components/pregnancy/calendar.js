@@ -97,16 +97,22 @@ var Calendar = (function() {
   }
 
   function init() {
-    document.getElementById('cal-prev').addEventListener('click', function() {
-      currentMonth--;
-      if (currentMonth < 0) { currentMonth = 11; currentYear--; }
-      render();
-    });
-    document.getElementById('cal-next').addEventListener('click', function() {
-      currentMonth++;
-      if (currentMonth > 11) { currentMonth = 0; currentYear++; }
-      render();
-    });
+    var prevBtn = document.getElementById('cal-prev');
+    var nextBtn = document.getElementById('cal-next');
+    if (prevBtn) {
+      prevBtn.addEventListener('click', function() {
+        currentMonth--;
+        if (currentMonth < 0) { currentMonth = 11; currentYear--; }
+        render();
+      });
+    }
+    if (nextBtn) {
+      nextBtn.addEventListener('click', function() {
+        currentMonth++;
+        if (currentMonth > 11) { currentMonth = 0; currentYear++; }
+        render();
+      });
+    }
     render();
     document.addEventListener('viewchange', function(e) {
       if (e.detail.view === 'calendar') render();
