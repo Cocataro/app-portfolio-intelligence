@@ -30,7 +30,8 @@ const componentOrder = [
   'quick-log.js',
   'calendar.js',
   'charts.js',
-  'insights.js'
+  'insights.js',
+  'reports.js'
 ];
 
 let scripts = '';

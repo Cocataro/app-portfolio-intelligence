@@ -11,6 +11,7 @@
     Calendar.init();
     Charts.init();
     Insights.init();
+    Reports.init();
 
     // Set initial view
     Navigation.switchTo('log');
