@@ -29,6 +29,7 @@ const styles = fs.readFileSync(stylesPath, 'utf8');
 // Read component scripts in dependency order
 const componentOrder = [
   'storage.js',
+  'setup.js',
   'theme.js',
   'navigation.js',
   'settings.js',

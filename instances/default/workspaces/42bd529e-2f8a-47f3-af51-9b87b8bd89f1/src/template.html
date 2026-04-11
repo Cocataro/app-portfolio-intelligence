@@ -258,6 +258,24 @@
     </div>
   </div>
 
+  <div id="setup-overlay" class="setup-overlay" hidden aria-modal="true" role="dialog" aria-label="First-time setup">
+    <div class="setup-panel">
+      <div class="setup-progress" role="navigation" aria-label="Setup progress">
+        <span id="setup-progress-label" class="sr-only">Step 1 of 4</span>
+        <span class="setup-progress-dot active" aria-current="step" aria-label="Welcome"></span>
+        <span class="setup-progress-dot" aria-label="Name"></span>
+        <span class="setup-progress-dot" aria-label="Symptoms"></span>
+        <span class="setup-progress-dot" aria-label="Done"></span>
+      </div>
+      <div id="setup-step-content" class="setup-step-content"></div>
+      <div class="setup-actions">
+        <button id="setup-back" class="btn btn-outline setup-btn-back" hidden aria-label="Go back">Back</button>
+        <button id="setup-skip" class="btn btn-text setup-btn-skip" hidden aria-label="Skip this step">Skip</button>
+        <button id="setup-next" class="btn btn-primary setup-btn-primary" aria-label="Continue to next step">Continue</button>
+      </div>
+    </div>
+  </div>
+
   <footer class="privacy-footer" role="contentinfo">
     <p>Your data stays on this device. Nothing is sent anywhere.</p>
   </footer>

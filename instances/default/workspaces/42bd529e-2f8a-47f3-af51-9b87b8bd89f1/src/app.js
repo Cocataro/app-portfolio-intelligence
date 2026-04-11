@@ -2,7 +2,7 @@
 (function() {
   'use strict';
 
-  function init() {
+  function initApp() {
     // Initialize modules in order
     Theme.init();
     Navigation.init();
@@ -17,10 +17,20 @@
     Navigation.switchTo('log');
   }
 
+  function boot() {
+    // Always init theme early so setup overlay gets correct colors
+    Theme.init();
+
+    // Check for first-time setup
+    Setup.init(function() {
+      initApp();
+    });
+  }
+
   // Boot when DOM ready
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', init);
+    document.addEventListener('DOMContentLoaded', boot);
   } else {
-    init();
+    boot();
   }
 })();
