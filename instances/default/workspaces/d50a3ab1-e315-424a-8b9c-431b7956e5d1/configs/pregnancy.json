@@ -46,7 +46,7 @@
     "wellnessGreat": "#7D9474",
     "wellnessGood": "#9AAE8E",
     "wellnessTough": "#C49350",
-    "wellnessRough": "#B87B6B",
+    "wellnessRough": "#A86D5E",
     "milestone": "#D4A85C",
     "dark": {
       "primary": "#D9A85E",
@@ -104,7 +104,7 @@
     { "value": 1, "label": "Rough", "key": "rough" }
   ],
   "feelingScale": [
-    { "value": 1, "label": "Rough", "color": "#B87B6B" },
+    { "value": 1, "label": "Rough", "color": "#A86D5E" },
     { "value": 2, "label": "Tough", "color": "#C49350" },
     { "value": 3, "label": "Good", "color": "#9AAE8E" },
     { "value": 4, "label": "Great", "color": "#7D9474" }

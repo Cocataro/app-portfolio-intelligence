@@ -226,6 +226,7 @@ var Reports = (function() {
     if (symptoms.length > 0) {
       html += '<section class="report-section" aria-labelledby="report-symptoms-heading">';
       html += '<h4 id="report-symptoms-heading" class="report-section-title">Symptom frequency</h4>';
+      html += '<div class="report-table-wrapper">';
       html += '<table class="report-table" aria-label="Symptom frequency table">';
       html += '<thead><tr><th>Symptom</th><th>Days</th></tr></thead>';
       html += '<tbody>';
@@ -233,6 +234,7 @@ var Reports = (function() {
         html += '<tr><td>' + escapeHtml(s.name) + '</td><td>' + s.count + '</td></tr>';
       });
       html += '</tbody></table>';
+      html += '</div>';
       html += '</section>';
     }
 
@@ -240,6 +242,7 @@ var Reports = (function() {
     if (supplements.length > 0) {
       html += '<section class="report-section" aria-labelledby="report-supps-heading">';
       html += '<h4 id="report-supps-heading" class="report-section-title">Supplement &amp; medication adherence</h4>';
+      html += '<div class="report-table-wrapper">';
       html += '<table class="report-table" aria-label="Supplement adherence table">';
       html += '<thead><tr><th>Supplement</th><th>Taken</th><th>Skipped</th><th>Rate</th></tr></thead>';
       html += '<tbody>';
@@ -247,6 +250,7 @@ var Reports = (function() {
         html += '<tr><td>' + escapeHtml(m.name) + '</td><td>' + m.taken + '</td><td>' + m.skipped + '</td><td>' + m.pct + '%</td></tr>';
       });
       html += '</tbody></table>';
+      html += '</div>';
       html += '</section>';
     }
 
@@ -256,6 +260,7 @@ var Reports = (function() {
     if (pastAppts.length > 0) {
       html += '<section class="report-section" aria-labelledby="report-appts-heading">';
       html += '<h4 id="report-appts-heading" class="report-section-title">Prenatal appointments</h4>';
+      html += '<div class="report-table-wrapper">';
       html += '<table class="report-table" aria-label="Appointment history">';
       html += '<thead><tr><th>Date</th><th>Type</th><th>Notes</th></tr></thead>';
       html += '<tbody>';
@@ -263,6 +268,7 @@ var Reports = (function() {
         html += '<tr><td>' + formatDate(a.date) + '</td><td>' + escapeHtml(a.type || 'Visit') + '</td><td>' + escapeHtml(a.notes || '') + '</td></tr>';
       });
       html += '</tbody></table>';
+      html += '</div>';
       html += '</section>';
     }
 

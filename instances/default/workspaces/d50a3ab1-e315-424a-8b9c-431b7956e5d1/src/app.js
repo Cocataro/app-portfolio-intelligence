@@ -3,8 +3,7 @@
   'use strict';
 
   function initApp() {
-    // Initialize modules in order
-    Theme.init();
+    // Initialize modules in order (Theme.init() already called in boot())
     Navigation.init();
     Settings.init();
     if (typeof Dashboard !== 'undefined') Dashboard.init();

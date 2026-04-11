@@ -7,6 +7,17 @@ var Settings = (function() {
     if (!panel) return;
     panel.removeAttribute('hidden');
     renderCustomLists();
+    // Populate due date if pregnancy variant
+    var dueDateInput = document.getElementById('settings-due-date');
+    if (dueDateInput && typeof PregnancyStorage !== 'undefined') {
+      dueDateInput.value = PregnancyStorage.getDueDate() || '';
+    }
+    // Populate dark mode select
+    var darkModeSelect = document.getElementById('dark-mode-select');
+    if (darkModeSelect) {
+      var settings = Storage.getSettings();
+      darkModeSelect.value = settings.darkMode || 'auto';
+    }
     // Focus the close button
     var close = document.getElementById('settings-close');
     if (close) close.focus();
@@ -107,7 +118,7 @@ var Settings = (function() {
     titleEl.textContent = title;
     msgEl.textContent = message;
     overlay.removeAttribute('hidden');
-    okBtn.focus();
+    cancelBtn.focus();
 
     function cleanup() {
       overlay.setAttribute('hidden', '');
@@ -151,6 +162,30 @@ var Settings = (function() {
     document.getElementById('settings-panel').addEventListener('click', function(e) {
       if (e.target === document.getElementById('settings-panel')) close();
     });
+
+    // Due date (pregnancy variant)
+    var dueDateInput = document.getElementById('settings-due-date');
+    if (dueDateInput && typeof PregnancyStorage !== 'undefined') {
+      dueDateInput.addEventListener('change', function() {
+        var val = this.value;
+        if (val) {
+          PregnancyStorage.setDueDate(val);
+          showToast('Due date updated');
+          if (typeof Dashboard !== 'undefined') Dashboard.render();
+        }
+      });
+    }
+
+    // Dark mode select
+    var darkModeSelect = document.getElementById('dark-mode-select');
+    if (darkModeSelect) {
+      darkModeSelect.addEventListener('change', function() {
+        var s = Storage.getSettings();
+        s.darkMode = this.value;
+        Storage.saveSettings(s);
+        if (typeof Theme !== 'undefined') Theme.apply(this.value);
+      });
+    }
 
     // Custom item add buttons
     document.getElementById('add-custom-symptom').addEventListener('click', function() {
