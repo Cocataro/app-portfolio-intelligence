@@ -1,0 +1,132 @@
+{
+  "variant": "migraine",
+  "name": "Migraine & Headache Tracker",
+  "tagline": "Track gently. Find patterns. Bring proof to your doctor.",
+  "defaultDarkMode": "dark",
+  "theme": {
+    "primary": "#6B9E7D",
+    "primaryLight": "#7DB38E",
+    "primaryDark": "#5A8A6B",
+    "accent": "#9B8EC4",
+    "background": "#F5F4F2",
+    "surface": "#ECEAE7",
+    "surfaceAlt": "#E3E1DD",
+    "text": "#2C2D30",
+    "textSecondary": "#6B6D75",
+    "textMuted": "#9B9DA5",
+    "border": "#D5D2CC",
+    "accentGreen": "#4A7A5C",
+    "accentPurple": "#7B6EA8",
+    "accentPurpleSubtle": "#EEEAF5",
+    "success": "#4A7A5C",
+    "warning": "#A88A4A",
+    "error": "#994A4A",
+    "severityNone": "#4A7A5C",
+    "severityMild": "#A88A4A",
+    "severityModerate": "#A8634A",
+    "severityHigh": "#994A4A",
+    "severityExtreme": "#994A4A",
+    "dark": {
+      "background": "#141518",
+      "surface": "#1C1D22",
+      "surfaceAlt": "#25262C",
+      "text": "#D4D5DB",
+      "textSecondary": "#8B8D98",
+      "textMuted": "#5C5E6A",
+      "border": "#2E3038",
+      "primary": "#6B9E7D",
+      "primaryLight": "#7DB38E",
+      "primaryDark": "#5A8A6B",
+      "accent": "#9B8EC4",
+      "accentGreen": "#6B9E7D",
+      "accentPurple": "#9B8EC4",
+      "accentPurpleSubtle": "#1F1C2B",
+      "success": "#5C9E6B",
+      "severityNone": "#6B9E7D",
+      "severityMild": "#C4A86B",
+      "severityModerate": "#C47B6B",
+      "severityHigh": "#B85C5C",
+      "severityExtreme": "#B85C5C"
+    }
+  },
+  "symptoms": [
+    "Throbbing pain", "Pressure pain", "Stabbing pain",
+    "Nausea", "Vomiting", "Light sensitivity", "Sound sensitivity",
+    "Aura (visual)", "Aura (sensory)", "Dizziness",
+    "Neck stiffness", "Brain fog", "Fatigue",
+    "Blurred vision", "Eye pain", "Nasal congestion",
+    "Scalp tenderness", "Jaw pain", "Mood changes"
+  ],
+  "painTypes": [
+    "Throbbing", "Pressure", "Stabbing", "Pulsating",
+    "Squeezing", "Burning", "Aching", "Sharp"
+  ],
+  "painLocations": [
+    "Forehead", "Left temple", "Right temple", "Behind left eye",
+    "Behind right eye", "Top of head", "Back of head",
+    "Left side", "Right side", "All over", "Neck", "Face"
+  ],
+  "triggers": [
+    "Poor sleep", "Stress", "Weather/barometric change",
+    "Bright lights", "Screen time", "Loud noise",
+    "Strong smells", "Certain foods", "Alcohol", "Caffeine",
+    "Skipped meal", "Dehydration", "Hormonal changes",
+    "Overexertion", "Travel"
+  ],
+  "medications": [
+    "Sumatriptan (Imitrex)", "Rizatriptan (Maxalt)", "Zolmitriptan (Zomig)",
+    "Ibuprofen", "Acetaminophen", "Naproxen", "Aspirin",
+    "Topiramate (Topamax)", "Propranolol", "Amitriptyline",
+    "Botox (onabotulinumtoxinA)", "CGRP inhibitor",
+    "Magnesium", "Riboflavin (B2)", "CoQ10", "Caffeine"
+  ],
+  "medicationEffectiveness": [
+    { "value": 0, "label": "No help" },
+    { "value": 1, "label": "Some relief" },
+    { "value": 2, "label": "Resolved" }
+  ],
+  "durationPresets": [
+    "Just started", "30 min", "1 hr", "2 hr", "4 hr", "8+ hr", "All day"
+  ],
+  "migrainePhases": [
+    "Prodrome", "Aura", "Headache", "Postdrome"
+  ],
+  "exerciseTypes": [
+    "Gentle walking", "Stretching", "Yoga", "Rest day"
+  ],
+  "mealOptions": ["Breakfast", "Lunch", "Dinner", "Snack"],
+  "insightRules": [
+    {
+      "id": "trigger-frequency",
+      "label": "Most common triggers",
+      "description": "Ranks triggers by frequency over the selected period"
+    },
+    {
+      "id": "medication-effectiveness",
+      "label": "Medication impact",
+      "description": "Tracks which medications correlate with lower pain and shorter attacks"
+    },
+    {
+      "id": "sleep-pain-correlation",
+      "label": "Sleep and migraine patterns",
+      "description": "Tracks whether poor sleep nights correlate with migraine days"
+    },
+    {
+      "id": "weather-correlation",
+      "label": "Weather and attack patterns",
+      "description": "Identifies weather-related trigger frequency"
+    },
+    {
+      "id": "cycle-pattern",
+      "label": "Cycle-linked migraines",
+      "description": "Detects correlation between menstrual cycle days and migraine frequency"
+    }
+  ],
+  "feelingScale": [
+    { "value": 1, "label": "Rough", "color": "#B85C5C" },
+    { "value": 2, "label": "Okay", "color": "#C4A86B" },
+    { "value": 3, "label": "Steady", "color": "#9B8EC4" },
+    { "value": 4, "label": "Good", "color": "#6B9E7D" },
+    { "value": 5, "label": "Great", "color": "#5A8A6B" }
+  ]
+}

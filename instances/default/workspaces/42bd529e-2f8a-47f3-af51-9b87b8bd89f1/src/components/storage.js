@@ -10,7 +10,7 @@ var Storage = (function() {
       if (raw) return JSON.parse(raw);
     } catch (e) { /* ignore */ }
     return {
-      darkMode: 'auto',
+      darkMode: APP_CONFIG.defaultDarkMode || 'auto',
       customSymptoms: [],
       customTriggers: [],
       customMedications: []
