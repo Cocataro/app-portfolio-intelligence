@@ -1,0 +1,77 @@
+{
+  "variant": "pcos",
+  "name": "PCOS Wellness Tracker",
+  "tagline": "Track patterns. Own your data. No cloud required.",
+  "theme": {
+    "primary": "#7C6AA0",
+    "primaryLight": "#9B8EC4",
+    "primaryDark": "#5A4D7A",
+    "accent": "#E8A87C",
+    "background": "#FAFAFA",
+    "surface": "#FFFFFF",
+    "text": "#2D2D2D",
+    "textSecondary": "#6B6B6B",
+    "success": "#4CAF50",
+    "warning": "#FF9800",
+    "error": "#F44336",
+    "dark": {
+      "background": "#1A1A2E",
+      "surface": "#25253E",
+      "text": "#E8E8E8",
+      "textSecondary": "#A0A0B8"
+    }
+  },
+  "symptoms": [
+    "Bloating", "Cramps", "Acne", "Fatigue", "Mood swings",
+    "Hair thinning", "Weight changes", "Brain fog",
+    "Irregular periods", "Heavy bleeding", "Spotting",
+    "Pelvic pain", "Headache", "Insomnia", "Anxiety",
+    "Hot flashes", "Cravings", "Nausea"
+  ],
+  "triggers": [
+    "Stress", "Poor sleep", "Sugar/carbs", "Dairy",
+    "Skipped medication", "Dehydration", "Alcohol",
+    "Intense exercise", "Sedentary day", "Weather change",
+    "Hormonal cycle phase", "Caffeine"
+  ],
+  "medications": [
+    "Metformin", "Spironolactone", "Birth control pill",
+    "Letrozole", "Clomid", "Inositol", "Vitamin D",
+    "Omega-3", "Berberine", "Progesterone", "Ovasitol"
+  ],
+  "mealOptions": ["Breakfast", "Lunch", "Dinner", "Snack"],
+  "exerciseTypes": [
+    "Walking", "Yoga", "Strength training", "Swimming",
+    "Cycling", "HIIT", "Pilates", "Stretching", "Rest day"
+  ],
+  "cyclePhases": ["Menstrual", "Follicular", "Ovulatory", "Luteal"],
+  "insightRules": [
+    {
+      "id": "sleep-symptom-correlation",
+      "label": "Sleep and symptom patterns",
+      "description": "Tracks whether poor sleep nights correlate with higher symptom days"
+    },
+    {
+      "id": "trigger-frequency",
+      "label": "Most common triggers",
+      "description": "Ranks triggers by frequency over the selected period"
+    },
+    {
+      "id": "cycle-symptom-map",
+      "label": "Symptoms by cycle phase",
+      "description": "Shows which symptoms cluster in each cycle phase"
+    },
+    {
+      "id": "medication-adherence",
+      "label": "Medication consistency",
+      "description": "Tracks daily medication check-in rate"
+    }
+  ],
+  "feelingScale": [
+    { "value": 1, "label": "Rough", "color": "#C0626F" },
+    { "value": 2, "label": "Okay", "color": "#D4956B" },
+    { "value": 3, "label": "Steady", "color": "#9E9E9E" },
+    { "value": 4, "label": "Good", "color": "#6BA3A0" },
+    { "value": 5, "label": "Great", "color": "#6BAF6E" }
+  ]
+}
