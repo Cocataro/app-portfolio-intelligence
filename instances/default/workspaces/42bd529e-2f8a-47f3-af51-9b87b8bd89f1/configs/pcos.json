@@ -3,22 +3,22 @@
   "name": "PCOS Wellness Tracker",
   "tagline": "Track patterns. Own your data. No cloud required.",
   "theme": {
-    "primary": "#7C6AA0",
-    "primaryLight": "#9B8EC4",
-    "primaryDark": "#5A4D7A",
-    "accent": "#E8A87C",
-    "background": "#FAFAFA",
+    "primary": "#8B6F8E",
+    "primaryLight": "#B89FBA",
+    "primaryDark": "#6A5269",
+    "accent": "#C4956A",
+    "background": "#FAF7F5",
     "surface": "#FFFFFF",
-    "text": "#2D2D2D",
-    "textSecondary": "#6B6B6B",
-    "success": "#4CAF50",
-    "warning": "#FF9800",
-    "error": "#F44336",
+    "text": "#2D2A2E",
+    "textSecondary": "#6B636B",
+    "success": "#5A9E6F",
+    "warning": "#C4956A",
+    "error": "#C07070",
     "dark": {
-      "background": "#1A1A2E",
-      "surface": "#25253E",
-      "text": "#E8E8E8",
-      "textSecondary": "#A0A0B8"
+      "background": "#1A1518",
+      "surface": "#252022",
+      "text": "#E8E4E8",
+      "textSecondary": "#A09BA0"
     }
   },
   "symptoms": [
