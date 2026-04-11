@@ -1,0 +1,205 @@
+{
+  "variant": "pregnancy",
+  "name": "Pregnancy Wellness Tracker",
+  "tagline": "Your pregnancy journey, beautifully organized. Your data never leaves this device.",
+  "defaultDarkMode": "auto",
+  "template": "template-pregnancy.html",
+  "components": [
+    "storage.js",
+    "pregnancy/pregnancy-storage.js",
+    "setup.js",
+    "theme.js",
+    "pregnancy/navigation.js",
+    "settings.js",
+    "pregnancy/dashboard.js",
+    "pregnancy/daily-checkin.js",
+    "pregnancy/timeline.js",
+    "pregnancy/appointments.js",
+    "pregnancy/kick-counter.js",
+    "pregnancy/contraction-timer.js",
+    "pregnancy/birth-plan.js",
+    "pregnancy/hospital-bag.js",
+    "pregnancy/calendar.js",
+    "pregnancy/charts.js",
+    "pregnancy/reports.js"
+  ],
+  "theme": {
+    "primary": "#C49350",
+    "primaryLight": "#D4A85C",
+    "primaryDark": "#B08342",
+    "accent": "#7D9474",
+    "background": "#FBF8F3",
+    "surface": "#F5F0E8",
+    "surfaceAlt": "#EDE7DC",
+    "text": "#3A3229",
+    "textSecondary": "#7B7164",
+    "textMuted": "#A89E90",
+    "border": "#DDD5C8",
+    "borderAccent": "#CBBFAE",
+    "success": "#7D9474",
+    "warning": "#D4A85C",
+    "error": "#B8655A",
+    "trimester1": "#C49350",
+    "trimester2": "#B8805A",
+    "trimester3": "#A06B4A",
+    "wellnessGreat": "#7D9474",
+    "wellnessGood": "#9AAE8E",
+    "wellnessTough": "#C49350",
+    "wellnessRough": "#B87B6B",
+    "milestone": "#D4A85C",
+    "dark": {
+      "primary": "#D9A85E",
+      "primaryLight": "#E5B870",
+      "primaryDark": "#C49350",
+      "accent": "#8FB893",
+      "background": "#1C1915",
+      "surface": "#25221D",
+      "surfaceAlt": "#2F2B25",
+      "text": "#E2D9CC",
+      "textSecondary": "#9E9487",
+      "textMuted": "#6E655A",
+      "border": "#3D3730",
+      "borderAccent": "#4D463D",
+      "success": "#8FB893",
+      "warning": "#E5BE6A",
+      "error": "#C87070",
+      "trimester1": "#D9A85E",
+      "trimester2": "#C8926A",
+      "trimester3": "#B07D5A",
+      "wellnessGreat": "#8FB893",
+      "wellnessGood": "#A8C89E",
+      "wellnessTough": "#D9A85E",
+      "wellnessRough": "#C8907A",
+      "milestone": "#E5BE6A"
+    }
+  },
+  "symptoms": [
+    "Morning sickness", "Fatigue", "Back pain", "Heartburn",
+    "Swelling", "Braxton Hicks", "Insomnia", "Mood swings",
+    "Round ligament pain", "Food aversions", "Cravings",
+    "Headache", "Constipation", "Shortness of breath",
+    "Pelvic pressure", "Frequent urination", "Dizziness",
+    "Anxiety"
+  ],
+  "triggers": [
+    "Stress", "Poor sleep", "Dehydration", "Skipped meals",
+    "Weather change", "Overexertion", "Certain foods",
+    "Lack of movement", "Hormonal surges", "Caffeine"
+  ],
+  "medications": [
+    "Prenatal vitamins", "Folic acid", "Iron supplement",
+    "Calcium supplement", "Magnesium", "DHA/Omega-3",
+    "Vitamin D", "Ginger supplement", "Antacid",
+    "Acetaminophen"
+  ],
+  "exerciseTypes": [
+    "Walking", "Swimming", "Prenatal yoga", "Stretching",
+    "Pelvic floor exercises", "Light strength", "Rest day"
+  ],
+  "wellnessLevels": [
+    { "value": 4, "label": "Great", "key": "great" },
+    { "value": 3, "label": "Good", "key": "good" },
+    { "value": 2, "label": "Tough", "key": "tough" },
+    { "value": 1, "label": "Rough", "key": "rough" }
+  ],
+  "feelingScale": [
+    { "value": 1, "label": "Rough", "color": "#B87B6B" },
+    { "value": 2, "label": "Tough", "color": "#C49350" },
+    { "value": 3, "label": "Good", "color": "#9AAE8E" },
+    { "value": 4, "label": "Great", "color": "#7D9474" }
+  ],
+  "babySizes": [
+    "", "Poppy seed", "Sesame seed", "Lentil", "Blueberry",
+    "Raspberry", "Cherry", "Olive", "Prune", "Strawberry",
+    "Lime", "Plum", "Lemon", "Nectarine", "Apple",
+    "Avocado", "Pear", "Sweet potato", "Mango", "Banana",
+    "Pomegranate", "Papaya", "Grapefruit", "Corn ear", "Cantaloupe",
+    "Cauliflower", "Lettuce head", "Eggplant", "Butternut squash", "Acorn squash",
+    "Cabbage", "Coconut", "Jicama", "Pineapple", "Honeydew melon",
+    "Canary melon", "Swiss chard", "Winter melon", "Leek", "Mini watermelon",
+    "Watermelon"
+  ],
+  "hospitalBagItems": {
+    "mom": [
+      "Insurance card and ID",
+      "Birth plan copies",
+      "Comfortable robe",
+      "Nursing bra",
+      "Warm socks",
+      "Toiletries",
+      "Hair ties",
+      "Phone charger",
+      "Snacks",
+      "Going-home outfit",
+      "Pillow from home",
+      "Lip balm"
+    ],
+    "partner": [
+      "Snacks and drinks",
+      "Phone charger",
+      "Change of clothes",
+      "Toiletries",
+      "Pillow",
+      "Camera",
+      "Entertainment",
+      "Cash for vending"
+    ],
+    "baby": [
+      "Going-home outfit",
+      "Car seat (installed)",
+      "Swaddle blanket",
+      "Newborn diapers",
+      "Hat and mittens",
+      "Burp cloths"
+    ]
+  },
+  "birthPlanSections": [
+    {
+      "id": "environment",
+      "title": "Labor environment",
+      "options": ["Dim lighting", "Music playing", "Quiet room", "Freedom to move", "Aromatherapy", "Birth ball available"]
+    },
+    {
+      "id": "pain",
+      "title": "Pain management",
+      "options": ["Epidural", "Natural/unmedicated", "Open to either", "IV medication", "Nitrous oxide", "Breathing techniques", "Water therapy"]
+    },
+    {
+      "id": "delivery",
+      "title": "Delivery preferences",
+      "options": ["Vaginal delivery preferred", "Delayed cord clamping", "Skin-to-skin immediately", "Partner cuts cord", "Mirror to watch", "Gentle cesarean if needed"]
+    },
+    {
+      "id": "postpartum",
+      "title": "After delivery",
+      "options": ["Breastfeed immediately", "Formula feeding", "Combo feeding", "Delayed bathing", "Rooming in", "Visitors welcome", "Limited visitors"]
+    },
+    {
+      "id": "people",
+      "title": "Who is present",
+      "options": ["Partner", "Doula", "Parent(s)", "Sibling(s)", "Friend", "No additional visitors during labor"]
+    }
+  ],
+  "insightRules": [
+    {
+      "id": "symptom-trimester",
+      "label": "Symptoms by trimester",
+      "description": "Shows which symptoms cluster in each trimester"
+    },
+    {
+      "id": "wellness-trend",
+      "label": "Wellness trend",
+      "description": "Tracks your overall wellness over time"
+    },
+    {
+      "id": "sleep-wellness",
+      "label": "Sleep and wellness",
+      "description": "Correlates sleep quality with daily wellness"
+    },
+    {
+      "id": "medication-adherence",
+      "label": "Prenatal vitamin consistency",
+      "description": "Tracks daily prenatal vitamin intake"
+    }
+  ]
+}

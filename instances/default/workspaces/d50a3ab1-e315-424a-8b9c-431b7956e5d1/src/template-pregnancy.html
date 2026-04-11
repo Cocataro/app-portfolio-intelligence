@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{APP_NAME}}</title>
+  <style>
+    {{STYLES}}
+  </style>
+</head>
+<body>
+  <a href="#main-content" class="skip-link">Skip to content</a>
+
+  <header class="app-header" role="banner">
+    <h1 class="app-title">{{APP_NAME}}</h1>
+    <div class="header-actions">
+      <button id="theme-toggle" class="icon-btn" aria-label="Toggle dark mode" title="Toggle dark mode">
+        <svg class="icon sun-icon" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><circle cx="12" cy="12" r="5" fill="currentColor"/><g stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></g></svg>
+        <svg class="icon moon-icon" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" fill="currentColor"/></svg>
+      </button>
+      <button id="settings-btn" class="icon-btn" aria-label="Open settings" title="Settings">
+        <svg class="icon" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path d="M12 15.5A3.5 3.5 0 1015.5 12 3.5 3.5 0 0012 15.5zm7.43-2.53l1.76 1.38a.42.42 0 01.1.54l-1.67 2.88a.43.43 0 01-.52.18l-2.08-.84a6.25 6.25 0 01-1.15.67l-.31 2.21a.42.42 0 01-.42.36h-3.34a.42.42 0 01-.42-.36l-.31-2.21a6.56 6.56 0 01-1.15-.67l-2.08.84a.43.43 0 01-.52-.18L5.71 14.9a.42.42 0 01.1-.54l1.76-1.38a5.3 5.3 0 010-1.34L5.81 10.26a.42.42 0 01-.1-.54l1.67-2.88a.43.43 0 01.52-.18l2.08.84a6.25 6.25 0 011.15-.67l.31-2.21A.42.42 0 0111.86 4.26h3.34a.42.42 0 01.42.36l.31 2.21a6.56 6.56 0 011.15.67l2.08-.84a.43.43 0 01.52.18l1.67 2.88a.42.42 0 01-.1.54l-1.76 1.38a5.3 5.3 0 010 1.34z" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <div class="app-layout">
+    <nav id="sidebar-nav" class="sidebar-nav" role="navigation" aria-label="Main navigation">
+      <ul class="nav-list" role="tablist">
+        <li role="presentation"><button role="tab" class="nav-btn active" data-view="home" aria-selected="true" aria-controls="view-home"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" fill="none" stroke="currentColor" stroke-width="2"/><polyline points="9 22 9 12 15 12 15 22" fill="none" stroke="currentColor" stroke-width="2"/></svg><span>Home</span></button></li>
+        <li role="presentation"><button role="tab" class="nav-btn" data-view="log" aria-selected="false" aria-controls="view-log"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" fill="none" stroke="currentColor" stroke-width="2"/><polyline points="14 2 14 8 20 8" fill="none" stroke="currentColor" stroke-width="2"/><line x1="16" y1="13" x2="8" y2="13" stroke="currentColor" stroke-width="2"/><line x1="16" y1="17" x2="8" y2="17" stroke="currentColor" stroke-width="2"/></svg><span>Log</span></button></li>
+        <li role="presentation"><button role="tab" class="nav-btn" data-view="timeline" aria-selected="false" aria-controls="view-timeline"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><line x1="4" y1="6" x2="20" y2="6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="4" y1="12" x2="20" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="4" y1="18" x2="14" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="8" cy="6" r="2" fill="currentColor"/><circle cx="14" cy="12" r="2" fill="currentColor"/><circle cx="8" cy="18" r="2" fill="currentColor"/></svg><span>Timeline</span></button></li>
+        <li role="presentation"><button role="tab" class="nav-btn" data-view="tools" aria-selected="false" aria-controls="view-tools"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z" fill="none" stroke="currentColor" stroke-width="2"/></svg><span>Tools</span></button></li>
+        <li role="presentation"><button role="tab" class="nav-btn" data-view="reports" aria-selected="false" aria-controls="view-reports"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M17 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V5a2 2 0 00-2-2z" fill="none" stroke="currentColor" stroke-width="2"/><line x1="9" y1="7" x2="15" y2="7" stroke="currentColor" stroke-width="2"/><line x1="9" y1="11" x2="15" y2="11" stroke="currentColor" stroke-width="2"/><line x1="9" y1="15" x2="12" y2="15" stroke="currentColor" stroke-width="2"/></svg><span>Reports</span></button></li>
+      </ul>
+    </nav>
+
+    <main id="main-content" class="main-content" role="main">
+      <div id="view-home" class="view active" role="tabpanel" aria-labelledby="nav-home">
+        <div id="dashboard-container" class="dashboard-view"></div>
+      </div>
+
+      <div id="view-log" class="view" role="tabpanel" aria-labelledby="nav-log" hidden>
+        <div class="quick-log">
+          <div class="log-date-nav">
+            <button id="log-prev-day" class="icon-btn" aria-label="Previous day">
+              <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><polyline points="15 18 9 12 15 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            <button id="log-date-display" class="log-date-btn" aria-label="Select date">
+              <span id="log-date-text"></span>
+            </button>
+            <button id="log-next-day" class="icon-btn" aria-label="Next day">
+              <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><polyline points="9 18 15 12 9 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            <input type="date" id="log-date-picker" class="sr-only" aria-label="Pick a date">
+          </div>
+
+          <section class="log-section" aria-labelledby="wellness-heading">
+            <h3 id="wellness-heading" class="log-section-title">How are you feeling?</h3>
+            <div id="wellness-scale" class="wellness-scale" role="radiogroup" aria-label="Wellness level"></div>
+          </section>
+
+          <section class="log-section" aria-labelledby="symptoms-heading">
+            <h3 id="symptoms-heading" class="log-section-title">Symptoms</h3>
+            <div id="symptom-chips" class="chip-list" role="group" aria-label="Symptom selection"></div>
+            <div class="add-custom-row">
+              <input type="text" id="log-custom-symptom" placeholder="Add other symptom" aria-label="Add custom symptom" maxlength="50">
+              <button id="log-add-symptom" class="btn btn-small" aria-label="Add symptom">Add</button>
+            </div>
+          </section>
+
+          <section class="log-section collapsible" aria-labelledby="triggers-heading">
+            <button class="log-section-toggle" aria-expanded="false" aria-controls="triggers-body">
+              <h3 id="triggers-heading" class="log-section-title">Triggers</h3>
+              <svg class="toggle-chevron" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><polyline points="6 9 12 15 18 9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            <div id="triggers-body" class="collapsible-body" hidden>
+              <div id="trigger-chips" class="chip-list" role="group" aria-label="Trigger selection"></div>
+            </div>
+          </section>
+
+          <section class="log-section" aria-labelledby="meds-heading">
+            <h3 id="meds-heading" class="log-section-title">Supplements &amp; medications</h3>
+            <div id="medication-list" class="medication-list" role="group" aria-label="Medication tracking"></div>
+          </section>
+
+          <section class="log-section collapsible" aria-labelledby="exercise-heading">
+            <button class="log-section-toggle" aria-expanded="false" aria-controls="exercise-body">
+              <h3 id="exercise-heading" class="log-section-title">Exercise</h3>
+              <svg class="toggle-chevron" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><polyline points="6 9 12 15 18 9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            <div id="exercise-body" class="collapsible-body" hidden>
+              <div class="exercise-row">
+                <label for="exercise-type">Type</label>
+                <select id="exercise-type" aria-label="Exercise type"></select>
+              </div>
+              <div class="exercise-row">
+                <label for="exercise-duration">Minutes</label>
+                <input type="number" id="exercise-duration" min="0" max="600" step="5" placeholder="0" aria-label="Exercise duration in minutes">
+              </div>
+            </div>
+          </section>
+
+          <section class="log-section collapsible" aria-labelledby="sleep-heading">
+            <button class="log-section-toggle" aria-expanded="false" aria-controls="sleep-body">
+              <h3 id="sleep-heading" class="log-section-title">Sleep</h3>
+              <svg class="toggle-chevron" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><polyline points="6 9 12 15 18 9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            <div id="sleep-body" class="collapsible-body" hidden>
+              <div class="sleep-row">
+                <label for="sleep-hours">Hours</label>
+                <input type="number" id="sleep-hours" min="0" max="24" step="0.5" placeholder="0" aria-label="Hours of sleep">
+              </div>
+              <div class="sleep-row">
+                <label id="sleep-quality-label">Quality</label>
+                <div id="sleep-quality" class="quality-scale" role="radiogroup" aria-labelledby="sleep-quality-label"></div>
+              </div>
+            </div>
+          </section>
+
+          <section class="log-section" aria-labelledby="notes-heading">
+            <h3 id="notes-heading" class="log-section-title">Notes</h3>
+            <textarea id="log-notes" class="log-textarea" placeholder="How was your day? Anything to remember..." aria-label="Additional notes" rows="3"></textarea>
+          </section>
+
+          <div class="log-actions">
+            <button id="log-save" class="btn btn-primary log-save-btn" aria-label="Save entry">Save entry</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="view-timeline" class="view" role="tabpanel" aria-labelledby="nav-timeline" hidden>
+        <div id="timeline-container" class="timeline-view"></div>
+      </div>
+
+      <div id="view-tools" class="view" role="tabpanel" aria-labelledby="nav-tools" hidden>
+        <div id="tools-container" class="tools-view"></div>
+      </div>
+
+      <div id="view-reports" class="view" role="tabpanel" aria-labelledby="nav-reports" hidden>
+        <div id="reports-container" class="reports-view"></div>
+      </div>
+    </main>
+  </div>
+
+  <div id="settings-panel" class="settings-overlay" hidden aria-modal="true" role="dialog" aria-label="Settings">
+    <div class="settings-panel">
+      <div class="settings-header">
+        <h2>Settings</h2>
+        <button id="settings-close" class="icon-btn" aria-label="Close settings">
+          <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="6" y1="6" x2="18" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+      <div class="settings-body">
+        <section class="settings-section">
+          <h3>Appearance</h3>
+          <div class="setting-row">
+            <label for="dark-mode-select">Dark mode</label>
+            <select id="dark-mode-select" aria-label="Dark mode preference">
+              <option value="auto">System default</option>
+              <option value="light">Light</option>
+              <option value="dark">Dark</option>
+            </select>
+          </div>
+        </section>
+        <section class="settings-section">
+          <h3>Due date</h3>
+          <div class="setting-row">
+            <label for="settings-due-date">Expected due date</label>
+            <input type="date" id="settings-due-date" aria-label="Due date">
+          </div>
+        </section>
+        <section class="settings-section">
+          <h3>Custom symptoms</h3>
+          <div id="custom-symptoms-list" class="chip-list"></div>
+          <div class="add-custom-row">
+            <input type="text" id="custom-symptom-input" placeholder="Add custom symptom" aria-label="Add custom symptom" maxlength="50">
+            <button id="add-custom-symptom" class="btn btn-small" aria-label="Add symptom">Add</button>
+          </div>
+        </section>
+        <section class="settings-section">
+          <h3>Custom triggers</h3>
+          <div id="custom-triggers-list" class="chip-list"></div>
+          <div class="add-custom-row">
+            <input type="text" id="custom-trigger-input" placeholder="Add custom trigger" aria-label="Add custom trigger" maxlength="50">
+            <button id="add-custom-trigger" class="btn btn-small" aria-label="Add trigger">Add</button>
+          </div>
+        </section>
+        <section class="settings-section">
+          <h3>Custom supplements</h3>
+          <div id="custom-medications-list" class="chip-list"></div>
+          <div class="add-custom-row">
+            <input type="text" id="custom-medication-input" placeholder="Add supplement or medication" aria-label="Add custom supplement" maxlength="50">
+            <button id="add-custom-medication" class="btn btn-small" aria-label="Add supplement">Add</button>
+          </div>
+        </section>
+        <section class="settings-section">
+          <h3>Data</h3>
+          <div class="settings-actions">
+            <button id="backup-btn" class="btn btn-outline" aria-label="Export backup">Export backup (JSON)</button>
+            <button id="restore-btn" class="btn btn-outline" aria-label="Import backup">Import backup (JSON)</button>
+            <input type="file" id="restore-input" accept=".json" hidden aria-hidden="true">
+            <button id="clear-data-btn" class="btn btn-danger" aria-label="Clear all data">Clear all data</button>
+          </div>
+        </section>
+      </div>
+      <footer class="settings-footer">
+        <p class="disclaimer">This tracker is for personal informational use only. It is not a medical device or diagnostic tool. Always consult your healthcare provider for medical advice about your pregnancy.</p>
+      </footer>
+    </div>
+  </div>
+
+  <div id="confirm-dialog" class="confirm-overlay" hidden aria-modal="true" role="alertdialog" aria-labelledby="confirm-title" aria-describedby="confirm-message">
+    <div class="confirm-panel">
+      <h3 id="confirm-title"></h3>
+      <p id="confirm-message"></p>
+      <div class="confirm-actions">
+        <button id="confirm-cancel" class="btn btn-outline">Cancel</button>
+        <button id="confirm-ok" class="btn btn-danger">Confirm</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="setup-overlay" class="setup-overlay" hidden aria-modal="true" role="dialog" aria-label="First-time setup">
+    <div class="setup-panel">
+      <div class="setup-progress" role="navigation" aria-label="Setup progress">
+        <span id="setup-progress-label" class="sr-only">Step 1 of 5</span>
+        <span class="setup-progress-dot active" aria-current="step" aria-label="Welcome"></span>
+        <span class="setup-progress-dot" aria-label="Name"></span>
+        <span class="setup-progress-dot" aria-label="Due date"></span>
+        <span class="setup-progress-dot" aria-label="Symptoms"></span>
+        <span class="setup-progress-dot" aria-label="Done"></span>
+      </div>
+      <div id="setup-step-content" class="setup-step-content"></div>
+      <div class="setup-actions">
+        <button id="setup-back" class="btn btn-outline setup-btn-back" hidden aria-label="Go back">Back</button>
+        <button id="setup-skip" class="btn btn-text setup-btn-skip" hidden aria-label="Skip this step">Skip</button>
+        <button id="setup-next" class="btn btn-primary setup-btn-primary" aria-label="Continue to next step">Continue</button>
+      </div>
+    </div>
+  </div>
+
+  <footer class="privacy-footer" role="contentinfo">
+    <p>Your data stays on this device. Nothing is sent anywhere.</p>
+  </footer>
+
+  <script>
+    var APP_CONFIG = {{CONFIG_JSON}};
+    {{SCRIPTS}}
+  </script>
+</body>
+</html>
