@@ -9,6 +9,11 @@ var QuickLog = (function() {
   var selectedFeeling = 0;
   var selectedCyclePhase = '';
   var sleepQuality = 0;
+  var selectedPainTypes = [];
+  var selectedPainLocations = [];
+  var selectedDuration = '';
+  var selectedMigrainePhase = '';
+  var selectedMedEffectiveness = -1;
 
   function todayStr() {
     var d = new Date();
@@ -360,6 +365,150 @@ var QuickLog = (function() {
     }
   }
 
+  // === Migraine-specific field renderers ===
+
+  function hasMigraineFields() {
+    return (APP_CONFIG.painTypes && APP_CONFIG.painTypes.length > 0) ||
+           (APP_CONFIG.painLocations && APP_CONFIG.painLocations.length > 0) ||
+           (APP_CONFIG.durationPresets && APP_CONFIG.durationPresets.length > 0) ||
+           (APP_CONFIG.migrainePhases && APP_CONFIG.migrainePhases.length > 0) ||
+           (APP_CONFIG.medicationEffectiveness && APP_CONFIG.medicationEffectiveness.length > 0);
+  }
+
+  function renderMigraineFields() {
+    var section = document.getElementById('migraine-fields-section');
+    if (!section || !hasMigraineFields()) return;
+    section.removeAttribute('hidden');
+    renderMigrainePhaseChips();
+    renderPainTypeChips();
+    renderPainLocationChips();
+    renderDurationChips();
+    renderMedEffectivenessChips();
+  }
+
+  function renderMigrainePhaseChips() {
+    var area = document.getElementById('migraine-phase-area');
+    var container = document.getElementById('migraine-phase-chips');
+    var phases = APP_CONFIG.migrainePhases || [];
+    if (!area || !container || phases.length === 0) return;
+    area.removeAttribute('hidden');
+    container.innerHTML = '';
+    phases.forEach(function(phase) {
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'chip';
+      btn.setAttribute('role', 'radio');
+      btn.setAttribute('aria-checked', selectedMigrainePhase === phase ? 'true' : 'false');
+      if (selectedMigrainePhase === phase) btn.classList.add('selected');
+      btn.textContent = phase;
+      btn.addEventListener('click', function() {
+        selectedMigrainePhase = selectedMigrainePhase === phase ? '' : phase;
+        renderMigrainePhaseChips();
+      });
+      container.appendChild(btn);
+    });
+  }
+
+  function renderPainTypeChips() {
+    var area = document.getElementById('pain-type-area');
+    var container = document.getElementById('pain-type-chips');
+    var types = APP_CONFIG.painTypes || [];
+    if (!area || !container || types.length === 0) return;
+    area.removeAttribute('hidden');
+    container.innerHTML = '';
+    types.forEach(function(name) {
+      var chip = document.createElement('button');
+      chip.type = 'button';
+      chip.className = 'chip';
+      chip.setAttribute('aria-pressed', selectedPainTypes.indexOf(name) !== -1 ? 'true' : 'false');
+      if (selectedPainTypes.indexOf(name) !== -1) chip.classList.add('selected');
+      chip.textContent = name;
+      chip.addEventListener('click', function() {
+        var idx = selectedPainTypes.indexOf(name);
+        if (idx !== -1) {
+          selectedPainTypes.splice(idx, 1);
+        } else {
+          selectedPainTypes.push(name);
+        }
+        renderPainTypeChips();
+      });
+      container.appendChild(chip);
+    });
+  }
+
+  function renderPainLocationChips() {
+    var area = document.getElementById('pain-location-area');
+    var container = document.getElementById('pain-location-chips');
+    var locations = APP_CONFIG.painLocations || [];
+    if (!area || !container || locations.length === 0) return;
+    area.removeAttribute('hidden');
+    container.innerHTML = '';
+    locations.forEach(function(name) {
+      var chip = document.createElement('button');
+      chip.type = 'button';
+      chip.className = 'chip';
+      chip.setAttribute('aria-pressed', selectedPainLocations.indexOf(name) !== -1 ? 'true' : 'false');
+      if (selectedPainLocations.indexOf(name) !== -1) chip.classList.add('selected');
+      chip.textContent = name;
+      chip.addEventListener('click', function() {
+        var idx = selectedPainLocations.indexOf(name);
+        if (idx !== -1) {
+          selectedPainLocations.splice(idx, 1);
+        } else {
+          selectedPainLocations.push(name);
+        }
+        renderPainLocationChips();
+      });
+      container.appendChild(chip);
+    });
+  }
+
+  function renderDurationChips() {
+    var area = document.getElementById('duration-area');
+    var container = document.getElementById('duration-chips');
+    var presets = APP_CONFIG.durationPresets || [];
+    if (!area || !container || presets.length === 0) return;
+    area.removeAttribute('hidden');
+    container.innerHTML = '';
+    presets.forEach(function(preset) {
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'chip';
+      btn.setAttribute('role', 'radio');
+      btn.setAttribute('aria-checked', selectedDuration === preset ? 'true' : 'false');
+      if (selectedDuration === preset) btn.classList.add('selected');
+      btn.textContent = preset;
+      btn.addEventListener('click', function() {
+        selectedDuration = selectedDuration === preset ? '' : preset;
+        renderDurationChips();
+      });
+      container.appendChild(btn);
+    });
+  }
+
+  function renderMedEffectivenessChips() {
+    var area = document.getElementById('med-effectiveness-area');
+    var container = document.getElementById('med-effectiveness-chips');
+    var options = APP_CONFIG.medicationEffectiveness || [];
+    if (!area || !container || options.length === 0) return;
+    area.removeAttribute('hidden');
+    container.innerHTML = '';
+    options.forEach(function(opt) {
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'chip';
+      btn.setAttribute('role', 'radio');
+      btn.setAttribute('aria-checked', selectedMedEffectiveness === opt.value ? 'true' : 'false');
+      if (selectedMedEffectiveness === opt.value) btn.classList.add('selected');
+      btn.textContent = opt.label;
+      btn.addEventListener('click', function() {
+        selectedMedEffectiveness = selectedMedEffectiveness === opt.value ? -1 : opt.value;
+        renderMedEffectivenessChips();
+      });
+      container.appendChild(btn);
+    });
+  }
+
   function collectEntry() {
     var entry = {
       feeling: selectedFeeling,
@@ -372,6 +521,13 @@ var QuickLog = (function() {
       sleep: {},
       notes: ''
     };
+
+    // Migraine-specific fields
+    if (selectedPainTypes.length > 0) entry.painTypes = selectedPainTypes.slice();
+    if (selectedPainLocations.length > 0) entry.painLocations = selectedPainLocations.slice();
+    if (selectedDuration) entry.duration = selectedDuration;
+    if (selectedMigrainePhase) entry.migrainePhase = selectedMigrainePhase;
+    if (selectedMedEffectiveness >= 0) entry.medEffectiveness = selectedMedEffectiveness;
 
     // Symptoms with severity
     entry.symptoms = JSON.parse(JSON.stringify(selectedSymptoms));
@@ -416,6 +572,11 @@ var QuickLog = (function() {
     selectedFeeling = 0;
     selectedCyclePhase = '';
     sleepQuality = 0;
+    selectedPainTypes = [];
+    selectedPainLocations = [];
+    selectedDuration = '';
+    selectedMigrainePhase = '';
+    selectedMedEffectiveness = -1;
 
     var entry = Storage.getEntry(dateStr);
     if (entry) {
@@ -435,12 +596,20 @@ var QuickLog = (function() {
       if (entry.sleep) {
         sleepQuality = entry.sleep.quality || 0;
       }
+
+      // Migraine-specific fields
+      if (Array.isArray(entry.painTypes)) selectedPainTypes = entry.painTypes.slice();
+      if (Array.isArray(entry.painLocations)) selectedPainLocations = entry.painLocations.slice();
+      selectedDuration = entry.duration || '';
+      selectedMigrainePhase = entry.migrainePhase || '';
+      selectedMedEffectiveness = typeof entry.medEffectiveness === 'number' ? entry.medEffectiveness : -1;
     }
 
     // Render all sections
     renderFeelingScale();
     renderSymptomChips();
     renderSeverityArea();
+    renderMigraineFields();
     renderTriggerChips();
     renderMedications();
     renderCyclePhases();
@@ -573,6 +742,12 @@ var QuickLog = (function() {
     document.getElementById('log-custom-trigger').addEventListener('keydown', function(e) {
       if (e.key === 'Enter') addCustomTriggerFromLog();
     });
+
+    // Relabel medications as "Daily Habits" for habit variant
+    if (APP_CONFIG.variant === 'habit') {
+      var medsHeading = document.getElementById('meds-heading');
+      if (medsHeading) medsHeading.textContent = 'Daily Habits';
+    }
 
     // Hide cycle phase section if no phases configured
     var phases = APP_CONFIG.cyclePhases || [];

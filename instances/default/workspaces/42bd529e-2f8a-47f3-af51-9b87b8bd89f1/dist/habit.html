@@ -3,82 +3,78 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Migraine & Headache Tracker</title>
-  <script>(function(){try{var d='dark';var s=JSON.parse(localStorage.getItem('healthtracker_migraine_settings'));var m=s&&s.darkMode||(d||'auto');var t=m==='auto'?(window.matchMedia&&window.matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light'):m;document.documentElement.setAttribute('data-theme',t)}catch(e){if('dark'==='dark')document.documentElement.setAttribute('data-theme','dark')}})()</script>
+  <title>Health Habit Tracker</title>
+  <script>(function(){try{var d='auto';var s=JSON.parse(localStorage.getItem('healthtracker_habit_settings'));var m=s&&s.darkMode||(d||'auto');var t=m==='auto'?(window.matchMedia&&window.matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light'):m;document.documentElement.setAttribute('data-theme',t)}catch(e){if('auto'==='dark')document.documentElement.setAttribute('data-theme','dark')}})()</script>
   <style>
-    /* === CSS Variables — Migraine & Headache Tracker === */
-/* Dark mode is PRIMARY. Sage green accent (least aggravating wavelength). */
-/* Purple for branding (migraine awareness ribbon). No bright blues. */
+    /* === CSS Variables — Health Habit Tracker === */
+/* Warm moss green + amber accent. Growth, renewal, organic calm. */
 :root {
-  --primary: #4A7A5C;
-  --primary-light: #6B9E7D;
-  --primary-dark: #3D6A4E;
-  --accent: #7B6EA8;
-  --accent-subtle: #E8F0EB;
-  --purple: #7B6EA8;
-  --purple-subtle: #EEEAF5;
-  --bg: #F5F4F2;
-  --surface: #ECEAE7;
-  --surface-alt: #E3E1DD;
-  --text: #2C2D30;
-  --text-secondary: #6B6D75;
-  --text-muted: #9B9DA5;
-  --border: #D5D2CC;
-  --border-accent: #B8B4AD;
-  --success: #4A7A5C;
-  --warning: #A88A4A;
-  --error: #994A4A;
-  --shadow: rgba(0,0,0,0.06);
+  --primary: #5B8C5A;
+  --primary-light: #8DB88C;
+  --primary-dark: #3D6B3C;
+  --accent: #C4944A;
+  --bg: #F9F7F3;
+  --surface: #FFFFFF;
+  --surface-alt: #F0EDE6;
+  --text: #2A2D26;
+  --text-secondary: #5E6358;
+  --text-muted: #95998F;
+  --accent-warm: #C4944A;
+  --success: #5B8C5A;
+  --warning: #C4944A;
+  --error: #B87070;
+  --border: #E0DBD2;
+  --shadow: rgba(0,0,0,0.04);
   --radius: 10px;
   --radius-lg: 14px;
   --nav-height: 64px;
   --header-height: 56px;
-  --severity-none: #4A7A5C;
-  --severity-mild: #A88A4A;
-  --severity-moderate: #A8634A;
-  --severity-high: #994A4A;
-  --severity-extreme: #994A4A;
-  --chart-line: #4A7A5C;
-  --chart-fill: rgba(74, 122, 92, 0.10);
-  --feeling-1: #994A4A;
-  --feeling-2: #A88A4A;
-  --feeling-3: #7B6EA8;
-  --feeling-4: #4A7A5C;
-  --feeling-5: #3D6A4E;
+  --severity-none: #8DB88C;
+  --severity-mild: #C4944A;
+  --severity-moderate: #B87070;
+  --severity-high: #8B4040;
+  --severity-extreme: #6B2020;
+  --feeling-1: #B87070;
+  --feeling-2: #C4944A;
+  --feeling-3: #8DB88C;
+  --feeling-4: #5B8C5A;
+  --feeling-5: #3D6B3C;
+  --heatmap-empty: #EBE8E1;
+  --heatmap-low: #C5DBC4;
+  --heatmap-mid: #8DB88C;
+  --heatmap-high: #5B8C5A;
+  --heatmap-full: #3D6B3C;
 }
 
 [data-theme="dark"] {
-  --bg: #141518;
-  --surface: #1C1D22;
-  --surface-alt: #25262C;
-  --text: #D4D5DB;
-  --text-secondary: #8B8D98;
-  --text-muted: #5C5E6A;
-  --border: #2E3038;
-  --border-accent: #3D3F4A;
-  --shadow: rgba(0,0,0,0.4);
-  --primary: #6B9E7D;
-  --primary-light: #7DB38E;
-  --primary-dark: #5A8A6B;
-  --accent: #9B8EC4;
-  --accent-subtle: #1A2B21;
-  --purple: #9B8EC4;
-  --purple-subtle: #1F1C2B;
-  --success: #5C9E6B;
-  --warning: #C4A86B;
-  --error: #B85C5C;
-  --severity-none: #6B9E7D;
-  --severity-mild: #C4A86B;
-  --severity-moderate: #C47B6B;
-  --severity-high: #B85C5C;
-  --severity-extreme: #B85C5C;
-  --chart-line: #6B9E7D;
-  --chart-fill: rgba(107, 158, 125, 0.12);
-  --feeling-1: #B85C5C;
-  --feeling-2: #C4A86B;
-  --feeling-3: #9B8EC4;
-  --feeling-4: #6B9E7D;
-  --feeling-5: #8B8D98;
+  --bg: #171A15;
+  --surface: #1E221C;
+  --surface-alt: #262B24;
+  --text: #E8EBE6;
+  --text-secondary: #A8AEA3;
+  --text-muted: #6B7268;
+  --border: #363D34;
+  --shadow: rgba(0,0,0,0.3);
+  --primary: #8DB88C;
+  --primary-light: #B0D4AF;
+  --primary-dark: #5B8C5A;
+  --accent-warm: #D4A65E;
+  --success: #8DB88C;
+  --severity-none: #8DB88C;
+  --severity-mild: #D4A65E;
+  --severity-moderate: #C88080;
+  --severity-high: #C47474;
+  --severity-extreme: #D45555;
+  --feeling-1: #C88080;
+  --feeling-2: #D4A65E;
+  --feeling-3: #8DB88C;
+  --feeling-4: #5B8C5A;
+  --feeling-5: #A8AEA3;
+  --heatmap-empty: #252A23;
+  --heatmap-low: #2E3F2D;
+  --heatmap-mid: #3D6B3C;
+  --heatmap-high: #5B8C5A;
+  --heatmap-full: #8DB88C;
 }
 
 /* === Reset & Base === */
@@ -99,7 +95,6 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
   font-size: 0.9375rem;
   line-height: 1.6;
-  letter-spacing: 0.01em;
   color: var(--text);
   background: var(--bg);
   min-height: 100vh;
@@ -160,6 +155,7 @@ select:focus:not(:focus-visible) {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  letter-spacing: -0.01em;
 }
 
 .header-actions {
@@ -182,7 +178,7 @@ select:focus:not(:focus-visible) {
   cursor: pointer;
   transition: background 0.15s;
 }
-.icon-btn:hover { background: var(--border); }
+.icon-btn:hover { background: var(--surface-alt); }
 .icon-btn:active { background: var(--primary-light); color: #fff; }
 
 /* Theme toggle icon states */
@@ -198,8 +194,8 @@ select:focus:not(:focus-visible) {
   justify-content: center;
   min-height: 44px;
   min-width: 44px;
-  padding: 0.625rem 1.25rem;
-  border: 2px solid transparent;
+  padding: 0.75rem 1.5rem;
+  border: 1.5px solid transparent;
   border-radius: var(--radius);
   font-size: 0.9375rem;
   font-weight: 500;
@@ -208,13 +204,15 @@ select:focus:not(:focus-visible) {
   text-decoration: none;
   line-height: 1.3;
 }
-.btn-primary { background: var(--primary); color: #fff; border-color: var(--primary); }
-.btn-primary:hover { background: var(--primary-dark); border-color: var(--primary-dark); }
-.btn-outline { background: transparent; color: var(--primary); border-color: var(--primary); }
-.btn-outline:hover { background: var(--primary); color: #fff; }
+.btn-primary { background: var(--primary); color: #fff; border-color: var(--primary); box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+.btn-primary:hover { background: var(--primary-light); border-color: var(--primary-light); }
+.btn-outline { background: transparent; color: var(--primary); border-color: var(--primary-light); }
+.btn-outline:hover { background: var(--primary); color: #fff; border-color: var(--primary); }
 .btn-danger { background: var(--error); color: #fff; border-color: var(--error); }
 .btn-danger:hover { opacity: 0.9; }
 .btn-small { min-height: 44px; padding: 0.5rem 1rem; font-size: 0.875rem; }
+.btn-text { background: transparent; border-color: transparent; color: var(--primary); }
+.btn-text:hover { background: var(--surface-alt); }
 
 /* === App Layout === */
 .app-layout {
@@ -274,8 +272,8 @@ select:focus:not(:focus-visible) {
 .nav-btn.active::after {
   content: '';
   display: block;
-  width: 4px;
-  height: 4px;
+  width: 6px;
+  height: 6px;
   border-radius: 50%;
   background: var(--primary);
   margin-top: 2px;
@@ -335,7 +333,7 @@ select:focus:not(:focus-visible) {
   padding: 1rem;
   border-bottom: 1px solid var(--border);
 }
-.settings-header h2 { font-size: 1.25rem; }
+.settings-header h2 { font-size: 1.25rem; font-weight: 600; }
 
 .settings-body { flex: 1; padding: 1rem; overflow-y: auto; }
 
@@ -343,12 +341,12 @@ select:focus:not(:focus-visible) {
   margin-bottom: 1.5rem;
 }
 .settings-section h3 {
-  font-size: 0.9375rem;
-  font-weight: 600;
+  font-size: 0.875rem;
+  font-weight: 500;
   margin-bottom: 0.75rem;
   color: var(--text-secondary);
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
+  text-transform: none;
+  letter-spacing: 0.02em;
 }
 
 .setting-row {
@@ -364,7 +362,7 @@ select:focus:not(:focus-visible) {
 .setting-row select {
   min-height: 44px;
   padding: 0.5rem 0.75rem;
-  border: 1px solid var(--border);
+  border: 1.5px solid var(--border);
   border-radius: var(--radius);
   background: var(--bg);
   color: var(--text);
@@ -427,7 +425,7 @@ select:focus:not(:focus-visible) {
   padding: 0.375rem 0.75rem;
   min-height: 44px;
   background: var(--bg);
-  border: 1px solid var(--border);
+  border: 1.5px solid var(--border);
   border-radius: 999px;
   font-size: 0.875rem;
   color: var(--text);
@@ -436,8 +434,8 @@ select:focus:not(:focus-visible) {
 }
 .chip:hover { border-color: var(--primary-light); }
 .chip.selected {
-  background: var(--accent-subtle);
-  color: var(--primary);
+  background: var(--primary);
+  color: #fff;
   border-color: var(--primary);
 }
 .chip .remove-chip {
@@ -465,11 +463,15 @@ select:focus:not(:focus-visible) {
   flex: 1;
   min-height: 44px;
   padding: 0.5rem 0.75rem;
-  border: 1px solid var(--border);
+  border: 1.5px solid var(--border);
   border-radius: var(--radius);
   background: var(--bg);
   color: var(--text);
   font-size: 0.9375rem;
+}
+.add-custom-row input:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(91,140,90,0.12);
 }
 
 /* === Privacy Footer === */
@@ -485,9 +487,9 @@ select:focus:not(:focus-visible) {
 
 /* === Save Feedback Pulse === */
 @keyframes savePulse {
-  0% { box-shadow: 0 0 0 0 rgba(107,158,125,0.4); }
-  70% { box-shadow: 0 0 0 10px rgba(107,158,125,0); }
-  100% { box-shadow: 0 0 0 0 rgba(107,158,125,0); }
+  0% { box-shadow: 0 0 0 0 rgba(91,140,90,0.4); }
+  70% { box-shadow: 0 0 0 10px rgba(91,140,90,0); }
+  100% { box-shadow: 0 0 0 0 rgba(91,140,90,0); }
 }
 .save-pulse { animation: savePulse 0.6s ease-out; }
 
@@ -553,7 +555,7 @@ select:focus:not(:focus-visible) {
   }
   .nav-btn.active::after { display: none; }
   .nav-btn.active {
-    background: rgba(107,158,125,0.1);
+    background: rgba(91,140,90,0.1);
   }
 
   .main-content { padding: 2rem; }
@@ -708,7 +710,7 @@ select:focus:not(:focus-visible) {
   color: var(--text-secondary);
   font-size: 0.75rem;
   cursor: pointer;
-  transition: background-color 200ms ease, border-color 200ms ease, transform 150ms ease;
+  transition: background-color 200ms ease, border-color 200ms ease;
 }
 @media (prefers-reduced-motion: reduce) {
   .severity-btn { transition: none; }
@@ -719,11 +721,10 @@ select:focus:not(:focus-visible) {
   background: color-mix(in srgb, var(--sev-color) 15%, transparent);
   color: var(--text);
   border-color: var(--sev-color);
-  transform: scale(1.05);
   font-weight: 600;
 }
 
-/* Medication list */
+/* Medication/Habit list — styled as habit checkboxes */
 .medication-list {
   display: flex;
   flex-direction: column;
@@ -737,6 +738,7 @@ select:focus:not(:focus-visible) {
 }
 .med-name {
   font-size: 0.9375rem;
+  font-weight: 500;
   flex: 1;
   min-width: 0;
   overflow: hidden;
@@ -752,7 +754,7 @@ select:focus:not(:focus-visible) {
   min-height: 44px;
   min-width: 44px;
   padding: 0.375rem 0.625rem;
-  border: 1px solid var(--border);
+  border: 2px solid var(--border);
   border-radius: var(--radius);
   background: var(--bg);
   color: var(--text-secondary);
@@ -767,9 +769,15 @@ select:focus:not(:focus-visible) {
   border-color: var(--success);
 }
 .med-btn.med-skipped {
-  background: var(--text-secondary);
+  background: var(--text-muted);
   color: #fff;
-  border-color: var(--text-secondary);
+  border-color: var(--text-muted);
+}
+
+.empty-hint {
+  font-size: 0.9375rem;
+  color: var(--text-secondary);
+  padding: 0.5rem 0;
 }
 
 /* Meal fields */
@@ -792,7 +800,7 @@ select:focus:not(:focus-visible) {
   flex: 1;
   min-height: 44px;
   padding: 0.5rem 0.75rem;
-  border: 1px solid var(--border);
+  border: 1.5px solid var(--border);
   border-radius: var(--radius);
   background: var(--bg);
   color: var(--text);
@@ -816,7 +824,7 @@ select:focus:not(:focus-visible) {
   flex: 1;
   min-height: 44px;
   padding: 0.5rem 0.75rem;
-  border: 1px solid var(--border);
+  border: 1.5px solid var(--border);
   border-radius: var(--radius);
   background: var(--bg);
   color: var(--text);
@@ -839,7 +847,7 @@ select:focus:not(:focus-visible) {
   width: 100px;
   min-height: 44px;
   padding: 0.5rem 0.75rem;
-  border: 1px solid var(--border);
+  border: 1.5px solid var(--border);
   border-radius: var(--radius);
   background: var(--bg);
   color: var(--text);
@@ -852,7 +860,7 @@ select:focus:not(:focus-visible) {
 .quality-btn {
   min-width: 44px;
   min-height: 44px;
-  border: 1px solid var(--border);
+  border: 1.5px solid var(--border);
   border-radius: var(--radius);
   background: var(--bg);
   color: var(--text-secondary);
@@ -873,14 +881,18 @@ select:focus:not(:focus-visible) {
   width: 100%;
   min-height: 80px;
   padding: 0.75rem;
-  border: 1px solid var(--border);
+  border: 1.5px solid var(--border);
   border-radius: var(--radius);
   background: var(--bg);
   color: var(--text);
   font-family: inherit;
   font-size: 0.9375rem;
   resize: vertical;
-  line-height: 1.5;
+  line-height: 1.6;
+}
+.log-textarea:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(91,140,90,0.12);
 }
 
 /* Save button */
@@ -891,6 +903,26 @@ select:focus:not(:focus-visible) {
   width: 100%;
   font-size: 1rem;
   min-height: 48px;
+}
+
+/* Welcome banner */
+.welcome-banner {
+  background: color-mix(in srgb, var(--primary) 6%, var(--surface));
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 1.25rem;
+  margin-bottom: 0.5rem;
+}
+.welcome-banner h3 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin-bottom: 0.375rem;
+  color: var(--primary);
+}
+.welcome-banner p {
+  font-size: 0.9375rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
 }
 
 /* === Calendar View === */
@@ -950,7 +982,7 @@ select:focus:not(:focus-visible) {
 }
 .cal-day:hover {
   border-color: var(--primary-light);
-  box-shadow: 0 0 0 2px rgba(107,158,125,0.15);
+  box-shadow: 0 0 0 2px rgba(91,140,90,0.12);
 }
 
 .cal-today {
@@ -985,7 +1017,7 @@ select:focus:not(:focus-visible) {
 }
 .cal-dot-symptom { background: var(--error); }
 .cal-dot-med { background: var(--primary); }
-.cal-dot-exercise { background: var(--success); }
+.cal-dot-exercise { background: var(--accent); }
 
 .cal-empty { background: transparent; border: none; }
 
@@ -1043,7 +1075,7 @@ select:focus:not(:focus-visible) {
   min-height: 44px;
   min-width: 44px;
   padding: 0.5rem 1rem;
-  border: 1px solid var(--border);
+  border: 1.5px solid var(--border);
   border-radius: var(--radius);
   background: var(--bg);
   color: var(--text-secondary);
@@ -1072,7 +1104,7 @@ select:focus:not(:focus-visible) {
 .chart-custom-range input[type="date"] {
   min-height: 44px;
   padding: 0.5rem 0.75rem;
-  border: 1px solid var(--border);
+  border: 1.5px solid var(--border);
   border-radius: var(--radius);
   background: var(--bg);
   color: var(--text);
@@ -1278,13 +1310,13 @@ select:focus:not(:focus-visible) {
   border-radius: 999px;
   flex-shrink: 0;
 }
-.insight-confidence-high { background: rgba(76,175,80,0.15); color: var(--success); }
-.insight-confidence-medium { background: rgba(255,152,0,0.15); color: var(--warning); }
-.insight-confidence-low { background: rgba(158,158,158,0.15); color: var(--text-secondary); }
+.insight-confidence-high { background: rgba(91,140,90,0.15); color: var(--success); }
+.insight-confidence-medium { background: rgba(196,148,74,0.15); color: var(--warning); }
+.insight-confidence-low { background: rgba(149,153,143,0.15); color: var(--text-secondary); }
 
 .insight-card-body {
   font-size: 0.9375rem;
-  line-height: 1.5;
+  line-height: 1.6;
   color: var(--text);
 }
 
@@ -1345,7 +1377,7 @@ select:focus:not(:focus-visible) {
 .report-range-row input[type="date"] {
   min-height: 44px;
   padding: 0.5rem 0.75rem;
-  border: 1px solid var(--border);
+  border: 1.5px solid var(--border);
   border-radius: var(--radius);
   background: var(--bg);
   color: var(--text);
@@ -1434,9 +1466,10 @@ select:focus:not(:focus-visible) {
 }
 .report-stat-value {
   font-size: 1.5rem;
-  font-weight: 700;
+  font-weight: 600;
   color: var(--primary);
   line-height: 1.2;
+  font-variant-numeric: tabular-nums;
 }
 .report-stat-label {
   font-size: 0.75rem;
@@ -1489,7 +1522,7 @@ select:focus:not(:focus-visible) {
   font-size: 0.9375rem;
   color: var(--text);
   margin-top: 0.25rem;
-  line-height: 1.5;
+  line-height: 1.6;
 }
 
 .report-disclaimer {
@@ -1518,6 +1551,369 @@ select:focus:not(:focus-visible) {
   }
 }
 
+/* === Setup Overlay === */
+.setup-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 500;
+  background: var(--bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  transition: opacity 0.3s;
+}
+.setup-overlay[hidden] { display: none; }
+.setup-fade-out { opacity: 0; }
+.setup-active { overflow: hidden; }
+
+.setup-panel {
+  width: 100%;
+  max-width: 480px;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.setup-progress {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+}
+.setup-progress-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--border);
+  transition: background 0.2s;
+}
+.setup-progress-dot.active { background: var(--primary); }
+.setup-progress-dot.completed { background: var(--success); }
+
+.setup-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 1rem;
+}
+
+.setup-heading {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--text);
+}
+.setup-heading:focus { outline: none; }
+
+.setup-text {
+  font-size: 0.9375rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  max-width: 360px;
+}
+
+.setup-privacy-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  background: color-mix(in srgb, var(--success) 8%, var(--bg));
+  border: 1px solid color-mix(in srgb, var(--success) 25%, var(--border));
+  border-radius: var(--radius);
+  font-size: 0.875rem;
+  color: var(--text);
+}
+.setup-privacy-badge svg { color: var(--success); flex-shrink: 0; }
+
+.setup-input-group {
+  width: 100%;
+  max-width: 300px;
+}
+.setup-input {
+  width: 100%;
+  min-height: 44px;
+  padding: 0.75rem 1rem;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--text);
+  font-size: 1rem;
+  text-align: center;
+}
+.setup-input:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(91,140,90,0.12);
+  outline: none;
+}
+
+.setup-chip-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: center;
+  max-width: 400px;
+}
+.setup-chip {
+  padding: 0.375rem 0.75rem;
+  min-height: 44px;
+  border: 1.5px solid var(--border);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--text);
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+}
+.setup-chip:hover { border-color: var(--primary-light); }
+.setup-chip.selected {
+  background: var(--primary);
+  color: #fff;
+  border-color: var(--primary);
+}
+
+.setup-hint {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+}
+
+.setup-views-list {
+  text-align: left;
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  font-size: 0.9375rem;
+  color: var(--text);
+  line-height: 1.5;
+}
+.setup-views-list strong { color: var(--primary); }
+
+.setup-actions {
+  display: flex;
+  justify-content: center;
+  gap: 0.75rem;
+}
+.setup-actions .btn { min-width: 120px; }
+
+/* === Heatmap Calendar (GitHub-style) === */
+.heatmap-section {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 1.25rem;
+}
+
+.heatmap-wrapper {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: 0.25rem;
+}
+
+.heatmap-svg {
+  display: block;
+}
+
+.heatmap-month-label {
+  font-size: 11px;
+  fill: var(--text-muted);
+}
+
+.heatmap-day-label {
+  font-size: 10px;
+  fill: var(--text-muted);
+}
+
+.heatmap-cell {
+  rx: 3px;
+  ry: 3px;
+  stroke: var(--surface);
+  stroke-width: 1;
+}
+
+.heatmap-tooltip {
+  position: fixed;
+  z-index: 500;
+  background: var(--text);
+  color: var(--bg);
+  font-size: 0.8125rem;
+  padding: 0.375rem 0.625rem;
+  border-radius: var(--radius);
+  pointer-events: none;
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+.heatmap-tooltip.visible { opacity: 1; }
+
+.heatmap-legend {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  margin-top: 0.75rem;
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  justify-content: flex-end;
+}
+
+.heatmap-legend-cell {
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+}
+
+/* === Completion Ring (Dashboard Hero) === */
+.dashboard-hero {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+
+.completion-ring-container {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  flex-shrink: 0;
+}
+
+.completion-ring-svg {
+  transform: rotate(-90deg);
+  width: 120px;
+  height: 120px;
+}
+
+.completion-ring-bg {
+  fill: none;
+  stroke: var(--border);
+  stroke-width: 10;
+}
+
+.completion-ring-fill {
+  fill: none;
+  stroke-width: 10;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 0.6s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .completion-ring-fill { transition: none; }
+}
+
+.completion-ring-label {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.completion-ring-pct {
+  font-size: 2rem;
+  font-weight: 600;
+  color: var(--primary-dark);
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+[data-theme="dark"] .completion-ring-pct {
+  color: var(--primary);
+}
+
+.completion-ring-sublabel {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-top: 0.125rem;
+}
+
+.dashboard-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.dashboard-stat-item {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+
+.dashboard-stat-value {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--primary);
+  font-variant-numeric: tabular-nums;
+  line-height: 1.2;
+}
+
+.dashboard-stat-label {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+}
+
+/* === Habit Presets === */
+.habit-presets {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 1rem;
+}
+
+.preset-pills {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.preset-pill {
+  min-height: 44px;
+  padding: 0.5rem 1rem;
+  border: 1.5px solid var(--primary-light);
+  border-radius: 20px;
+  background: transparent;
+  color: var(--primary);
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+.preset-pill:hover { background: color-mix(in srgb, var(--primary) 8%, transparent); }
+.preset-pill.selected {
+  background: var(--primary-light);
+  border-color: var(--primary);
+  color: var(--text);
+}
+
+/* Weekly completion bars */
+.weekly-bars-svg {
+  width: 100%;
+  height: auto;
+}
+
+.weekly-bar-bg {
+  fill: var(--border);
+  opacity: 0.4;
+  rx: 6px;
+}
+
+.weekly-bar-fill {
+  fill: var(--primary);
+  rx: 6px;
+}
+
+.weekly-bar-label {
+  font-size: 12px;
+  fill: var(--text-secondary);
+}
+
+.weekly-bar-count {
+  font-size: 11px;
+  fill: var(--text-muted);
+}
+
 /* === Print Styles === */
 @media print {
   :root {
@@ -1526,7 +1922,7 @@ select:focus:not(:focus-visible) {
     --text: #000 !important;
     --text-secondary: #333 !important;
     --border: #ccc !important;
-    --primary: #4A7A5C !important;
+    --primary: #5B8C5A !important;
   }
   [data-theme="dark"] {
     --bg: #fff !important;
@@ -1554,7 +1950,7 @@ select:focus:not(:focus-visible) {
   <a href="#main-content" class="skip-link">Skip to content</a>
 
   <header class="app-header" role="banner">
-    <h1 class="app-title">Migraine & Headache Tracker</h1>
+    <h1 class="app-title">Health Habit Tracker</h1>
     <div class="header-actions">
       <button id="theme-toggle" class="icon-btn" aria-label="Toggle dark mode" title="Toggle dark mode">
         <svg class="icon sun-icon" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><circle cx="12" cy="12" r="5" fill="currentColor"/><g stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></g></svg>
@@ -1847,7 +2243,7 @@ select:focus:not(:focus-visible) {
   </footer>
 
   <script>
-    var APP_CONFIG = {"variant":"migraine","name":"Migraine & Headache Tracker","tagline":"Track gently. Find patterns. Bring proof to your doctor.","defaultDarkMode":"dark","theme":{"primary":"#6B9E7D","primaryLight":"#7DB38E","primaryDark":"#5A8A6B","accent":"#9B8EC4","background":"#F5F4F2","surface":"#ECEAE7","surfaceAlt":"#E3E1DD","text":"#2C2D30","textSecondary":"#6B6D75","textMuted":"#9B9DA5","border":"#D5D2CC","accentGreen":"#4A7A5C","accentPurple":"#7B6EA8","accentPurpleSubtle":"#EEEAF5","success":"#4A7A5C","warning":"#A88A4A","error":"#994A4A","severityNone":"#4A7A5C","severityMild":"#A88A4A","severityModerate":"#A8634A","severityHigh":"#994A4A","severityExtreme":"#994A4A","dark":{"background":"#141518","surface":"#1C1D22","surfaceAlt":"#25262C","text":"#D4D5DB","textSecondary":"#8B8D98","textMuted":"#5C5E6A","border":"#2E3038","primary":"#6B9E7D","primaryLight":"#7DB38E","primaryDark":"#5A8A6B","accent":"#9B8EC4","accentGreen":"#6B9E7D","accentPurple":"#9B8EC4","accentPurpleSubtle":"#1F1C2B","success":"#5C9E6B","severityNone":"#6B9E7D","severityMild":"#C4A86B","severityModerate":"#C47B6B","severityHigh":"#B85C5C","severityExtreme":"#B85C5C"}},"symptoms":["Throbbing pain","Pressure pain","Stabbing pain","Nausea","Vomiting","Light sensitivity","Sound sensitivity","Aura (visual)","Aura (sensory)","Dizziness","Neck stiffness","Brain fog","Fatigue","Blurred vision","Eye pain","Nasal congestion","Scalp tenderness","Jaw pain","Mood changes"],"painTypes":["Throbbing","Pressure","Stabbing","Pulsating","Squeezing","Burning","Aching","Sharp"],"painLocations":["Forehead","Left temple","Right temple","Behind left eye","Behind right eye","Top of head","Back of head","Left side","Right side","All over","Neck","Face"],"triggers":["Poor sleep","Stress","Weather/barometric change","Bright lights","Screen time","Loud noise","Strong smells","Certain foods","Alcohol","Caffeine","Skipped meal","Dehydration","Hormonal changes","Overexertion","Travel"],"medications":["Sumatriptan (Imitrex)","Rizatriptan (Maxalt)","Zolmitriptan (Zomig)","Ibuprofen","Acetaminophen","Naproxen","Aspirin","Topiramate (Topamax)","Propranolol","Amitriptyline","Botox (onabotulinumtoxinA)","CGRP inhibitor","Magnesium","Riboflavin (B2)","CoQ10","Caffeine"],"medicationEffectiveness":[{"value":0,"label":"No help"},{"value":1,"label":"Some relief"},{"value":2,"label":"Resolved"}],"durationPresets":["Just started","30 min","1 hr","2 hr","4 hr","8+ hr","All day"],"migrainePhases":["Prodrome","Aura","Headache","Postdrome"],"exerciseTypes":["Gentle walking","Stretching","Yoga","Rest day"],"mealOptions":["Breakfast","Lunch","Dinner","Snack"],"insightRules":[{"id":"trigger-frequency","label":"Most common triggers","description":"Ranks triggers by frequency over the selected period"},{"id":"medication-effectiveness","label":"Medication impact","description":"Tracks which medications correlate with lower pain and shorter attacks"},{"id":"sleep-pain-correlation","label":"Sleep and migraine patterns","description":"Tracks whether poor sleep nights correlate with migraine days"},{"id":"weather-correlation","label":"Weather and attack patterns","description":"Identifies weather-related trigger frequency"},{"id":"cycle-pattern","label":"Cycle-linked migraines","description":"Detects correlation between menstrual cycle days and migraine frequency"}],"feelingScale":[{"value":1,"label":"Rough","color":"#B85C5C"},{"value":2,"label":"Okay","color":"#C4A86B"},{"value":3,"label":"Steady","color":"#9B8EC4"},{"value":4,"label":"Good","color":"#6B9E7D"},{"value":5,"label":"Great","color":"#5A8A6B"}]};
+    var APP_CONFIG = {"variant":"habit","name":"Health Habit Tracker","tagline":"Build healthy routines. See your progress. One day at a time.","theme":{"primary":"#5B8C5A","primaryLight":"#8DB88C","primaryDark":"#3D6B3C","accent":"#C4944A","background":"#F9F7F3","surface":"#FFFFFF","surfaceAlt":"#F0EDE6","text":"#2A2D26","textSecondary":"#5E6358","textMuted":"#95998F","border":"#E0DBD2","accentWarm":"#C4944A","accentRose":"#B87070","success":"#5B8C5A","warning":"#C4944A","error":"#B87070","severityNone":"#8DB88C","severityMild":"#C4944A","severityModerate":"#B87070","severityHigh":"#8B4040","severityExtreme":"#6B2020","heatmapEmpty":"#EBE8E1","heatmapLow":"#C5DBC4","heatmapMid":"#8DB88C","heatmapHigh":"#5B8C5A","heatmapFull":"#3D6B3C","dark":{"background":"#171A15","surface":"#1E221C","surfaceAlt":"#262B24","text":"#E8EBE6","textSecondary":"#A8AEA3","textMuted":"#6B7268","border":"#363D34","primary":"#8DB88C","primaryLight":"#B0D4AF","primaryDark":"#5B8C5A","accentWarm":"#D4A65E","accentRose":"#C88080","success":"#8DB88C","severityNone":"#8DB88C","severityMild":"#D4A65E","severityModerate":"#C88080","severityHigh":"#C47474","severityExtreme":"#D45555","heatmapEmpty":"#252A23","heatmapLow":"#2E3F2D","heatmapMid":"#3D6B3C","heatmapHigh":"#5B8C5A","heatmapFull":"#8DB88C"}},"symptoms":["Fatigue","Brain fog","Low mood","Anxiety","Headache","Muscle aches","Joint stiffness","Nausea","Digestive issues","Insomnia","Dizziness","Low energy"],"triggers":["Poor sleep","Stress","Skipped habits","Weather change","Missed medication","Dehydration","Overexertion","Hormonal changes","Certain foods","Sedentary day"],"medications":["Take morning supplements","Drink 8 glasses of water","10-minute gentle walk","Take evening medication","Eat a nourishing meal","Stretching or yoga","Journaling or mindfulness","Get outside for fresh air"],"habitPresets":{"General Wellness":["Take morning supplements","Drink 8 glasses of water","10-minute gentle walk","Eat a nourishing meal","Stretching or yoga","Journaling or mindfulness","Get outside for fresh air","Take evening medication"],"PCOS Daily":["Take supplements (inositol, vitamin D)","30-minute walk or movement","Eat balanced meals (protein + fiber)","Drink 8 glasses of water","Stress management (breathing, meditation)","Get 7-8 hours of sleep","Track cycle symptoms","Limit processed sugar"],"Migraine Prevention":["Drink 8 glasses of water","Eat regular meals (no skipping)","Take preventive medication","Limit screen time before bed","Gentle stretching or yoga","Track weather and triggers","Get consistent sleep schedule","Manage stress levels"],"Chronic Pain":["Gentle stretching routine","Take pain medication on schedule","10-minute mindful walk","Apply heat or ice therapy","Practice deep breathing","Drink enough water","Pace activities (rest breaks)","Evening relaxation routine"],"Fibro-Friendly":["Gentle morning stretch","Take medications on time","Short walk if able","Drink water throughout day","Rest when needed (no guilt)","Light housekeeping task","Calming activity before bed","Track energy levels"],"Endo Self-Care":["Anti-inflammatory meal","Gentle movement or rest","Take supplements and medication","Heat therapy as needed","Stress reduction activity","Track pain and symptoms","Hydrate well","Prioritize sleep"]},"mealOptions":["Breakfast","Lunch","Dinner","Snack"],"exerciseTypes":["Gentle walking","Stretching","Yoga","Swimming","Light cycling","Tai chi","Gardening","Rest day"],"insightRules":[{"id":"medication-adherence","label":"Habit consistency","description":"Tracks daily habit completion rate"},{"id":"trigger-frequency","label":"Most common triggers","description":"Ranks triggers by frequency over the selected period"},{"id":"sleep-symptom-correlation","label":"Sleep and symptom patterns","description":"Tracks whether poor sleep correlates with more symptoms"}],"severityLevels":[{"key":"mild","label":"Mild","cssVar":"--severity-mild"},{"key":"moderate","label":"Moderate","cssVar":"--severity-moderate"},{"key":"severe","label":"Severe","cssVar":"--severity-high"}],"feelingScale":[{"value":1,"label":"Rough","color":"#B87070"},{"value":2,"label":"Okay","color":"#C4944A"},{"value":3,"label":"Steady","color":"#8DB88C"},{"value":4,"label":"Good","color":"#5B8C5A"},{"value":5,"label":"Great","color":"#3D6B3C"}]};
     // === Storage Module ===
 var Storage = (function() {
   var VARIANT = APP_CONFIG.variant;

@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>PCOS Wellness Tracker</title>
-  <script>(function(){try{var s=JSON.parse(localStorage.getItem('healthtracker_pcos_settings'));var m=s&&s.darkMode||'auto';var t=m==='auto'?(window.matchMedia&&window.matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light'):m;document.documentElement.setAttribute('data-theme',t)}catch(e){}})()</script>
+  <script>(function(){try{var d='auto';var s=JSON.parse(localStorage.getItem('healthtracker_pcos_settings'));var m=s&&s.darkMode||(d||'auto');var t=m==='auto'?(window.matchMedia&&window.matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light'):m;document.documentElement.setAttribute('data-theme',t)}catch(e){if('auto'==='dark')document.documentElement.setAttribute('data-theme','dark')}})()</script>
   <style>
     /* === CSS Variables === */
 :root {
@@ -623,6 +623,18 @@ select:focus:not(:focus-visible) {
 }
 .collapsible-body { padding-top: 0.75rem; }
 
+/* Migraine subsections */
+.migraine-subsection { margin-bottom: 0.75rem; }
+.migraine-subsection:last-child { margin-bottom: 0; }
+.log-subsection-title {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
 /* Feeling scale */
 .feeling-scale {
   display: flex;
@@ -911,6 +923,7 @@ select:focus:not(:focus-visible) {
 .cal-cell {
   position: relative;
   aspect-ratio: 1;
+  min-height: 44px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -1830,6 +1843,30 @@ select:focus:not(:focus-visible) {
             </div>
           </section>
 
+          <section id="migraine-fields-section" class="log-section" aria-labelledby="migraine-fields-heading" hidden>
+            <h3 id="migraine-fields-heading" class="log-section-title">Attack Details</h3>
+            <div id="migraine-phase-area" class="migraine-subsection" hidden>
+              <h4 id="migraine-phase-label" class="log-subsection-title">Phase</h4>
+              <div id="migraine-phase-chips" class="chip-list" role="radiogroup" aria-labelledby="migraine-phase-label"></div>
+            </div>
+            <div id="pain-type-area" class="migraine-subsection" hidden>
+              <h4 id="pain-type-label" class="log-subsection-title">Pain Type</h4>
+              <div id="pain-type-chips" class="chip-list" role="group" aria-labelledby="pain-type-label"></div>
+            </div>
+            <div id="pain-location-area" class="migraine-subsection" hidden>
+              <h4 id="pain-location-label" class="log-subsection-title">Pain Location</h4>
+              <div id="pain-location-chips" class="chip-list" role="group" aria-labelledby="pain-location-label"></div>
+            </div>
+            <div id="duration-area" class="migraine-subsection" hidden>
+              <h4 id="duration-label" class="log-subsection-title">Duration</h4>
+              <div id="duration-chips" class="chip-list" role="radiogroup" aria-labelledby="duration-label"></div>
+            </div>
+            <div id="med-effectiveness-area" class="migraine-subsection" hidden>
+              <h4 id="med-effectiveness-label" class="log-subsection-title">Medication Relief</h4>
+              <div id="med-effectiveness-chips" class="chip-list" role="radiogroup" aria-labelledby="med-effectiveness-label"></div>
+            </div>
+          </section>
+
           <section class="log-section" aria-labelledby="triggers-heading">
             <h3 id="triggers-heading" class="log-section-title">Triggers</h3>
             <div id="trigger-chips" class="chip-list" role="group" aria-label="Trigger selection"></div>
@@ -2226,9 +2263,11 @@ var Setup = (function() {
 
   var SETUP_KEY = 'healthtracker_' + APP_CONFIG.variant + '_settings';
   var currentStep = 0;
-  var totalSteps = 4;
+  var isHabit = APP_CONFIG.variant === 'habit';
+  var totalSteps = isHabit ? 5 : 4;
   var selectedSymptoms = [];
   var userName = '';
+  var selectedPreset = '';
 
   function isFirstTime() {
     try {
@@ -2259,6 +2298,19 @@ var Setup = (function() {
     overlay.removeAttribute('hidden');
     document.body.classList.add('setup-active');
 
+    // Add extra progress dot for habit variant
+    if (isHabit) {
+      var progress = overlay.querySelector('.setup-progress');
+      if (progress && progress.children.length < totalSteps + 1) {
+        var dot = document.createElement('span');
+        dot.className = 'setup-progress-dot';
+        dot.setAttribute('aria-label', 'Habits');
+        // Insert before last dot (Done)
+        var lastDot = progress.children[progress.children.length - 1];
+        progress.insertBefore(dot, lastDot);
+      }
+    }
+
     renderStep(0);
     bindEvents(onComplete);
     updateProgress();
@@ -2276,19 +2328,21 @@ var Setup = (function() {
     if (!container) return;
 
     var html = '';
-    switch (step) {
-      case 0:
-        html = renderWelcome();
-        break;
-      case 1:
-        html = renderName();
-        break;
-      case 2:
-        html = renderSymptoms();
-        break;
-      case 3:
-        html = renderDone();
-        break;
+    if (isHabit) {
+      switch (step) {
+        case 0: html = renderWelcome(); break;
+        case 1: html = renderName(); break;
+        case 2: html = renderHabitPresets(); break;
+        case 3: html = renderSymptoms(); break;
+        case 4: html = renderDone(); break;
+      }
+    } else {
+      switch (step) {
+        case 0: html = renderWelcome(); break;
+        case 1: html = renderName(); break;
+        case 2: html = renderSymptoms(); break;
+        case 3: html = renderDone(); break;
+      }
     }
 
     container.innerHTML = html;
@@ -2344,6 +2398,34 @@ var Setup = (function() {
       '<p class="setup-text">Select the symptoms you want to track. You can always change these later in Settings.</p>' +
       '<div class="setup-chip-grid" role="group" aria-label="Symptom selection">' + chips + '</div>' +
       '<p class="setup-hint">' + selectedSymptoms.length + ' of ' + symptoms.length + ' selected</p>' +
+    '</div>';
+  }
+
+  function renderHabitPresets() {
+    var presets = APP_CONFIG.habitPresets || {};
+    var names = Object.keys(presets);
+    var pills = '';
+    for (var i = 0; i < names.length; i++) {
+      var name = names[i];
+      var isSelected = selectedPreset === name;
+      pills += '<button type="button" class="preset-pill' + (isSelected ? ' selected' : '') + '" ' +
+        'data-preset="' + escapeHtml(name) + '" ' +
+        'aria-pressed="' + (isSelected ? 'true' : 'false') + '">' +
+        escapeHtml(name) + '</button>';
+    }
+    var previewHtml = '';
+    if (selectedPreset && presets[selectedPreset]) {
+      previewHtml = '<ul class="setup-views-list" style="margin-top:0.75rem">';
+      presets[selectedPreset].forEach(function(h) {
+        previewHtml += '<li>' + escapeHtml(h) + '</li>';
+      });
+      previewHtml += '</ul>';
+    }
+    return '<div class="setup-step">' +
+      '<h2 tabindex="-1" class="setup-heading">Choose a habit preset</h2>' +
+      '<p class="setup-text">Pick a starting set of daily habits. You can customize them anytime in Settings.</p>' +
+      '<div class="preset-pills" role="group" aria-label="Habit preset selection">' + pills + '</div>' +
+      previewHtml +
     '</div>';
   }
 
@@ -2455,10 +2537,22 @@ var Setup = (function() {
       });
     }
 
-    // Symptom chip clicks (delegated)
+    // Symptom chip + preset pill clicks (delegated)
     var stepContent = document.getElementById('setup-step-content');
     if (stepContent) {
       stepContent.addEventListener('click', function(e) {
+        // Preset pill
+        var pill = e.target.closest('.preset-pill');
+        if (pill) {
+          var presetName = pill.getAttribute('data-preset');
+          if (presetName) {
+            selectedPreset = selectedPreset === presetName ? '' : presetName;
+            renderStep(currentStep);
+          }
+          return;
+        }
+
+        // Symptom chip
         var chip = e.target.closest('.setup-chip');
         if (!chip) return;
         var symptom = chip.getAttribute('data-symptom');
@@ -2505,6 +2599,21 @@ var Setup = (function() {
     settings.setupComplete = true;
     settings.userName = userName;
     settings.activeSymptoms = activeSymptoms;
+
+    // If habit variant with a selected preset, save those as custom medications (habits)
+    if (isHabit && selectedPreset && APP_CONFIG.habitPresets && APP_CONFIG.habitPresets[selectedPreset]) {
+      var presetHabits = APP_CONFIG.habitPresets[selectedPreset];
+      var baseMeds = APP_CONFIG.medications || [];
+      var custom = [];
+      presetHabits.forEach(function(h) {
+        if (baseMeds.indexOf(h) === -1 && custom.indexOf(h) === -1) {
+          custom.push(h);
+        }
+      });
+      settings.customMedications = custom;
+      settings.selectedPreset = selectedPreset;
+    }
+
     Storage.saveSettings(settings);
 
     // Transition out
@@ -2834,6 +2943,19 @@ var Settings = (function() {
       if (e.target === document.getElementById('settings-panel')) close();
     });
 
+    // Relabel "Custom Medications" for habit variant
+    if (APP_CONFIG.variant === 'habit') {
+      var medSection = document.getElementById('custom-medications-list');
+      if (medSection && medSection.parentElement) {
+        var heading = medSection.parentElement.querySelector('h3');
+        if (heading && heading.textContent === 'Custom Medications') {
+          heading.textContent = 'Custom Habits';
+        }
+        var medInput = document.getElementById('custom-medication-input');
+        if (medInput) medInput.placeholder = 'Add custom habit';
+      }
+    }
+
     // Custom item add buttons
     document.getElementById('add-custom-symptom').addEventListener('click', function() {
       addCustomItem('custom-symptom-input', 'customSymptoms');
@@ -2916,6 +3038,11 @@ var QuickLog = (function() {
   var selectedFeeling = 0;
   var selectedCyclePhase = '';
   var sleepQuality = 0;
+  var selectedPainTypes = [];
+  var selectedPainLocations = [];
+  var selectedDuration = '';
+  var selectedMigrainePhase = '';
+  var selectedMedEffectiveness = -1;
 
   function todayStr() {
     var d = new Date();
@@ -3267,6 +3394,150 @@ var QuickLog = (function() {
     }
   }
 
+  // === Migraine-specific field renderers ===
+
+  function hasMigraineFields() {
+    return (APP_CONFIG.painTypes && APP_CONFIG.painTypes.length > 0) ||
+           (APP_CONFIG.painLocations && APP_CONFIG.painLocations.length > 0) ||
+           (APP_CONFIG.durationPresets && APP_CONFIG.durationPresets.length > 0) ||
+           (APP_CONFIG.migrainePhases && APP_CONFIG.migrainePhases.length > 0) ||
+           (APP_CONFIG.medicationEffectiveness && APP_CONFIG.medicationEffectiveness.length > 0);
+  }
+
+  function renderMigraineFields() {
+    var section = document.getElementById('migraine-fields-section');
+    if (!section || !hasMigraineFields()) return;
+    section.removeAttribute('hidden');
+    renderMigrainePhaseChips();
+    renderPainTypeChips();
+    renderPainLocationChips();
+    renderDurationChips();
+    renderMedEffectivenessChips();
+  }
+
+  function renderMigrainePhaseChips() {
+    var area = document.getElementById('migraine-phase-area');
+    var container = document.getElementById('migraine-phase-chips');
+    var phases = APP_CONFIG.migrainePhases || [];
+    if (!area || !container || phases.length === 0) return;
+    area.removeAttribute('hidden');
+    container.innerHTML = '';
+    phases.forEach(function(phase) {
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'chip';
+      btn.setAttribute('role', 'radio');
+      btn.setAttribute('aria-checked', selectedMigrainePhase === phase ? 'true' : 'false');
+      if (selectedMigrainePhase === phase) btn.classList.add('selected');
+      btn.textContent = phase;
+      btn.addEventListener('click', function() {
+        selectedMigrainePhase = selectedMigrainePhase === phase ? '' : phase;
+        renderMigrainePhaseChips();
+      });
+      container.appendChild(btn);
+    });
+  }
+
+  function renderPainTypeChips() {
+    var area = document.getElementById('pain-type-area');
+    var container = document.getElementById('pain-type-chips');
+    var types = APP_CONFIG.painTypes || [];
+    if (!area || !container || types.length === 0) return;
+    area.removeAttribute('hidden');
+    container.innerHTML = '';
+    types.forEach(function(name) {
+      var chip = document.createElement('button');
+      chip.type = 'button';
+      chip.className = 'chip';
+      chip.setAttribute('aria-pressed', selectedPainTypes.indexOf(name) !== -1 ? 'true' : 'false');
+      if (selectedPainTypes.indexOf(name) !== -1) chip.classList.add('selected');
+      chip.textContent = name;
+      chip.addEventListener('click', function() {
+        var idx = selectedPainTypes.indexOf(name);
+        if (idx !== -1) {
+          selectedPainTypes.splice(idx, 1);
+        } else {
+          selectedPainTypes.push(name);
+        }
+        renderPainTypeChips();
+      });
+      container.appendChild(chip);
+    });
+  }
+
+  function renderPainLocationChips() {
+    var area = document.getElementById('pain-location-area');
+    var container = document.getElementById('pain-location-chips');
+    var locations = APP_CONFIG.painLocations || [];
+    if (!area || !container || locations.length === 0) return;
+    area.removeAttribute('hidden');
+    container.innerHTML = '';
+    locations.forEach(function(name) {
+      var chip = document.createElement('button');
+      chip.type = 'button';
+      chip.className = 'chip';
+      chip.setAttribute('aria-pressed', selectedPainLocations.indexOf(name) !== -1 ? 'true' : 'false');
+      if (selectedPainLocations.indexOf(name) !== -1) chip.classList.add('selected');
+      chip.textContent = name;
+      chip.addEventListener('click', function() {
+        var idx = selectedPainLocations.indexOf(name);
+        if (idx !== -1) {
+          selectedPainLocations.splice(idx, 1);
+        } else {
+          selectedPainLocations.push(name);
+        }
+        renderPainLocationChips();
+      });
+      container.appendChild(chip);
+    });
+  }
+
+  function renderDurationChips() {
+    var area = document.getElementById('duration-area');
+    var container = document.getElementById('duration-chips');
+    var presets = APP_CONFIG.durationPresets || [];
+    if (!area || !container || presets.length === 0) return;
+    area.removeAttribute('hidden');
+    container.innerHTML = '';
+    presets.forEach(function(preset) {
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'chip';
+      btn.setAttribute('role', 'radio');
+      btn.setAttribute('aria-checked', selectedDuration === preset ? 'true' : 'false');
+      if (selectedDuration === preset) btn.classList.add('selected');
+      btn.textContent = preset;
+      btn.addEventListener('click', function() {
+        selectedDuration = selectedDuration === preset ? '' : preset;
+        renderDurationChips();
+      });
+      container.appendChild(btn);
+    });
+  }
+
+  function renderMedEffectivenessChips() {
+    var area = document.getElementById('med-effectiveness-area');
+    var container = document.getElementById('med-effectiveness-chips');
+    var options = APP_CONFIG.medicationEffectiveness || [];
+    if (!area || !container || options.length === 0) return;
+    area.removeAttribute('hidden');
+    container.innerHTML = '';
+    options.forEach(function(opt) {
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'chip';
+      btn.setAttribute('role', 'radio');
+      btn.setAttribute('aria-checked', selectedMedEffectiveness === opt.value ? 'true' : 'false');
+      if (selectedMedEffectiveness === opt.value) btn.classList.add('selected');
+      btn.textContent = opt.label;
+      btn.addEventListener('click', function() {
+        selectedMedEffectiveness = selectedMedEffectiveness === opt.value ? -1 : opt.value;
+        renderMedEffectivenessChips();
+      });
+      container.appendChild(btn);
+    });
+  }
+
   function collectEntry() {
     var entry = {
       feeling: selectedFeeling,
@@ -3279,6 +3550,13 @@ var QuickLog = (function() {
       sleep: {},
       notes: ''
     };
+
+    // Migraine-specific fields
+    if (selectedPainTypes.length > 0) entry.painTypes = selectedPainTypes.slice();
+    if (selectedPainLocations.length > 0) entry.painLocations = selectedPainLocations.slice();
+    if (selectedDuration) entry.duration = selectedDuration;
+    if (selectedMigrainePhase) entry.migrainePhase = selectedMigrainePhase;
+    if (selectedMedEffectiveness >= 0) entry.medEffectiveness = selectedMedEffectiveness;
 
     // Symptoms with severity
     entry.symptoms = JSON.parse(JSON.stringify(selectedSymptoms));
@@ -3323,6 +3601,11 @@ var QuickLog = (function() {
     selectedFeeling = 0;
     selectedCyclePhase = '';
     sleepQuality = 0;
+    selectedPainTypes = [];
+    selectedPainLocations = [];
+    selectedDuration = '';
+    selectedMigrainePhase = '';
+    selectedMedEffectiveness = -1;
 
     var entry = Storage.getEntry(dateStr);
     if (entry) {
@@ -3342,12 +3625,20 @@ var QuickLog = (function() {
       if (entry.sleep) {
         sleepQuality = entry.sleep.quality || 0;
       }
+
+      // Migraine-specific fields
+      if (Array.isArray(entry.painTypes)) selectedPainTypes = entry.painTypes.slice();
+      if (Array.isArray(entry.painLocations)) selectedPainLocations = entry.painLocations.slice();
+      selectedDuration = entry.duration || '';
+      selectedMigrainePhase = entry.migrainePhase || '';
+      selectedMedEffectiveness = typeof entry.medEffectiveness === 'number' ? entry.medEffectiveness : -1;
     }
 
     // Render all sections
     renderFeelingScale();
     renderSymptomChips();
     renderSeverityArea();
+    renderMigraineFields();
     renderTriggerChips();
     renderMedications();
     renderCyclePhases();
@@ -3480,6 +3771,12 @@ var QuickLog = (function() {
     document.getElementById('log-custom-trigger').addEventListener('keydown', function(e) {
       if (e.key === 'Enter') addCustomTriggerFromLog();
     });
+
+    // Relabel medications as "Daily Habits" for habit variant
+    if (APP_CONFIG.variant === 'habit') {
+      var medsHeading = document.getElementById('meds-heading');
+      if (medsHeading) medsHeading.textContent = 'Daily Habits';
+    }
 
     // Hide cycle phase section if no phases configured
     var phases = APP_CONFIG.cyclePhases || [];
@@ -4077,18 +4374,279 @@ var Charts = (function() {
     return svg + legend + table;
   }
 
+  // --- Habit-Specific Charts ---
+
+  function buildHeatmap(allEntries) {
+    var today = new Date();
+    var totalHabits = (APP_CONFIG.medications || []).length;
+    if (totalHabits === 0) totalHabits = 1;
+
+    // Build 52 weeks of data ending today (Sunday-start weeks)
+    var endDay = new Date(today);
+    // Go to end of this week (Saturday)
+    var dayOfWeek = endDay.getDay();
+    endDay.setDate(endDay.getDate() + (6 - dayOfWeek));
+
+    var startDay = new Date(endDay);
+    startDay.setDate(startDay.getDate() - (52 * 7 - 1));
+
+    var cellSize = 14;
+    var gap = 3;
+    var labelW = 28;
+    var labelH = 18;
+    var cols = 52;
+    var rows = 7;
+    var w = labelW + cols * (cellSize + gap);
+    var h = labelH + rows * (cellSize + gap);
+
+    var svg = '<svg class="heatmap-svg" viewBox="0 0 ' + w + ' ' + h + '" role="img" aria-label="Habit completion heatmap for the past year">';
+
+    // Month labels
+    var monthNames = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    var lastMonth = -1;
+    for (var col = 0; col < cols; col++) {
+      var cellDate = new Date(startDay);
+      cellDate.setDate(cellDate.getDate() + col * 7);
+      var m = cellDate.getMonth();
+      if (m !== lastMonth) {
+        var x = labelW + col * (cellSize + gap);
+        svg += '<text x="' + x + '" y="12" class="heatmap-month-label">' + monthNames[m] + '</text>';
+        lastMonth = m;
+      }
+    }
+
+    // Day labels (Mon, Wed, Fri)
+    var dayLabels = ['', 'Mon', '', 'Wed', '', 'Fri', ''];
+    for (var row = 0; row < rows; row++) {
+      if (dayLabels[row]) {
+        var y = labelH + row * (cellSize + gap) + cellSize * 0.75;
+        svg += '<text x="0" y="' + y + '" class="heatmap-day-label">' + dayLabels[row] + '</text>';
+      }
+    }
+
+    // Cells
+    for (var c = 0; c < cols; c++) {
+      for (var r = 0; r < rows; r++) {
+        var d = new Date(startDay);
+        d.setDate(d.getDate() + c * 7 + r);
+        if (d > today) continue;
+
+        var ds = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+        var entry = allEntries[ds];
+        var pct = 0;
+        if (entry && entry.medications && typeof entry.medications === 'object') {
+          var takenCount = 0;
+          Object.keys(entry.medications).forEach(function(m) {
+            if (entry.medications[m] === 'taken') takenCount++;
+          });
+          pct = Object.keys(entry.medications).length > 0 ? takenCount / Object.keys(entry.medications).length : 0;
+        }
+
+        var color;
+        if (!entry) {
+          color = 'var(--heatmap-empty)';
+        } else if (pct === 0) {
+          color = 'var(--heatmap-empty)';
+        } else if (pct < 0.4) {
+          color = 'var(--heatmap-low)';
+        } else if (pct < 0.7) {
+          color = 'var(--heatmap-mid)';
+        } else if (pct < 1) {
+          color = 'var(--heatmap-high)';
+        } else {
+          color = 'var(--heatmap-full)';
+        }
+
+        var cx = labelW + c * (cellSize + gap);
+        var cy = labelH + r * (cellSize + gap);
+        var dOpts = { weekday: 'short', month: 'short', day: 'numeric' };
+        var dLabel = d.toLocaleDateString(undefined, dOpts);
+        var takenOfTotal = entry && entry.medications ? Object.keys(entry.medications).filter(function(m) { return entry.medications[m] === 'taken'; }).length : 0;
+        var loggedTotal = entry && entry.medications ? Object.keys(entry.medications).length : 0;
+        var tipText = dLabel + ' — ' + takenOfTotal + '/' + loggedTotal + ' habits (' + Math.round(pct * 100) + '%)';
+
+        svg += '<rect class="heatmap-cell" x="' + cx + '" y="' + cy + '" width="' + cellSize + '" height="' + cellSize + '" fill="' + color + '" data-tip="' + escapeHtml(tipText) + '" aria-label="' + escapeHtml(tipText) + '"/>';
+      }
+    }
+
+    svg += '</svg>';
+
+    // Legend
+    var legend = '<div class="heatmap-legend" aria-label="Heatmap legend">';
+    legend += '<span>Less</span>';
+    ['var(--heatmap-empty)', 'var(--heatmap-low)', 'var(--heatmap-mid)', 'var(--heatmap-high)', 'var(--heatmap-full)'].forEach(function(c) {
+      legend += '<span class="heatmap-legend-cell" style="background:' + c + '"></span>';
+    });
+    legend += '<span>More</span>';
+    legend += '</div>';
+
+    return '<div class="heatmap-wrapper">' + svg + '</div>' + legend;
+  }
+
+  function buildCompletionRing(allEntries) {
+    // Calculate today's and this week's completion
+    var today = todayStr();
+    var todayEntry = allEntries[today];
+    var todayPct = 0;
+    var todayTaken = 0;
+    var todayTotal = 0;
+
+    if (todayEntry && todayEntry.medications && typeof todayEntry.medications === 'object') {
+      Object.keys(todayEntry.medications).forEach(function(m) {
+        todayTotal++;
+        if (todayEntry.medications[m] === 'taken') todayTaken++;
+      });
+      todayPct = todayTotal > 0 ? Math.round((todayTaken / todayTotal) * 100) : 0;
+    }
+
+    // This week: last 7 days
+    var weekTaken = 0;
+    var weekTotal = 0;
+    for (var i = 0; i < 7; i++) {
+      var ds = subtractDays(today, i);
+      var entry = allEntries[ds];
+      if (entry && entry.medications && typeof entry.medications === 'object') {
+        Object.keys(entry.medications).forEach(function(m) {
+          weekTotal++;
+          if (entry.medications[m] === 'taken') weekTaken++;
+        });
+      }
+    }
+    var weekPct = weekTotal > 0 ? Math.round((weekTaken / weekTotal) * 100) : 0;
+
+    // Total days logged
+    var totalDays = Object.keys(allEntries).length;
+
+    // SVG ring
+    var radius = 50;
+    var circumference = 2 * Math.PI * radius;
+    var offset = circumference - (todayPct / 100) * circumference;
+
+    var ringColor = todayPct < 40 ? 'var(--heatmap-low)' : todayPct < 70 ? 'var(--heatmap-mid)' : todayPct < 100 ? 'var(--heatmap-high)' : 'var(--heatmap-full)';
+
+    var html = '<div class="dashboard-hero">';
+
+    // Ring
+    html += '<div class="completion-ring-container">';
+    html += '<svg class="completion-ring-svg" viewBox="0 0 120 120" aria-label="Today\'s completion: ' + todayPct + '%">';
+    html += '<circle class="completion-ring-bg" cx="60" cy="60" r="' + radius + '"/>';
+    html += '<circle class="completion-ring-fill" cx="60" cy="60" r="' + radius + '" stroke="' + ringColor + '" stroke-dasharray="' + circumference.toFixed(1) + '" stroke-dashoffset="' + offset.toFixed(1) + '"/>';
+    html += '</svg>';
+    html += '<div class="completion-ring-label">';
+    html += '<span class="completion-ring-pct">' + todayPct + '%</span>';
+    html += '<span class="completion-ring-sublabel">today</span>';
+    html += '</div>';
+    html += '</div>';
+
+    // Stats
+    html += '<div class="dashboard-stats">';
+    html += '<div class="dashboard-stat-item"><span class="dashboard-stat-value">' + todayTaken + '/' + todayTotal + '</span><span class="dashboard-stat-label">habits today</span></div>';
+    html += '<div class="dashboard-stat-item"><span class="dashboard-stat-value">' + weekPct + '%</span><span class="dashboard-stat-label">this week</span></div>';
+    html += '<div class="dashboard-stat-item"><span class="dashboard-stat-value">' + totalDays + '</span><span class="dashboard-stat-label">days logged</span></div>';
+    html += '</div>';
+
+    html += '</div>';
+    return html;
+  }
+
+  function buildWeeklyBars(allEntries) {
+    var today = todayStr();
+    var dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    var data = [];
+    var maxHabits = 1;
+
+    for (var i = 6; i >= 0; i--) {
+      var ds = subtractDays(today, i);
+      var entry = allEntries[ds];
+      var taken = 0;
+      var total = 0;
+      if (entry && entry.medications && typeof entry.medications === 'object') {
+        Object.keys(entry.medications).forEach(function(m) {
+          total++;
+          if (entry.medications[m] === 'taken') taken++;
+        });
+      }
+      var parts = ds.split('-');
+      var d = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
+      data.push({ day: dayNames[d.getDay()], taken: taken, total: total, date: ds });
+      if (total > maxHabits) maxHabits = total;
+    }
+
+    if (maxHabits === 0) {
+      return '<div class="chart-empty" role="img" aria-label="No habit data this week">No habits logged this week.</div>';
+    }
+
+    var barH = 24;
+    var gap = 8;
+    var labelW = 36;
+    var countW = 40;
+    var w = 300;
+    var h = data.length * (barH + gap) + gap;
+    var barArea = w - labelW - countW - 8;
+
+    var svg = '<svg class="weekly-bars-svg" viewBox="0 0 ' + w + ' ' + h + '" role="img" aria-label="Weekly habit completion">';
+    data.forEach(function(item, i) {
+      var y = gap + i * (barH + gap);
+      // Label
+      svg += '<text x="' + (labelW - 4) + '" y="' + (y + barH * 0.65) + '" class="weekly-bar-label" text-anchor="end">' + item.day + '</text>';
+      // Background bar
+      svg += '<rect class="weekly-bar-bg" x="' + labelW + '" y="' + y + '" width="' + barArea + '" height="' + barH + '"/>';
+      // Fill bar
+      var fillW = item.total > 0 ? (item.taken / maxHabits) * barArea : 0;
+      if (fillW > 0) {
+        svg += '<rect class="weekly-bar-fill" x="' + labelW + '" y="' + y + '" width="' + fillW.toFixed(1) + '" height="' + barH + '" opacity="' + (0.5 + 0.5 * (item.total > 0 ? item.taken / item.total : 0)).toFixed(2) + '"/>';
+      }
+      // Count
+      var countText = item.total > 0 ? item.taken + '/' + item.total : '-';
+      svg += '<text x="' + (labelW + barArea + 6) + '" y="' + (y + barH * 0.65) + '" class="weekly-bar-count">' + countText + '</text>';
+    });
+    svg += '</svg>';
+
+    // Accessible table
+    var table = '<table class="sr-only"><caption>Weekly habit completion</caption><thead><tr><th>Day</th><th>Done</th><th>Total</th></tr></thead><tbody>';
+    data.forEach(function(item) {
+      table += '<tr><td>' + item.day + '</td><td>' + item.taken + '</td><td>' + item.total + '</td></tr>';
+    });
+    table += '</tbody></table>';
+
+    return svg + table;
+  }
+
   // --- Render ---
 
   function render() {
     var container = document.getElementById('view-charts');
     if (!container) return;
 
+    var isHabit = APP_CONFIG.variant === 'habit';
     var range = getDateRange();
     var entries = Storage.getEntriesInRange(range.start, range.end);
     var dates = getDatesInRange(range.start, range.end);
     var entryCount = Object.keys(entries).length;
+    var allEntries = isHabit ? Storage.getAllEntries() : null;
 
     var html = '<div class="charts-view">';
+
+    // Habit variant: dashboard hero with completion ring + heatmap first
+    if (isHabit && allEntries) {
+      // Completion Ring
+      html += '<section class="chart-section" aria-labelledby="chart-dashboard-heading">';
+      html += '<h3 id="chart-dashboard-heading" class="chart-section-title">Dashboard</h3>';
+      html += buildCompletionRing(allEntries);
+      html += '</section>';
+
+      // Heatmap Calendar
+      html += '<section class="heatmap-section" aria-labelledby="chart-heatmap-heading">';
+      html += '<h3 id="chart-heatmap-heading" class="chart-section-title">Habit Heatmap</h3>';
+      html += buildHeatmap(allEntries);
+      html += '</section>';
+
+      // Weekly Bars
+      html += '<section class="chart-section" aria-labelledby="chart-weekly-heading">';
+      html += '<h3 id="chart-weekly-heading" class="chart-section-title">This Week</h3>';
+      html += buildWeeklyBars(allEntries);
+      html += '</section>';
+    }
 
     // Time range selector
     html += '<div class="chart-range-bar" role="group" aria-label="Time range">';
@@ -4137,9 +4695,9 @@ var Charts = (function() {
       html += buildSleepChart(entries, dates);
       html += '</section>';
 
-      // Medication Adherence
+      // Medication/Habit Adherence
       html += '<section class="chart-section" aria-labelledby="chart-med-heading">';
-      html += '<h3 id="chart-med-heading" class="chart-section-title">Medication Adherence</h3>';
+      html += '<h3 id="chart-med-heading" class="chart-section-title">' + (isHabit ? 'Habit Consistency' : 'Medication Adherence') + '</h3>';
       html += buildMedChart(entries);
       html += '</section>';
 
@@ -4153,6 +4711,7 @@ var Charts = (function() {
     html += '</div>';
     container.innerHTML = html;
     bindEvents();
+    if (isHabit) bindHeatmapTooltips();
   }
 
   function bindEvents() {
@@ -4190,6 +4749,30 @@ var Charts = (function() {
         }
       });
     }
+  }
+
+  function bindHeatmapTooltips() {
+    var tooltip = document.createElement('div');
+    tooltip.className = 'heatmap-tooltip';
+    tooltip.setAttribute('role', 'tooltip');
+    tooltip.setAttribute('aria-hidden', 'true');
+    document.body.appendChild(tooltip);
+
+    var cells = document.querySelectorAll('.heatmap-cell');
+    cells.forEach(function(cell) {
+      cell.addEventListener('mouseenter', function(e) {
+        var tip = this.getAttribute('data-tip');
+        if (!tip) return;
+        tooltip.textContent = tip;
+        tooltip.classList.add('visible');
+        var rect = this.getBoundingClientRect();
+        tooltip.style.left = rect.left + rect.width / 2 - tooltip.offsetWidth / 2 + 'px';
+        tooltip.style.top = rect.top - tooltip.offsetHeight - 6 + 'px';
+      });
+      cell.addEventListener('mouseleave', function() {
+        tooltip.classList.remove('visible');
+      });
+    });
   }
 
   function init() {
@@ -4329,6 +4912,7 @@ var Insights = (function() {
   }
 
   function medicationAdherence(entries) {
+    var isHabit = APP_CONFIG.variant === 'habit';
     var meds = {};
     Object.keys(entries).forEach(function(d) {
       var e = entries[d];
@@ -4355,9 +4939,50 @@ var Insights = (function() {
 
     return {
       id: 'medication-adherence',
-      title: 'Medication consistency',
+      title: isHabit ? 'Habit consistency' : 'Medication consistency',
       body: lines.join('<br>'),
       confidence: Math.min(items[0].total / 14, 1)
+    };
+  }
+
+  function habitImpactOnFeeling(entries) {
+    if (APP_CONFIG.variant !== 'habit') return null;
+
+    var highCompletionDays = [];
+    var lowCompletionDays = [];
+
+    Object.keys(entries).forEach(function(d) {
+      var e = entries[d];
+      if (!e.feeling || e.feeling === 0) return;
+      if (!e.medications || typeof e.medications !== 'object') return;
+
+      var total = Object.keys(e.medications).length;
+      if (total === 0) return;
+      var taken = 0;
+      Object.keys(e.medications).forEach(function(m) {
+        if (e.medications[m] === 'taken') taken++;
+      });
+      var pct = taken / total;
+
+      if (pct >= 0.7) {
+        highCompletionDays.push(e.feeling);
+      } else if (pct < 0.4) {
+        lowCompletionDays.push(e.feeling);
+      }
+    });
+
+    if (highCompletionDays.length < 3 || lowCompletionDays.length < 3) return null;
+
+    var avgHigh = highCompletionDays.reduce(function(a, b) { return a + b; }, 0) / highCompletionDays.length;
+    var avgLow = lowCompletionDays.reduce(function(a, b) { return a + b; }, 0) / lowCompletionDays.length;
+
+    if (avgHigh <= avgLow + 0.3) return null;
+
+    return {
+      id: 'habit-feeling-correlation',
+      title: 'Habits and how you feel',
+      body: 'On days you completed 70%+ of your habits, your average feeling was ' + avgHigh.toFixed(1) + '/5. On days below 40%, it was ' + avgLow.toFixed(1) + '/5 (' + highCompletionDays.length + ' high-completion days, ' + lowCompletionDays.length + ' low-completion days).',
+      confidence: Math.min((highCompletionDays.length + lowCompletionDays.length) / 15, 1)
     };
   }
 
@@ -4473,7 +5098,8 @@ var Insights = (function() {
         sleepSymptomCorrelation(entries),
         triggerSymptomCorrelation(entries),
         cycleSymptomMap(entries),
-        medicationAdherence(entries)
+        medicationAdherence(entries),
+        habitImpactOnFeeling(entries)
       ].filter(function(i) { return i !== null; });
 
       // Sort by confidence descending

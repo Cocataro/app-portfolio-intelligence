@@ -58,6 +58,8 @@ if (fs.existsSync(appPath)) {
 let html = template;
 html = html.replace('{{APP_NAME}}', config.name);
 html = html.replace('{{APP_NAME}}', config.name); // title tag instance
+html = html.replace('{{VARIANT}}', config.variant || variant);
+html = html.replace(/\{\{DEFAULT_DARK_MODE\}\}/g, config.defaultDarkMode || 'auto');
 html = html.replace('{{STYLES}}', styles);
 html = html.replace('{{CONFIG_JSON}}', JSON.stringify(config));
 html = html.replace('{{SCRIPTS}}', scripts);

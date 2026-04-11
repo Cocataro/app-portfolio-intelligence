@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{{APP_NAME}}</title>
+  <script>(function(){try{var d='{{DEFAULT_DARK_MODE}}';var s=JSON.parse(localStorage.getItem('healthtracker_{{VARIANT}}_settings'));var m=s&&s.darkMode||(d||'auto');var t=m==='auto'?(window.matchMedia&&window.matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light'):m;document.documentElement.setAttribute('data-theme',t)}catch(e){if('{{DEFAULT_DARK_MODE}}'==='dark')document.documentElement.setAttribute('data-theme','dark')}})()</script>
   <style>
     {{STYLES}}
   </style>
@@ -27,11 +28,11 @@
   <div class="app-layout">
     <nav id="sidebar-nav" class="sidebar-nav" role="navigation" aria-label="Main navigation">
       <ul class="nav-list" role="tablist">
-        <li role="presentation"><button role="tab" class="nav-btn active" data-view="log" aria-selected="true" aria-controls="view-log"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" fill="none" stroke="currentColor" stroke-width="2"/><polyline points="14 2 14 8 20 8" fill="none" stroke="currentColor" stroke-width="2"/><line x1="16" y1="13" x2="8" y2="13" stroke="currentColor" stroke-width="2"/><line x1="16" y1="17" x2="8" y2="17" stroke="currentColor" stroke-width="2"/></svg><span>Log</span></button></li>
-        <li role="presentation"><button role="tab" class="nav-btn" data-view="calendar" aria-selected="false" aria-controls="view-calendar"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><line x1="16" y1="2" x2="16" y2="6" stroke="currentColor" stroke-width="2"/><line x1="8" y1="2" x2="8" y2="6" stroke="currentColor" stroke-width="2"/><line x1="3" y1="10" x2="21" y2="10" stroke="currentColor" stroke-width="2"/></svg><span>Calendar</span></button></li>
-        <li role="presentation"><button role="tab" class="nav-btn" data-view="charts" aria-selected="false" aria-controls="view-charts"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><rect x="3" y="12" width="4" height="9" fill="currentColor" rx="1"/><rect x="10" y="7" width="4" height="14" fill="currentColor" rx="1"/><rect x="17" y="3" width="4" height="18" fill="currentColor" rx="1"/></svg><span>Charts</span></button></li>
-        <li role="presentation"><button role="tab" class="nav-btn" data-view="insights" aria-selected="false" aria-controls="view-insights"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M9 18h6M10 22h4M12 2a7 7 0 015 11.9V17a1 1 0 01-1 1H8a1 1 0 01-1-1v-3.1A7 7 0 0112 2z" fill="none" stroke="currentColor" stroke-width="2"/></svg><span>Insights</span></button></li>
-        <li role="presentation"><button role="tab" class="nav-btn" data-view="reports" aria-selected="false" aria-controls="view-reports"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M17 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V5a2 2 0 00-2-2z" fill="none" stroke="currentColor" stroke-width="2"/><line x1="9" y1="7" x2="15" y2="7" stroke="currentColor" stroke-width="2"/><line x1="9" y1="11" x2="15" y2="11" stroke="currentColor" stroke-width="2"/><line x1="9" y1="15" x2="12" y2="15" stroke="currentColor" stroke-width="2"/></svg><span>Reports</span></button></li>
+        <li role="presentation"><button role="tab" id="nav-log" class="nav-btn active" data-view="log" aria-selected="true" aria-controls="view-log"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" fill="none" stroke="currentColor" stroke-width="2"/><polyline points="14 2 14 8 20 8" fill="none" stroke="currentColor" stroke-width="2"/><line x1="16" y1="13" x2="8" y2="13" stroke="currentColor" stroke-width="2"/><line x1="16" y1="17" x2="8" y2="17" stroke="currentColor" stroke-width="2"/></svg><span>Log</span></button></li>
+        <li role="presentation"><button role="tab" id="nav-calendar" class="nav-btn" data-view="calendar" aria-selected="false" aria-controls="view-calendar"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><line x1="16" y1="2" x2="16" y2="6" stroke="currentColor" stroke-width="2"/><line x1="8" y1="2" x2="8" y2="6" stroke="currentColor" stroke-width="2"/><line x1="3" y1="10" x2="21" y2="10" stroke="currentColor" stroke-width="2"/></svg><span>Calendar</span></button></li>
+        <li role="presentation"><button role="tab" id="nav-charts" class="nav-btn" data-view="charts" aria-selected="false" aria-controls="view-charts"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><rect x="3" y="12" width="4" height="9" fill="currentColor" rx="1"/><rect x="10" y="7" width="4" height="14" fill="currentColor" rx="1"/><rect x="17" y="3" width="4" height="18" fill="currentColor" rx="1"/></svg><span>Charts</span></button></li>
+        <li role="presentation"><button role="tab" id="nav-insights" class="nav-btn" data-view="insights" aria-selected="false" aria-controls="view-insights"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M9 18h6M10 22h4M12 2a7 7 0 015 11.9V17a1 1 0 01-1 1H8a1 1 0 01-1-1v-3.1A7 7 0 0112 2z" fill="none" stroke="currentColor" stroke-width="2"/></svg><span>Insights</span></button></li>
+        <li role="presentation"><button role="tab" id="nav-reports" class="nav-btn" data-view="reports" aria-selected="false" aria-controls="view-reports"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M17 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V5a2 2 0 00-2-2z" fill="none" stroke="currentColor" stroke-width="2"/><line x1="9" y1="7" x2="15" y2="7" stroke="currentColor" stroke-width="2"/><line x1="9" y1="11" x2="15" y2="11" stroke="currentColor" stroke-width="2"/><line x1="9" y1="15" x2="12" y2="15" stroke="currentColor" stroke-width="2"/></svg><span>Reports</span></button></li>
       </ul>
     </nav>
 
@@ -63,6 +64,30 @@
             <div class="add-custom-row">
               <input type="text" id="log-custom-symptom" placeholder="Add other symptom" aria-label="Add custom symptom" maxlength="50">
               <button id="log-add-symptom" class="btn btn-small" aria-label="Add symptom">Add</button>
+            </div>
+          </section>
+
+          <section id="migraine-fields-section" class="log-section" aria-labelledby="migraine-fields-heading" hidden>
+            <h3 id="migraine-fields-heading" class="log-section-title">Attack Details</h3>
+            <div id="migraine-phase-area" class="migraine-subsection" hidden>
+              <h4 id="migraine-phase-label" class="log-subsection-title">Phase</h4>
+              <div id="migraine-phase-chips" class="chip-list" role="radiogroup" aria-labelledby="migraine-phase-label"></div>
+            </div>
+            <div id="pain-type-area" class="migraine-subsection" hidden>
+              <h4 id="pain-type-label" class="log-subsection-title">Pain Type</h4>
+              <div id="pain-type-chips" class="chip-list" role="group" aria-labelledby="pain-type-label"></div>
+            </div>
+            <div id="pain-location-area" class="migraine-subsection" hidden>
+              <h4 id="pain-location-label" class="log-subsection-title">Pain Location</h4>
+              <div id="pain-location-chips" class="chip-list" role="group" aria-labelledby="pain-location-label"></div>
+            </div>
+            <div id="duration-area" class="migraine-subsection" hidden>
+              <h4 id="duration-label" class="log-subsection-title">Duration</h4>
+              <div id="duration-chips" class="chip-list" role="radiogroup" aria-labelledby="duration-label"></div>
+            </div>
+            <div id="med-effectiveness-area" class="migraine-subsection" hidden>
+              <h4 id="med-effectiveness-label" class="log-subsection-title">Medication Relief</h4>
+              <div id="med-effectiveness-chips" class="chip-list" role="radiogroup" aria-labelledby="med-effectiveness-label"></div>
             </div>
           </section>
 

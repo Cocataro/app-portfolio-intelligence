@@ -1,6 +1,6 @@
 /* === CSS Variables === */
 :root {
-  --primary: #8B6F8E;
+  --primary: #7B5F7E;
   --primary-light: #B89FBA;
   --primary-dark: #6B4F6E;
   --accent: #C8907E;
@@ -9,9 +9,9 @@
   --surface-alt: #F3EDE8;
   --text: #2E2631;
   --text-secondary: #6E6175;
-  --text-muted: #9E8FA5;
+  --text-muted: #7E6F85;
   --accent-warm: #C8907E;
-  --success: #7A9E7E;
+  --success: #5A7E5E;
   --warning: #C8907E;
   --error: #A85D5D;
   --border: #E5DDD6;
@@ -38,7 +38,7 @@
   --surface-alt: #302A33;
   --text: #EDE6F0;
   --text-secondary: #B0A3B8;
-  --text-muted: #7A6E82;
+  --text-muted: #9A8EA2;
   --border: #3D3541;
   --shadow: rgba(0,0,0,0.3);
   --primary-light: #A899C8;
@@ -418,13 +418,13 @@ select:focus:not(:focus-visible) {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 20px;
-  height: 20px;
+  width: 44px;
+  height: 44px;
   border-radius: 50%;
   background: rgba(0,0,0,0.15);
   border: none;
   color: inherit;
-  font-size: 0.75rem;
+  font-size: 1rem;
   cursor: pointer;
   padding: 0;
   line-height: 1;
@@ -614,6 +614,18 @@ select:focus:not(:focus-visible) {
   transform: rotate(180deg);
 }
 .collapsible-body { padding-top: 0.75rem; }
+
+/* Migraine subsections */
+.migraine-subsection { margin-bottom: 0.75rem; }
+.migraine-subsection:last-child { margin-bottom: 0; }
+.log-subsection-title {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
 
 /* Feeling scale */
 .feeling-scale {
@@ -903,6 +915,7 @@ select:focus:not(:focus-visible) {
 .cal-cell {
   position: relative;
   aspect-ratio: 1;
+  min-height: 44px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -1489,6 +1502,33 @@ select:focus:not(:focus-visible) {
   .report-export-bar .btn {
     flex: 0 1 auto;
   }
+}
+
+/* === Welcome Banner === */
+.welcome-banner {
+  background: var(--surface-alt);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--primary);
+  border-radius: var(--radius);
+  padding: 1rem;
+  margin-bottom: 0.5rem;
+}
+.welcome-banner h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 0.25rem;
+}
+.welcome-banner p {
+  font-size: 0.9375rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+/* === Report Table Overflow === */
+.report-table-wrapper {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 /* === Print Styles === */
