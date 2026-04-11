@@ -77,7 +77,7 @@ var Reports = (function() {
       if (e.symptoms && typeof e.symptoms === 'object') {
         Object.keys(e.symptoms).forEach(function(s) {
           counts[s] = (counts[s] || 0) + 1;
-          if (!severities[s]) severities[s] = { mild: 0, moderate: 0, severe: 0 };
+          if (!severities[s]) severities[s] = { none: 0, mild: 0, moderate: 0, severe: 0, unbearable: 0 };
           var sev = e.symptoms[s];
           if (severities[s][sev] !== undefined) severities[s][sev]++;
         });
@@ -188,15 +188,17 @@ var Reports = (function() {
       html += '<section class="report-section" aria-labelledby="report-symptoms-heading">';
       html += '<h4 id="report-symptoms-heading" class="report-section-title">Symptom Frequency</h4>';
       html += '<table class="report-table" aria-label="Symptom frequency table">';
-      html += '<thead><tr><th>Symptom</th><th>Days</th><th>Mild</th><th>Moderate</th><th>Severe</th></tr></thead>';
+      html += '<thead><tr><th>Symptom</th><th>Days</th><th>None</th><th>Mild</th><th>Moderate</th><th>Severe</th><th>Unbearable</th></tr></thead>';
       html += '<tbody>';
       symptoms.forEach(function(s) {
         html += '<tr>';
         html += '<td>' + escapeHtml(s.name) + '</td>';
         html += '<td>' + s.count + '</td>';
+        html += '<td>' + (s.severities.none || 0) + '</td>';
         html += '<td>' + (s.severities.mild || 0) + '</td>';
         html += '<td>' + (s.severities.moderate || 0) + '</td>';
         html += '<td>' + (s.severities.severe || 0) + '</td>';
+        html += '<td>' + (s.severities.unbearable || 0) + '</td>';
         html += '</tr>';
       });
       html += '</tbody></table>';
@@ -309,7 +311,7 @@ var Reports = (function() {
     if (symptoms.length > 0) {
       lines.push('--- Symptom Frequency ---');
       symptoms.forEach(function(s) {
-        lines.push(s.name + ': ' + s.count + ' days (mild: ' + (s.severities.mild || 0) + ', moderate: ' + (s.severities.moderate || 0) + ', severe: ' + (s.severities.severe || 0) + ')');
+        lines.push(s.name + ': ' + s.count + ' days (none: ' + (s.severities.none || 0) + ', mild: ' + (s.severities.mild || 0) + ', moderate: ' + (s.severities.moderate || 0) + ', severe: ' + (s.severities.severe || 0) + ', unbearable: ' + (s.severities.unbearable || 0) + ')');
       });
       lines.push('');
     }

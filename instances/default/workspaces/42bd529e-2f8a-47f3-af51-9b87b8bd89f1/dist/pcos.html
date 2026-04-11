@@ -677,24 +677,30 @@ select:focus:not(:focus-visible) {
 .severity-btns {
   display: flex;
   gap: 0.375rem;
+  flex-wrap: wrap;
 }
 .severity-btn {
   min-height: 44px;
-  min-width: 44px;
-  padding: 0.375rem 0.625rem;
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  background: var(--bg);
+  padding: 0.375rem 0.75rem;
+  border: 1.5px solid var(--border);
+  border-radius: 20px;
+  background: var(--surface-alt);
   color: var(--text-secondary);
   font-size: 0.75rem;
   cursor: pointer;
-  transition: background 0.15s, border-color 0.15s;
+  transition: background-color 200ms ease, border-color 200ms ease, transform 150ms ease;
 }
-.severity-btn:hover { border-color: var(--primary-light); }
+@media (prefers-reduced-motion: reduce) {
+  .severity-btn { transition: none; }
+}
+.severity-btn:hover { border-color: var(--sev-color); }
+.severity-btn:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
 .severity-btn.selected {
-  background: var(--primary);
-  color: #fff;
-  border-color: var(--primary);
+  background: color-mix(in srgb, var(--sev-color) 15%, transparent);
+  color: var(--text);
+  border-color: var(--sev-color);
+  transform: scale(1.05);
+  font-weight: 600;
 }
 
 /* Medication list */
@@ -2453,7 +2459,7 @@ var QuickLog = (function() {
         if (selectedSymptoms[name]) {
           delete selectedSymptoms[name];
         } else {
-          selectedSymptoms[name] = 'mild';
+          selectedSymptoms[name] = 'none';
         }
         renderSymptomChips();
         renderSeverityArea();
@@ -2461,6 +2467,14 @@ var QuickLog = (function() {
       container.appendChild(chip);
     });
   }
+
+  var severityLevels = [
+    { key: 'none', label: 'None', cssVar: '--severity-none' },
+    { key: 'mild', label: 'Mild', cssVar: '--severity-mild' },
+    { key: 'moderate', label: 'Moderate', cssVar: '--severity-moderate' },
+    { key: 'severe', label: 'Severe', cssVar: '--severity-high' },
+    { key: 'unbearable', label: 'Unbearable', cssVar: '--severity-extreme' }
+  ];
 
   function renderSeverityArea() {
     var area = document.getElementById('symptom-severity-area');
@@ -2488,16 +2502,18 @@ var QuickLog = (function() {
       btnGroup.setAttribute('role', 'radiogroup');
       btnGroup.setAttribute('aria-label', name + ' severity');
 
-      ['mild', 'moderate', 'severe'].forEach(function(level) {
+      severityLevels.forEach(function(level) {
         var btn = document.createElement('button');
         btn.type = 'button';
         btn.className = 'severity-btn';
         btn.setAttribute('role', 'radio');
-        btn.setAttribute('aria-checked', selectedSymptoms[name] === level ? 'true' : 'false');
-        if (selectedSymptoms[name] === level) btn.classList.add('selected');
-        btn.textContent = level.charAt(0).toUpperCase() + level.slice(1);
+        btn.setAttribute('aria-checked', selectedSymptoms[name] === level.key ? 'true' : 'false');
+        btn.setAttribute('aria-label', level.label + ' severity');
+        if (selectedSymptoms[name] === level.key) btn.classList.add('selected');
+        btn.style.setProperty('--sev-color', 'var(' + level.cssVar + ')');
+        btn.textContent = level.label;
         btn.addEventListener('click', function() {
-          selectedSymptoms[name] = level;
+          selectedSymptoms[name] = level.key;
           renderSeverityArea();
         });
         btnGroup.appendChild(btn);
@@ -2820,7 +2836,7 @@ var QuickLog = (function() {
     }
     // Auto-select the newly added symptom
     if (!selectedSymptoms[val]) {
-      selectedSymptoms[val] = 'mild';
+      selectedSymptoms[val] = 'none';
     }
     input.value = '';
     renderSymptomChips();
@@ -3968,7 +3984,7 @@ var Reports = (function() {
       if (e.symptoms && typeof e.symptoms === 'object') {
         Object.keys(e.symptoms).forEach(function(s) {
           counts[s] = (counts[s] || 0) + 1;
-          if (!severities[s]) severities[s] = { mild: 0, moderate: 0, severe: 0 };
+          if (!severities[s]) severities[s] = { none: 0, mild: 0, moderate: 0, severe: 0, unbearable: 0 };
           var sev = e.symptoms[s];
           if (severities[s][sev] !== undefined) severities[s][sev]++;
         });
@@ -4079,15 +4095,17 @@ var Reports = (function() {
       html += '<section class="report-section" aria-labelledby="report-symptoms-heading">';
       html += '<h4 id="report-symptoms-heading" class="report-section-title">Symptom Frequency</h4>';
       html += '<table class="report-table" aria-label="Symptom frequency table">';
-      html += '<thead><tr><th>Symptom</th><th>Days</th><th>Mild</th><th>Moderate</th><th>Severe</th></tr></thead>';
+      html += '<thead><tr><th>Symptom</th><th>Days</th><th>None</th><th>Mild</th><th>Moderate</th><th>Severe</th><th>Unbearable</th></tr></thead>';
       html += '<tbody>';
       symptoms.forEach(function(s) {
         html += '<tr>';
         html += '<td>' + escapeHtml(s.name) + '</td>';
         html += '<td>' + s.count + '</td>';
+        html += '<td>' + (s.severities.none || 0) + '</td>';
         html += '<td>' + (s.severities.mild || 0) + '</td>';
         html += '<td>' + (s.severities.moderate || 0) + '</td>';
         html += '<td>' + (s.severities.severe || 0) + '</td>';
+        html += '<td>' + (s.severities.unbearable || 0) + '</td>';
         html += '</tr>';
       });
       html += '</tbody></table>';
@@ -4200,7 +4218,7 @@ var Reports = (function() {
     if (symptoms.length > 0) {
       lines.push('--- Symptom Frequency ---');
       symptoms.forEach(function(s) {
-        lines.push(s.name + ': ' + s.count + ' days (mild: ' + (s.severities.mild || 0) + ', moderate: ' + (s.severities.moderate || 0) + ', severe: ' + (s.severities.severe || 0) + ')');
+        lines.push(s.name + ': ' + s.count + ' days (none: ' + (s.severities.none || 0) + ', mild: ' + (s.severities.mild || 0) + ', moderate: ' + (s.severities.moderate || 0) + ', severe: ' + (s.severities.severe || 0) + ', unbearable: ' + (s.severities.unbearable || 0) + ')');
       });
       lines.push('');
     }

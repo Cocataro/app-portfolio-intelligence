@@ -130,7 +130,7 @@ var QuickLog = (function() {
         if (selectedSymptoms[name]) {
           delete selectedSymptoms[name];
         } else {
-          selectedSymptoms[name] = 'mild';
+          selectedSymptoms[name] = 'none';
         }
         renderSymptomChips();
         renderSeverityArea();
@@ -138,6 +138,14 @@ var QuickLog = (function() {
       container.appendChild(chip);
     });
   }
+
+  var severityLevels = [
+    { key: 'none', label: 'None', cssVar: '--severity-none' },
+    { key: 'mild', label: 'Mild', cssVar: '--severity-mild' },
+    { key: 'moderate', label: 'Moderate', cssVar: '--severity-moderate' },
+    { key: 'severe', label: 'Severe', cssVar: '--severity-high' },
+    { key: 'unbearable', label: 'Unbearable', cssVar: '--severity-extreme' }
+  ];
 
   function renderSeverityArea() {
     var area = document.getElementById('symptom-severity-area');
@@ -165,16 +173,18 @@ var QuickLog = (function() {
       btnGroup.setAttribute('role', 'radiogroup');
       btnGroup.setAttribute('aria-label', name + ' severity');
 
-      ['mild', 'moderate', 'severe'].forEach(function(level) {
+      severityLevels.forEach(function(level) {
         var btn = document.createElement('button');
         btn.type = 'button';
         btn.className = 'severity-btn';
         btn.setAttribute('role', 'radio');
-        btn.setAttribute('aria-checked', selectedSymptoms[name] === level ? 'true' : 'false');
-        if (selectedSymptoms[name] === level) btn.classList.add('selected');
-        btn.textContent = level.charAt(0).toUpperCase() + level.slice(1);
+        btn.setAttribute('aria-checked', selectedSymptoms[name] === level.key ? 'true' : 'false');
+        btn.setAttribute('aria-label', level.label + ' severity');
+        if (selectedSymptoms[name] === level.key) btn.classList.add('selected');
+        btn.style.setProperty('--sev-color', 'var(' + level.cssVar + ')');
+        btn.textContent = level.label;
         btn.addEventListener('click', function() {
-          selectedSymptoms[name] = level;
+          selectedSymptoms[name] = level.key;
           renderSeverityArea();
         });
         btnGroup.appendChild(btn);
@@ -497,7 +507,7 @@ var QuickLog = (function() {
     }
     // Auto-select the newly added symptom
     if (!selectedSymptoms[val]) {
-      selectedSymptoms[val] = 'mild';
+      selectedSymptoms[val] = 'none';
     }
     input.value = '';
     renderSymptomChips();
