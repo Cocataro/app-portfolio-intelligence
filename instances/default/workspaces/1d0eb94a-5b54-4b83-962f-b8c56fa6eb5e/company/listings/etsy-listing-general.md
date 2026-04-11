@@ -9,7 +9,7 @@ Symptom Tracker | Privacy-First Health Dashboard for Any Condition | Digital Dow
 ## Tags (13)
 
 1. symptom tracker
-2. health tracker digital
+2. digital health tool
 3. wellness tracker
 4. health planner
 5. symptom log
