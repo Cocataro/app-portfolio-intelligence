@@ -203,7 +203,7 @@ var Reports = (function() {
       var sevLevels = getSeverityKeys();
       html += '<section class="report-section" aria-labelledby="report-symptoms-heading">';
       html += '<h4 id="report-symptoms-heading" class="report-section-title">Symptom Frequency</h4>';
-      html += '<table class="report-table" aria-label="Symptom frequency table">';
+      html += '<div class="report-table-wrapper"><table class="report-table" aria-label="Symptom frequency table">';
       html += '<thead><tr><th>Symptom</th><th>Days</th>';
       sevLevels.forEach(function(l) { html += '<th>' + escapeHtml(l.label) + '</th>'; });
       html += '</tr></thead>';
@@ -215,16 +215,17 @@ var Reports = (function() {
         sevLevels.forEach(function(l) { html += '<td>' + (s.severities[l.key] || 0) + '</td>'; });
         html += '</tr>';
       });
-      html += '</tbody></table>';
+      html += '</tbody></table></div>';
       html += '</section>';
     }
 
-    // Medication adherence
+    // Medication adherence / Habit consistency
     if (meds.length > 0) {
+      var isHabitReport = APP_CONFIG.variant === 'habit';
       html += '<section class="report-section" aria-labelledby="report-meds-heading">';
-      html += '<h4 id="report-meds-heading" class="report-section-title">Medication Adherence</h4>';
-      html += '<table class="report-table" aria-label="Medication adherence table">';
-      html += '<thead><tr><th>Medication</th><th>Taken</th><th>Skipped</th><th>Logged</th><th>Rate</th></tr></thead>';
+      html += '<h4 id="report-meds-heading" class="report-section-title">' + (isHabitReport ? 'Habit Consistency' : 'Medication Adherence') + '</h4>';
+      html += '<div class="report-table-wrapper"><table class="report-table" aria-label="' + (isHabitReport ? 'Habit consistency' : 'Medication adherence') + ' table">';
+      html += '<thead><tr><th>' + (isHabitReport ? 'Habit' : 'Medication') + '</th><th>' + (isHabitReport ? 'Done' : 'Taken') + '</th><th>Skipped</th><th>Logged</th><th>Rate</th></tr></thead>';
       html += '<tbody>';
       meds.forEach(function(m) {
         html += '<tr>';
@@ -235,7 +236,7 @@ var Reports = (function() {
         html += '<td>' + m.pct + '%</td>';
         html += '</tr>';
       });
-      html += '</tbody></table>';
+      html += '</tbody></table></div>';
       html += '</section>';
     }
 
@@ -243,13 +244,13 @@ var Reports = (function() {
     if (cycle.length > 0) {
       html += '<section class="report-section" aria-labelledby="report-cycle-heading">';
       html += '<h4 id="report-cycle-heading" class="report-section-title">Cycle Overview</h4>';
-      html += '<table class="report-table" aria-label="Cycle phase table">';
+      html += '<div class="report-table-wrapper"><table class="report-table" aria-label="Cycle phase table">';
       html += '<thead><tr><th>Phase</th><th>Days</th></tr></thead>';
       html += '<tbody>';
       cycle.forEach(function(c) {
         html += '<tr><td>' + escapeHtml(c.phase) + '</td><td>' + c.days + '</td></tr>';
       });
-      html += '</tbody></table>';
+      html += '</tbody></table></div>';
       html += '</section>';
     }
 
@@ -257,7 +258,7 @@ var Reports = (function() {
     if (feelings.length > 0) {
       html += '<section class="report-section" aria-labelledby="report-feeling-heading">';
       html += '<h4 id="report-feeling-heading" class="report-section-title">Feeling Trend</h4>';
-      html += '<table class="report-table" aria-label="Feeling trend table">';
+      html += '<div class="report-table-wrapper"><table class="report-table" aria-label="Feeling trend table">';
       html += '<thead><tr><th>Date</th><th>Feeling</th></tr></thead>';
       html += '<tbody>';
       var scale = APP_CONFIG.feelingScale || [];
@@ -266,7 +267,7 @@ var Reports = (function() {
         scale.forEach(function(s) { if (s.value === f.feeling) label = s.label + ' (' + f.feeling + ')'; });
         html += '<tr><td>' + formatDate(f.date) + '</td><td>' + escapeHtml(label) + '</td></tr>';
       });
-      html += '</tbody></table>';
+      html += '</tbody></table></div>';
       html += '</section>';
     }
 
@@ -333,7 +334,7 @@ var Reports = (function() {
     }
 
     if (meds.length > 0) {
-      lines.push('--- Medication Adherence ---');
+      lines.push(APP_CONFIG.variant === 'habit' ? '--- Habit Consistency ---' : '--- Medication Adherence ---');
       meds.forEach(function(m) {
         lines.push(m.name + ': ' + m.taken + '/' + m.total + ' (' + m.pct + '%)');
       });

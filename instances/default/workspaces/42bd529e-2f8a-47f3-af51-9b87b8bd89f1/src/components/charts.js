@@ -387,18 +387,279 @@ var Charts = (function() {
     return svg + legend + table;
   }
 
+  // --- Habit-Specific Charts ---
+
+  function buildHeatmap(allEntries) {
+    var today = new Date();
+    var totalHabits = (APP_CONFIG.medications || []).length;
+    if (totalHabits === 0) totalHabits = 1;
+
+    // Build 52 weeks of data ending today (Sunday-start weeks)
+    var endDay = new Date(today);
+    // Go to end of this week (Saturday)
+    var dayOfWeek = endDay.getDay();
+    endDay.setDate(endDay.getDate() + (6 - dayOfWeek));
+
+    var startDay = new Date(endDay);
+    startDay.setDate(startDay.getDate() - (52 * 7 - 1));
+
+    var cellSize = 14;
+    var gap = 3;
+    var labelW = 28;
+    var labelH = 18;
+    var cols = 52;
+    var rows = 7;
+    var w = labelW + cols * (cellSize + gap);
+    var h = labelH + rows * (cellSize + gap);
+
+    var svg = '<svg class="heatmap-svg" viewBox="0 0 ' + w + ' ' + h + '" role="img" aria-label="Habit completion heatmap for the past year">';
+
+    // Month labels
+    var monthNames = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    var lastMonth = -1;
+    for (var col = 0; col < cols; col++) {
+      var cellDate = new Date(startDay);
+      cellDate.setDate(cellDate.getDate() + col * 7);
+      var m = cellDate.getMonth();
+      if (m !== lastMonth) {
+        var x = labelW + col * (cellSize + gap);
+        svg += '<text x="' + x + '" y="12" class="heatmap-month-label">' + monthNames[m] + '</text>';
+        lastMonth = m;
+      }
+    }
+
+    // Day labels (Mon, Wed, Fri)
+    var dayLabels = ['', 'Mon', '', 'Wed', '', 'Fri', ''];
+    for (var row = 0; row < rows; row++) {
+      if (dayLabels[row]) {
+        var y = labelH + row * (cellSize + gap) + cellSize * 0.75;
+        svg += '<text x="0" y="' + y + '" class="heatmap-day-label">' + dayLabels[row] + '</text>';
+      }
+    }
+
+    // Cells
+    for (var c = 0; c < cols; c++) {
+      for (var r = 0; r < rows; r++) {
+        var d = new Date(startDay);
+        d.setDate(d.getDate() + c * 7 + r);
+        if (d > today) continue;
+
+        var ds = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+        var entry = allEntries[ds];
+        var pct = 0;
+        if (entry && entry.medications && typeof entry.medications === 'object') {
+          var takenCount = 0;
+          Object.keys(entry.medications).forEach(function(m) {
+            if (entry.medications[m] === 'taken') takenCount++;
+          });
+          pct = Object.keys(entry.medications).length > 0 ? takenCount / Object.keys(entry.medications).length : 0;
+        }
+
+        var color;
+        if (!entry) {
+          color = 'var(--heatmap-empty)';
+        } else if (pct === 0) {
+          color = 'var(--heatmap-empty)';
+        } else if (pct < 0.4) {
+          color = 'var(--heatmap-low)';
+        } else if (pct < 0.7) {
+          color = 'var(--heatmap-mid)';
+        } else if (pct < 1) {
+          color = 'var(--heatmap-high)';
+        } else {
+          color = 'var(--heatmap-full)';
+        }
+
+        var cx = labelW + c * (cellSize + gap);
+        var cy = labelH + r * (cellSize + gap);
+        var dOpts = { weekday: 'short', month: 'short', day: 'numeric' };
+        var dLabel = d.toLocaleDateString(undefined, dOpts);
+        var takenOfTotal = entry && entry.medications ? Object.keys(entry.medications).filter(function(m) { return entry.medications[m] === 'taken'; }).length : 0;
+        var loggedTotal = entry && entry.medications ? Object.keys(entry.medications).length : 0;
+        var tipText = dLabel + ' — ' + takenOfTotal + '/' + loggedTotal + ' habits (' + Math.round(pct * 100) + '%)';
+
+        svg += '<rect class="heatmap-cell" x="' + cx + '" y="' + cy + '" width="' + cellSize + '" height="' + cellSize + '" fill="' + color + '" data-tip="' + escapeHtml(tipText) + '" aria-label="' + escapeHtml(tipText) + '"/>';
+      }
+    }
+
+    svg += '</svg>';
+
+    // Legend
+    var legend = '<div class="heatmap-legend" aria-label="Heatmap legend">';
+    legend += '<span>Less</span>';
+    ['var(--heatmap-empty)', 'var(--heatmap-low)', 'var(--heatmap-mid)', 'var(--heatmap-high)', 'var(--heatmap-full)'].forEach(function(c) {
+      legend += '<span class="heatmap-legend-cell" style="background:' + c + '"></span>';
+    });
+    legend += '<span>More</span>';
+    legend += '</div>';
+
+    return '<div class="heatmap-wrapper">' + svg + '</div>' + legend;
+  }
+
+  function buildCompletionRing(allEntries) {
+    // Calculate today's and this week's completion
+    var today = todayStr();
+    var todayEntry = allEntries[today];
+    var todayPct = 0;
+    var todayTaken = 0;
+    var todayTotal = 0;
+
+    if (todayEntry && todayEntry.medications && typeof todayEntry.medications === 'object') {
+      Object.keys(todayEntry.medications).forEach(function(m) {
+        todayTotal++;
+        if (todayEntry.medications[m] === 'taken') todayTaken++;
+      });
+      todayPct = todayTotal > 0 ? Math.round((todayTaken / todayTotal) * 100) : 0;
+    }
+
+    // This week: last 7 days
+    var weekTaken = 0;
+    var weekTotal = 0;
+    for (var i = 0; i < 7; i++) {
+      var ds = subtractDays(today, i);
+      var entry = allEntries[ds];
+      if (entry && entry.medications && typeof entry.medications === 'object') {
+        Object.keys(entry.medications).forEach(function(m) {
+          weekTotal++;
+          if (entry.medications[m] === 'taken') weekTaken++;
+        });
+      }
+    }
+    var weekPct = weekTotal > 0 ? Math.round((weekTaken / weekTotal) * 100) : 0;
+
+    // Total days logged
+    var totalDays = Object.keys(allEntries).length;
+
+    // SVG ring
+    var radius = 50;
+    var circumference = 2 * Math.PI * radius;
+    var offset = circumference - (todayPct / 100) * circumference;
+
+    var ringColor = todayPct < 40 ? 'var(--heatmap-low)' : todayPct < 70 ? 'var(--heatmap-mid)' : todayPct < 100 ? 'var(--heatmap-high)' : 'var(--heatmap-full)';
+
+    var html = '<div class="dashboard-hero">';
+
+    // Ring
+    html += '<div class="completion-ring-container">';
+    html += '<svg class="completion-ring-svg" viewBox="0 0 120 120" aria-label="Today\'s completion: ' + todayPct + '%">';
+    html += '<circle class="completion-ring-bg" cx="60" cy="60" r="' + radius + '"/>';
+    html += '<circle class="completion-ring-fill" cx="60" cy="60" r="' + radius + '" stroke="' + ringColor + '" stroke-dasharray="' + circumference.toFixed(1) + '" stroke-dashoffset="' + offset.toFixed(1) + '"/>';
+    html += '</svg>';
+    html += '<div class="completion-ring-label">';
+    html += '<span class="completion-ring-pct">' + todayPct + '%</span>';
+    html += '<span class="completion-ring-sublabel">today</span>';
+    html += '</div>';
+    html += '</div>';
+
+    // Stats
+    html += '<div class="dashboard-stats">';
+    html += '<div class="dashboard-stat-item"><span class="dashboard-stat-value">' + todayTaken + '/' + todayTotal + '</span><span class="dashboard-stat-label">habits today</span></div>';
+    html += '<div class="dashboard-stat-item"><span class="dashboard-stat-value">' + weekPct + '%</span><span class="dashboard-stat-label">this week</span></div>';
+    html += '<div class="dashboard-stat-item"><span class="dashboard-stat-value">' + totalDays + '</span><span class="dashboard-stat-label">days logged</span></div>';
+    html += '</div>';
+
+    html += '</div>';
+    return html;
+  }
+
+  function buildWeeklyBars(allEntries) {
+    var today = todayStr();
+    var dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    var data = [];
+    var maxHabits = 1;
+
+    for (var i = 6; i >= 0; i--) {
+      var ds = subtractDays(today, i);
+      var entry = allEntries[ds];
+      var taken = 0;
+      var total = 0;
+      if (entry && entry.medications && typeof entry.medications === 'object') {
+        Object.keys(entry.medications).forEach(function(m) {
+          total++;
+          if (entry.medications[m] === 'taken') taken++;
+        });
+      }
+      var parts = ds.split('-');
+      var d = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
+      data.push({ day: dayNames[d.getDay()], taken: taken, total: total, date: ds });
+      if (total > maxHabits) maxHabits = total;
+    }
+
+    if (maxHabits === 0) {
+      return '<div class="chart-empty" role="img" aria-label="No habit data this week">No habits logged this week.</div>';
+    }
+
+    var barH = 24;
+    var gap = 8;
+    var labelW = 36;
+    var countW = 40;
+    var w = 300;
+    var h = data.length * (barH + gap) + gap;
+    var barArea = w - labelW - countW - 8;
+
+    var svg = '<svg class="weekly-bars-svg" viewBox="0 0 ' + w + ' ' + h + '" role="img" aria-label="Weekly habit completion">';
+    data.forEach(function(item, i) {
+      var y = gap + i * (barH + gap);
+      // Label
+      svg += '<text x="' + (labelW - 4) + '" y="' + (y + barH * 0.65) + '" class="weekly-bar-label" text-anchor="end">' + item.day + '</text>';
+      // Background bar
+      svg += '<rect class="weekly-bar-bg" x="' + labelW + '" y="' + y + '" width="' + barArea + '" height="' + barH + '"/>';
+      // Fill bar
+      var fillW = item.total > 0 ? (item.taken / maxHabits) * barArea : 0;
+      if (fillW > 0) {
+        svg += '<rect class="weekly-bar-fill" x="' + labelW + '" y="' + y + '" width="' + fillW.toFixed(1) + '" height="' + barH + '" opacity="' + (0.5 + 0.5 * (item.total > 0 ? item.taken / item.total : 0)).toFixed(2) + '"/>';
+      }
+      // Count
+      var countText = item.total > 0 ? item.taken + '/' + item.total : '-';
+      svg += '<text x="' + (labelW + barArea + 6) + '" y="' + (y + barH * 0.65) + '" class="weekly-bar-count">' + countText + '</text>';
+    });
+    svg += '</svg>';
+
+    // Accessible table
+    var table = '<table class="sr-only"><caption>Weekly habit completion</caption><thead><tr><th>Day</th><th>Done</th><th>Total</th></tr></thead><tbody>';
+    data.forEach(function(item) {
+      table += '<tr><td>' + item.day + '</td><td>' + item.taken + '</td><td>' + item.total + '</td></tr>';
+    });
+    table += '</tbody></table>';
+
+    return svg + table;
+  }
+
   // --- Render ---
 
   function render() {
     var container = document.getElementById('view-charts');
     if (!container) return;
 
+    var isHabit = APP_CONFIG.variant === 'habit';
     var range = getDateRange();
     var entries = Storage.getEntriesInRange(range.start, range.end);
     var dates = getDatesInRange(range.start, range.end);
     var entryCount = Object.keys(entries).length;
+    var allEntries = isHabit ? Storage.getAllEntries() : null;
 
     var html = '<div class="charts-view">';
+
+    // Habit variant: dashboard hero with completion ring + heatmap first
+    if (isHabit && allEntries) {
+      // Completion Ring
+      html += '<section class="chart-section" aria-labelledby="chart-dashboard-heading">';
+      html += '<h3 id="chart-dashboard-heading" class="chart-section-title">Dashboard</h3>';
+      html += buildCompletionRing(allEntries);
+      html += '</section>';
+
+      // Heatmap Calendar
+      html += '<section class="heatmap-section" aria-labelledby="chart-heatmap-heading">';
+      html += '<h3 id="chart-heatmap-heading" class="chart-section-title">Habit Heatmap</h3>';
+      html += buildHeatmap(allEntries);
+      html += '</section>';
+
+      // Weekly Bars
+      html += '<section class="chart-section" aria-labelledby="chart-weekly-heading">';
+      html += '<h3 id="chart-weekly-heading" class="chart-section-title">This Week</h3>';
+      html += buildWeeklyBars(allEntries);
+      html += '</section>';
+    }
 
     // Time range selector
     html += '<div class="chart-range-bar" role="group" aria-label="Time range">';
@@ -447,9 +708,9 @@ var Charts = (function() {
       html += buildSleepChart(entries, dates);
       html += '</section>';
 
-      // Medication Adherence
+      // Medication/Habit Adherence
       html += '<section class="chart-section" aria-labelledby="chart-med-heading">';
-      html += '<h3 id="chart-med-heading" class="chart-section-title">Medication Adherence</h3>';
+      html += '<h3 id="chart-med-heading" class="chart-section-title">' + (isHabit ? 'Habit Consistency' : 'Medication Adherence') + '</h3>';
       html += buildMedChart(entries);
       html += '</section>';
 
@@ -463,6 +724,7 @@ var Charts = (function() {
     html += '</div>';
     container.innerHTML = html;
     bindEvents();
+    if (isHabit) bindHeatmapTooltips();
   }
 
   function bindEvents() {
@@ -500,6 +762,30 @@ var Charts = (function() {
         }
       });
     }
+  }
+
+  function bindHeatmapTooltips() {
+    var tooltip = document.createElement('div');
+    tooltip.className = 'heatmap-tooltip';
+    tooltip.setAttribute('role', 'tooltip');
+    tooltip.setAttribute('aria-hidden', 'true');
+    document.body.appendChild(tooltip);
+
+    var cells = document.querySelectorAll('.heatmap-cell');
+    cells.forEach(function(cell) {
+      cell.addEventListener('mouseenter', function(e) {
+        var tip = this.getAttribute('data-tip');
+        if (!tip) return;
+        tooltip.textContent = tip;
+        tooltip.classList.add('visible');
+        var rect = this.getBoundingClientRect();
+        tooltip.style.left = rect.left + rect.width / 2 - tooltip.offsetWidth / 2 + 'px';
+        tooltip.style.top = rect.top - tooltip.offsetHeight - 6 + 'px';
+      });
+      cell.addEventListener('mouseleave', function() {
+        tooltip.classList.remove('visible');
+      });
+    });
   }
 
   function init() {

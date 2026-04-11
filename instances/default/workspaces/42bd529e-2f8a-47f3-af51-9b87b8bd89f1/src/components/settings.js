@@ -97,7 +97,7 @@ var Settings = (function() {
     renderCustomLists();
   }
 
-  function showConfirm(title, message, onConfirm) {
+  function showConfirm(title, message, onConfirm, onCancel) {
     var overlay = document.getElementById('confirm-dialog');
     var titleEl = document.getElementById('confirm-title');
     var msgEl = document.getElementById('confirm-message');
@@ -107,7 +107,7 @@ var Settings = (function() {
     titleEl.textContent = title;
     msgEl.textContent = message;
     overlay.removeAttribute('hidden');
-    okBtn.focus();
+    cancelBtn.focus();
 
     function cleanup() {
       overlay.setAttribute('hidden', '');
@@ -115,9 +115,9 @@ var Settings = (function() {
       okBtn.removeEventListener('click', handleOk);
       overlay.removeEventListener('keydown', handleEscape);
     }
-    function handleCancel() { cleanup(); }
+    function handleCancel() { cleanup(); if (onCancel) onCancel(); }
     function handleOk() { cleanup(); onConfirm(); }
-    function handleEscape(e) { if (e.key === 'Escape') cleanup(); }
+    function handleEscape(e) { if (e.key === 'Escape') { cleanup(); if (onCancel) onCancel(); } }
 
     cancelBtn.addEventListener('click', handleCancel);
     okBtn.addEventListener('click', handleOk);
@@ -152,6 +152,19 @@ var Settings = (function() {
       if (e.target === document.getElementById('settings-panel')) close();
     });
 
+    // Relabel "Custom Medications" for habit variant
+    if (APP_CONFIG.variant === 'habit') {
+      var medSection = document.getElementById('custom-medications-list');
+      if (medSection && medSection.parentElement) {
+        var heading = medSection.parentElement.querySelector('h3');
+        if (heading && heading.textContent === 'Custom Medications') {
+          heading.textContent = 'Custom Habits';
+        }
+        var medInput = document.getElementById('custom-medication-input');
+        if (medInput) medInput.placeholder = 'Add custom habit';
+      }
+    }
+
     // Custom item add buttons
     document.getElementById('add-custom-symptom').addEventListener('click', function() {
       addCustomItem('custom-symptom-input', 'customSymptoms');
@@ -185,6 +198,7 @@ var Settings = (function() {
     document.getElementById('restore-input').addEventListener('change', function(e) {
       var file = e.target.files[0];
       if (!file) return;
+      var inputEl = e.target;
       showConfirm('Restore from backup?', 'This will merge the backup data with your current entries. Continue?', function() {
         Storage.restoreFromFile(file, function(err, count) {
           if (err) {
@@ -192,8 +206,10 @@ var Settings = (function() {
           } else {
             showToast('Restored ' + count + ' entries');
           }
-          e.target.value = '';
+          inputEl.value = '';
         });
+      }, function() {
+        inputEl.value = '';
       });
     });
 
@@ -205,6 +221,12 @@ var Settings = (function() {
         function() {
           Storage.clearAll();
           showToast('All data cleared');
+          if (typeof Calendar !== 'undefined' && Calendar.render) Calendar.render();
+          var activeView = document.querySelector('.nav-btn.active');
+          if (activeView) {
+            var view = activeView.getAttribute('data-view');
+            document.dispatchEvent(new CustomEvent('viewchange', { detail: { view: view } }));
+          }
         }
       );
     });

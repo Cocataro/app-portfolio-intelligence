@@ -123,6 +123,7 @@ var Insights = (function() {
   }
 
   function medicationAdherence(entries) {
+    var isHabit = APP_CONFIG.variant === 'habit';
     var meds = {};
     Object.keys(entries).forEach(function(d) {
       var e = entries[d];
@@ -149,9 +150,50 @@ var Insights = (function() {
 
     return {
       id: 'medication-adherence',
-      title: 'Medication consistency',
+      title: isHabit ? 'Habit consistency' : 'Medication consistency',
       body: lines.join('<br>'),
       confidence: Math.min(items[0].total / 14, 1)
+    };
+  }
+
+  function habitImpactOnFeeling(entries) {
+    if (APP_CONFIG.variant !== 'habit') return null;
+
+    var highCompletionDays = [];
+    var lowCompletionDays = [];
+
+    Object.keys(entries).forEach(function(d) {
+      var e = entries[d];
+      if (!e.feeling || e.feeling === 0) return;
+      if (!e.medications || typeof e.medications !== 'object') return;
+
+      var total = Object.keys(e.medications).length;
+      if (total === 0) return;
+      var taken = 0;
+      Object.keys(e.medications).forEach(function(m) {
+        if (e.medications[m] === 'taken') taken++;
+      });
+      var pct = taken / total;
+
+      if (pct >= 0.7) {
+        highCompletionDays.push(e.feeling);
+      } else if (pct < 0.4) {
+        lowCompletionDays.push(e.feeling);
+      }
+    });
+
+    if (highCompletionDays.length < 3 || lowCompletionDays.length < 3) return null;
+
+    var avgHigh = highCompletionDays.reduce(function(a, b) { return a + b; }, 0) / highCompletionDays.length;
+    var avgLow = lowCompletionDays.reduce(function(a, b) { return a + b; }, 0) / lowCompletionDays.length;
+
+    if (avgHigh <= avgLow + 0.3) return null;
+
+    return {
+      id: 'habit-feeling-correlation',
+      title: 'Habits and how you feel',
+      body: 'On days you completed 70%+ of your habits, your average feeling was ' + avgHigh.toFixed(1) + '/5. On days below 40%, it was ' + avgLow.toFixed(1) + '/5 (' + highCompletionDays.length + ' high-completion days, ' + lowCompletionDays.length + ' low-completion days).',
+      confidence: Math.min((highCompletionDays.length + lowCompletionDays.length) / 15, 1)
     };
   }
 
@@ -267,7 +309,8 @@ var Insights = (function() {
         sleepSymptomCorrelation(entries),
         triggerSymptomCorrelation(entries),
         cycleSymptomMap(entries),
-        medicationAdherence(entries)
+        medicationAdherence(entries),
+        habitImpactOnFeeling(entries)
       ].filter(function(i) { return i !== null; });
 
       // Sort by confidence descending

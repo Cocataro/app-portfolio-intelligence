@@ -1,0 +1,146 @@
+{
+  "variant": "habit",
+  "name": "Health Habit Tracker",
+  "tagline": "Build healthy routines. See your progress. One day at a time.",
+  "theme": {
+    "primary": "#5B8C5A",
+    "primaryLight": "#8DB88C",
+    "primaryDark": "#3D6B3C",
+    "accent": "#C4944A",
+    "background": "#F9F7F3",
+    "surface": "#FFFFFF",
+    "surfaceAlt": "#F0EDE6",
+    "text": "#2A2D26",
+    "textSecondary": "#5E6358",
+    "textMuted": "#95998F",
+    "border": "#E0DBD2",
+    "accentWarm": "#C4944A",
+    "accentRose": "#B87070",
+    "success": "#5B8C5A",
+    "warning": "#C4944A",
+    "error": "#B87070",
+    "severityNone": "#8DB88C",
+    "severityMild": "#C4944A",
+    "severityModerate": "#B87070",
+    "severityHigh": "#8B4040",
+    "severityExtreme": "#6B2020",
+    "heatmapEmpty": "#EBE8E1",
+    "heatmapLow": "#C5DBC4",
+    "heatmapMid": "#8DB88C",
+    "heatmapHigh": "#5B8C5A",
+    "heatmapFull": "#3D6B3C",
+    "dark": {
+      "background": "#171A15",
+      "surface": "#1E221C",
+      "surfaceAlt": "#262B24",
+      "text": "#E8EBE6",
+      "textSecondary": "#A8AEA3",
+      "textMuted": "#6B7268",
+      "border": "#363D34",
+      "primary": "#8DB88C",
+      "primaryLight": "#B0D4AF",
+      "primaryDark": "#5B8C5A",
+      "accentWarm": "#D4A65E",
+      "accentRose": "#C88080",
+      "success": "#8DB88C",
+      "severityNone": "#8DB88C",
+      "severityMild": "#D4A65E",
+      "severityModerate": "#C88080",
+      "severityHigh": "#C47474",
+      "severityExtreme": "#D45555",
+      "heatmapEmpty": "#252A23",
+      "heatmapLow": "#2E3F2D",
+      "heatmapMid": "#3D6B3C",
+      "heatmapHigh": "#5B8C5A",
+      "heatmapFull": "#8DB88C"
+    }
+  },
+  "symptoms": [
+    "Fatigue", "Brain fog", "Low mood", "Anxiety",
+    "Headache", "Muscle aches", "Joint stiffness", "Nausea",
+    "Digestive issues", "Insomnia", "Dizziness", "Low energy"
+  ],
+  "triggers": [
+    "Poor sleep", "Stress", "Skipped habits", "Weather change",
+    "Missed medication", "Dehydration", "Overexertion",
+    "Hormonal changes", "Certain foods", "Sedentary day"
+  ],
+  "medications": [
+    "Take morning supplements", "Drink 8 glasses of water",
+    "10-minute gentle walk", "Take evening medication",
+    "Eat a nourishing meal", "Stretching or yoga",
+    "Journaling or mindfulness", "Get outside for fresh air"
+  ],
+  "habitPresets": {
+    "General Wellness": [
+      "Take morning supplements", "Drink 8 glasses of water",
+      "10-minute gentle walk", "Eat a nourishing meal",
+      "Stretching or yoga", "Journaling or mindfulness",
+      "Get outside for fresh air", "Take evening medication"
+    ],
+    "PCOS Daily": [
+      "Take supplements (inositol, vitamin D)", "30-minute walk or movement",
+      "Eat balanced meals (protein + fiber)", "Drink 8 glasses of water",
+      "Stress management (breathing, meditation)", "Get 7-8 hours of sleep",
+      "Track cycle symptoms", "Limit processed sugar"
+    ],
+    "Migraine Prevention": [
+      "Drink 8 glasses of water", "Eat regular meals (no skipping)",
+      "Take preventive medication", "Limit screen time before bed",
+      "Gentle stretching or yoga", "Track weather and triggers",
+      "Get consistent sleep schedule", "Manage stress levels"
+    ],
+    "Chronic Pain": [
+      "Gentle stretching routine", "Take pain medication on schedule",
+      "10-minute mindful walk", "Apply heat or ice therapy",
+      "Practice deep breathing", "Drink enough water",
+      "Pace activities (rest breaks)", "Evening relaxation routine"
+    ],
+    "Fibro-Friendly": [
+      "Gentle morning stretch", "Take medications on time",
+      "Short walk if able", "Drink water throughout day",
+      "Rest when needed (no guilt)", "Light housekeeping task",
+      "Calming activity before bed", "Track energy levels"
+    ],
+    "Endo Self-Care": [
+      "Anti-inflammatory meal", "Gentle movement or rest",
+      "Take supplements and medication", "Heat therapy as needed",
+      "Stress reduction activity", "Track pain and symptoms",
+      "Hydrate well", "Prioritize sleep"
+    ]
+  },
+  "mealOptions": ["Breakfast", "Lunch", "Dinner", "Snack"],
+  "exerciseTypes": [
+    "Gentle walking", "Stretching", "Yoga", "Swimming",
+    "Light cycling", "Tai chi", "Gardening", "Rest day"
+  ],
+  "insightRules": [
+    {
+      "id": "medication-adherence",
+      "label": "Habit consistency",
+      "description": "Tracks daily habit completion rate"
+    },
+    {
+      "id": "trigger-frequency",
+      "label": "Most common triggers",
+      "description": "Ranks triggers by frequency over the selected period"
+    },
+    {
+      "id": "sleep-symptom-correlation",
+      "label": "Sleep and symptom patterns",
+      "description": "Tracks whether poor sleep correlates with more symptoms"
+    }
+  ],
+  "severityLevels": [
+    { "key": "mild", "label": "Mild", "cssVar": "--severity-mild" },
+    { "key": "moderate", "label": "Moderate", "cssVar": "--severity-moderate" },
+    { "key": "severe", "label": "Severe", "cssVar": "--severity-high" }
+  ],
+  "feelingScale": [
+    { "value": 1, "label": "Rough", "color": "#B87070" },
+    { "value": 2, "label": "Okay", "color": "#C4944A" },
+    { "value": 3, "label": "Steady", "color": "#8DB88C" },
+    { "value": 4, "label": "Good", "color": "#5B8C5A" },
+    { "value": 5, "label": "Great", "color": "#3D6B3C" }
+  ]
+}

@@ -775,8 +775,10 @@ var QuickLog = (function() {
         var banner = document.createElement('div');
         banner.className = 'welcome-banner';
         banner.id = 'welcome-banner';
-        banner.innerHTML = '<h3>Welcome to your ' + (APP_CONFIG.name || 'Health Tracker') + '</h3>' +
-          '<p>Start by selecting how you\'re feeling, then tap any symptoms that apply. Your first entry takes less than a minute.</p>';
+        var welcomeMsg = APP_CONFIG.variant === 'habit'
+          ? '<p>Start by checking off your daily habits, then note how you\'re feeling. Your first entry takes less than a minute.</p>'
+          : '<p>Start by selecting how you\'re feeling, then tap any symptoms that apply. Your first entry takes less than a minute.</p>';
+        banner.innerHTML = '<h3>Welcome to your ' + (APP_CONFIG.name || 'Health Tracker') + '</h3>' + welcomeMsg;
         logView.insertBefore(banner, logView.children[1]);
       }
     }

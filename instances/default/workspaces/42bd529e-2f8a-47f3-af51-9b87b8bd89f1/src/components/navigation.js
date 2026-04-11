@@ -38,6 +38,15 @@ var Navigation = (function() {
   }
 
   function init() {
+    // Relabel nav for habit variant
+    if (APP_CONFIG.variant === 'habit') {
+      var logBtn = document.getElementById('nav-log');
+      if (logBtn) {
+        var logLabel = logBtn.querySelector('span');
+        if (logLabel) logLabel.textContent = 'Today';
+      }
+    }
+
     var buttons = document.querySelectorAll('.nav-btn');
     buttons.forEach(function(btn) {
       btn.addEventListener('click', function() {

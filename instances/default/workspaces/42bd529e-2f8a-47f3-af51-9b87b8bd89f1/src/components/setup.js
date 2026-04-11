@@ -4,9 +4,11 @@ var Setup = (function() {
 
   var SETUP_KEY = 'healthtracker_' + APP_CONFIG.variant + '_settings';
   var currentStep = 0;
-  var totalSteps = 4;
+  var isHabit = APP_CONFIG.variant === 'habit';
+  var totalSteps = isHabit ? 5 : 4;
   var selectedSymptoms = [];
   var userName = '';
+  var selectedPreset = '';
 
   function isFirstTime() {
     try {
@@ -37,6 +39,19 @@ var Setup = (function() {
     overlay.removeAttribute('hidden');
     document.body.classList.add('setup-active');
 
+    // Add extra progress dot for habit variant
+    if (isHabit) {
+      var progress = overlay.querySelector('.setup-progress');
+      if (progress && progress.children.length < totalSteps + 1) {
+        var dot = document.createElement('span');
+        dot.className = 'setup-progress-dot';
+        dot.setAttribute('aria-label', 'Habits');
+        // Insert before last dot (Done)
+        var lastDot = progress.children[progress.children.length - 1];
+        progress.insertBefore(dot, lastDot);
+      }
+    }
+
     renderStep(0);
     bindEvents(onComplete);
     updateProgress();
@@ -54,19 +69,21 @@ var Setup = (function() {
     if (!container) return;
 
     var html = '';
-    switch (step) {
-      case 0:
-        html = renderWelcome();
-        break;
-      case 1:
-        html = renderName();
-        break;
-      case 2:
-        html = renderSymptoms();
-        break;
-      case 3:
-        html = renderDone();
-        break;
+    if (isHabit) {
+      switch (step) {
+        case 0: html = renderWelcome(); break;
+        case 1: html = renderName(); break;
+        case 2: html = renderHabitPresets(); break;
+        case 3: html = renderSymptoms(); break;
+        case 4: html = renderDone(); break;
+      }
+    } else {
+      switch (step) {
+        case 0: html = renderWelcome(); break;
+        case 1: html = renderName(); break;
+        case 2: html = renderSymptoms(); break;
+        case 3: html = renderDone(); break;
+      }
     }
 
     container.innerHTML = html;
@@ -122,6 +139,34 @@ var Setup = (function() {
       '<p class="setup-text">Select the symptoms you want to track. You can always change these later in Settings.</p>' +
       '<div class="setup-chip-grid" role="group" aria-label="Symptom selection">' + chips + '</div>' +
       '<p class="setup-hint">' + selectedSymptoms.length + ' of ' + symptoms.length + ' selected</p>' +
+    '</div>';
+  }
+
+  function renderHabitPresets() {
+    var presets = APP_CONFIG.habitPresets || {};
+    var names = Object.keys(presets);
+    var pills = '';
+    for (var i = 0; i < names.length; i++) {
+      var name = names[i];
+      var isSelected = selectedPreset === name;
+      pills += '<button type="button" class="preset-pill' + (isSelected ? ' selected' : '') + '" ' +
+        'data-preset="' + escapeHtml(name) + '" ' +
+        'aria-pressed="' + (isSelected ? 'true' : 'false') + '">' +
+        escapeHtml(name) + '</button>';
+    }
+    var previewHtml = '';
+    if (selectedPreset && presets[selectedPreset]) {
+      previewHtml = '<ul class="setup-views-list" style="margin-top:0.75rem">';
+      presets[selectedPreset].forEach(function(h) {
+        previewHtml += '<li>' + escapeHtml(h) + '</li>';
+      });
+      previewHtml += '</ul>';
+    }
+    return '<div class="setup-step">' +
+      '<h2 tabindex="-1" class="setup-heading">Choose a habit preset</h2>' +
+      '<p class="setup-text">Pick a starting set of daily habits. You can customize them anytime in Settings.</p>' +
+      '<div class="preset-pills" role="group" aria-label="Habit preset selection">' + pills + '</div>' +
+      previewHtml +
     '</div>';
   }
 
@@ -233,10 +278,22 @@ var Setup = (function() {
       });
     }
 
-    // Symptom chip clicks (delegated)
+    // Symptom chip + preset pill clicks (delegated)
     var stepContent = document.getElementById('setup-step-content');
     if (stepContent) {
       stepContent.addEventListener('click', function(e) {
+        // Preset pill
+        var pill = e.target.closest('.preset-pill');
+        if (pill) {
+          var presetName = pill.getAttribute('data-preset');
+          if (presetName) {
+            selectedPreset = selectedPreset === presetName ? '' : presetName;
+            renderStep(currentStep);
+          }
+          return;
+        }
+
+        // Symptom chip
         var chip = e.target.closest('.setup-chip');
         if (!chip) return;
         var symptom = chip.getAttribute('data-symptom');
@@ -283,6 +340,21 @@ var Setup = (function() {
     settings.setupComplete = true;
     settings.userName = userName;
     settings.activeSymptoms = activeSymptoms;
+
+    // If habit variant with a selected preset, save those as custom medications (habits)
+    if (isHabit && selectedPreset && APP_CONFIG.habitPresets && APP_CONFIG.habitPresets[selectedPreset]) {
+      var presetHabits = APP_CONFIG.habitPresets[selectedPreset];
+      var baseMeds = APP_CONFIG.medications || [];
+      var custom = [];
+      presetHabits.forEach(function(h) {
+        if (baseMeds.indexOf(h) === -1 && custom.indexOf(h) === -1) {
+          custom.push(h);
+        }
+      });
+      settings.customMedications = custom;
+      settings.selectedPreset = selectedPreset;
+    }
+
     Storage.saveSettings(settings);
 
     // Transition out
