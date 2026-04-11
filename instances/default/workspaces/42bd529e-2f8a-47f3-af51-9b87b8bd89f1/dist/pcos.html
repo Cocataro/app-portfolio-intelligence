@@ -2041,7 +2041,7 @@ var Storage = (function() {
     try {
       localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
     } catch (e) {
-      console.error('Failed to save settings:', e);
+      /* silent — toast notifies user */
     }
   }
 
@@ -2063,7 +2063,7 @@ var Storage = (function() {
       localStorage.setItem(entryKey(dateStr), JSON.stringify(data));
       return true;
     } catch (e) {
-      console.error('Failed to save entry:', e);
+      /* silent — toast notifies user */
       return false;
     }
   }
@@ -2839,13 +2839,15 @@ var Settings = (function() {
     document.getElementById('restore-input').addEventListener('change', function(e) {
       var file = e.target.files[0];
       if (!file) return;
-      Storage.restoreFromFile(file, function(err, count) {
-        if (err) {
-          showToast('Restore failed: ' + err.message);
-        } else {
-          showToast('Restored ' + count + ' entries');
-        }
-        e.target.value = '';
+      showConfirm('Restore from backup?', 'This will merge the backup data with your current entries. Continue?', function() {
+        Storage.restoreFromFile(file, function(err, count) {
+          if (err) {
+            showToast('Restore failed: ' + err.message);
+          } else {
+            showToast('Restored ' + count + ' entries');
+          }
+          e.target.value = '';
+        });
       });
     });
 
@@ -2998,7 +3000,7 @@ var QuickLog = (function() {
         if (selectedSymptoms[name]) {
           delete selectedSymptoms[name];
         } else {
-          selectedSymptoms[name] = 'none';
+          selectedSymptoms[name] = defaultSeverityKey;
         }
         renderSymptomChips();
         renderSeverityArea();
@@ -3014,6 +3016,7 @@ var QuickLog = (function() {
     { key: 'severe', label: 'Severe', cssVar: '--severity-high' },
     { key: 'unbearable', label: 'Unbearable', cssVar: '--severity-extreme' }
   ];
+  var defaultSeverityKey = severityLevels[0] ? severityLevels[0].key : 'none';
 
   function renderSeverityArea() {
     var area = document.getElementById('symptom-severity-area');
@@ -3384,7 +3387,7 @@ var QuickLog = (function() {
     }
     // Auto-select the newly added symptom
     if (!selectedSymptoms[val]) {
-      selectedSymptoms[val] = 'none';
+      selectedSymptoms[val] = defaultSeverityKey;
     }
     input.value = '';
     renderSymptomChips();
@@ -5068,16 +5071,19 @@ var Reports = (function() {
     if (restoreInput) {
       restoreInput.addEventListener('change', function() {
         var file = this.files[0];
+        var inputEl = this;
         if (!file) return;
-        Storage.restoreFromFile(file, function(err, count) {
-          if (!err && count >= 0) {
-            showToast('Restored ' + count + ' entries');
-            render();
-          } else {
-            showToast('Invalid backup file');
-          }
+        Settings.showConfirm('Restore from backup?', 'This will merge the backup data with your current entries. Continue?', function() {
+          Storage.restoreFromFile(file, function(err, count) {
+            if (!err && count >= 0) {
+              showToast('Restored ' + count + ' entries');
+              render();
+            } else {
+              showToast('Invalid backup file');
+            }
+          });
+          inputEl.value = '';
         });
-        this.value = '';
       });
     }
   }

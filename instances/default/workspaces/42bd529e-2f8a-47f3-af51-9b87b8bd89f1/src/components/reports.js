@@ -591,16 +591,19 @@ var Reports = (function() {
     if (restoreInput) {
       restoreInput.addEventListener('change', function() {
         var file = this.files[0];
+        var inputEl = this;
         if (!file) return;
-        Storage.restoreFromFile(file, function(err, count) {
-          if (!err && count >= 0) {
-            showToast('Restored ' + count + ' entries');
-            render();
-          } else {
-            showToast('Invalid backup file');
-          }
+        Settings.showConfirm('Restore from backup?', 'This will merge the backup data with your current entries. Continue?', function() {
+          Storage.restoreFromFile(file, function(err, count) {
+            if (!err && count >= 0) {
+              showToast('Restored ' + count + ' entries');
+              render();
+            } else {
+              showToast('Invalid backup file');
+            }
+          });
+          inputEl.value = '';
         });
-        this.value = '';
       });
     }
   }

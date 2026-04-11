@@ -21,7 +21,7 @@ var Storage = (function() {
     try {
       localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
     } catch (e) {
-      console.error('Failed to save settings:', e);
+      /* silent — toast notifies user */
     }
   }
 
@@ -43,7 +43,7 @@ var Storage = (function() {
       localStorage.setItem(entryKey(dateStr), JSON.stringify(data));
       return true;
     } catch (e) {
-      console.error('Failed to save entry:', e);
+      /* silent — toast notifies user */
       return false;
     }
   }

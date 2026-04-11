@@ -185,13 +185,15 @@ var Settings = (function() {
     document.getElementById('restore-input').addEventListener('change', function(e) {
       var file = e.target.files[0];
       if (!file) return;
-      Storage.restoreFromFile(file, function(err, count) {
-        if (err) {
-          showToast('Restore failed: ' + err.message);
-        } else {
-          showToast('Restored ' + count + ' entries');
-        }
-        e.target.value = '';
+      showConfirm('Restore from backup?', 'This will merge the backup data with your current entries. Continue?', function() {
+        Storage.restoreFromFile(file, function(err, count) {
+          if (err) {
+            showToast('Restore failed: ' + err.message);
+          } else {
+            showToast('Restored ' + count + ' entries');
+          }
+          e.target.value = '';
+        });
       });
     });
 
