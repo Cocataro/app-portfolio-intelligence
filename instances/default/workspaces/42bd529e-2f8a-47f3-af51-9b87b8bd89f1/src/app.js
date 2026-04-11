@@ -9,6 +9,8 @@
     Settings.init();
     QuickLog.init();
     Calendar.init();
+    Charts.init();
+    Insights.init();
 
     // Set initial view
     Navigation.switchTo('log');

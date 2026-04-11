@@ -28,7 +28,9 @@ const componentOrder = [
   'navigation.js',
   'settings.js',
   'quick-log.js',
-  'calendar.js'
+  'calendar.js',
+  'charts.js',
+  'insights.js'
 ];
 
 let scripts = '';

@@ -983,6 +983,290 @@ select:focus:not(:focus-visible) {
   .cal-dot { width: 7px; height: 7px; }
 }
 
+/* === Charts View === */
+.charts-view {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.chart-range-bar {
+  display: flex;
+  gap: 0.375rem;
+  flex-wrap: wrap;
+}
+
+.chart-range-btn {
+  min-height: 44px;
+  min-width: 44px;
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg);
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+.chart-range-btn:hover { border-color: var(--primary-light); }
+.chart-range-btn.active {
+  background: var(--primary);
+  color: #fff;
+  border-color: var(--primary);
+}
+
+.chart-custom-range {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+.chart-custom-range label {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+}
+.chart-custom-range input[type="date"] {
+  min-height: 44px;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg);
+  color: var(--text);
+  font-size: 0.875rem;
+}
+
+.chart-summary {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+}
+
+.chart-section {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 1rem;
+}
+
+.chart-section-title {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+  color: var(--text);
+}
+
+.chart-empty {
+  text-align: center;
+  padding: 1.5rem 1rem;
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+}
+
+.chart-empty-state {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: var(--text-secondary);
+}
+
+/* Line chart wrapper */
+.chart-line-wrapper {
+  display: flex;
+  gap: 0.25rem;
+  align-items: stretch;
+}
+
+.chart-y-labels {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  font-size: 0.625rem;
+  color: var(--text-secondary);
+  min-width: 32px;
+  text-align: right;
+  padding: 2px 0;
+}
+
+.chart-svg {
+  width: 100%;
+  height: auto;
+}
+
+.chart-line-wrapper .chart-svg {
+  flex: 1;
+  min-height: 120px;
+  max-height: 180px;
+}
+
+/* Horizontal bar chart wrapper */
+.chart-hbar-wrapper {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.chart-h-labels {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  min-width: 80px;
+  max-width: 120px;
+}
+
+.chart-h-label {
+  font-size: 0.75rem;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.2;
+}
+
+.chart-hbar-wrapper .chart-svg {
+  flex: 1;
+  height: auto;
+}
+
+.chart-bar-count {
+  font-size: 2.8px;
+  fill: var(--text-secondary);
+  dominant-baseline: middle;
+}
+
+/* Cycle overlay */
+.chart-cycle-svg {
+  height: 24px;
+  min-height: 24px;
+  max-height: 24px;
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.cycle-legend {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-top: 0.5rem;
+  font-size: 0.8125rem;
+  color: var(--text-secondary);
+}
+
+.cycle-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.cycle-legend-swatch {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+  flex-shrink: 0;
+}
+
+/* === Insights View === */
+.insights-view {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.insights-heading {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.insights-summary {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+}
+
+.insights-placeholder {
+  text-align: center;
+  padding: 3rem 1rem;
+}
+
+.insights-placeholder-icon {
+  margin-bottom: 1rem;
+}
+
+.insights-placeholder-text {
+  font-size: 1rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.5rem;
+}
+
+.insights-placeholder-count {
+  font-size: 0.9375rem;
+  color: var(--text);
+}
+
+.insights-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.insight-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 1rem;
+}
+
+.insight-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.insight-card-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.insight-confidence {
+  font-size: 0.75rem;
+  font-weight: 500;
+  padding: 0.125rem 0.5rem;
+  border-radius: 999px;
+  flex-shrink: 0;
+}
+.insight-confidence-high { background: rgba(76,175,80,0.15); color: var(--success); }
+.insight-confidence-medium { background: rgba(255,152,0,0.15); color: var(--warning); }
+.insight-confidence-low { background: rgba(158,158,158,0.15); color: var(--text-secondary); }
+
+.insight-card-body {
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  color: var(--text);
+}
+
+.insights-disclaimer {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 0.75rem 1rem;
+}
+
+.insights-disclaimer p {
+  font-size: 0.8125rem;
+  color: var(--text-secondary);
+  line-height: 1.4;
+}
+
+/* Tablet: two-column insight cards */
+@media (min-width: 480px) {
+  .insights-cards {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+  }
+}
+
 /* === Print Styles === */
 @media print {
   :root {
@@ -1169,18 +1453,8 @@ select:focus:not(:focus-visible) {
           </div>
         </div>
       </div>
-      <div id="view-charts" class="view" role="tabpanel" aria-labelledby="nav-charts" hidden>
-        <div class="view-placeholder">
-          <h2>Charts</h2>
-          <p>Visualize your trends over time.</p>
-        </div>
-      </div>
-      <div id="view-insights" class="view" role="tabpanel" aria-labelledby="nav-insights" hidden>
-        <div class="view-placeholder">
-          <h2>Smart Insights</h2>
-          <p>Discover patterns in your data.</p>
-        </div>
-      </div>
+      <div id="view-charts" class="view" role="tabpanel" aria-labelledby="nav-charts" hidden></div>
+      <div id="view-insights" class="view" role="tabpanel" aria-labelledby="nav-insights" hidden></div>
       <div id="view-reports" class="view" role="tabpanel" aria-labelledby="nav-reports" hidden>
         <div class="view-placeholder">
           <h2>Reports</h2>
@@ -2544,6 +2818,838 @@ var Calendar = (function() {
 })();
 
 
+// === Charts Module ===
+var Charts = (function() {
+  'use strict';
+
+  var activeRange = '30d';
+  var customStart = '';
+  var customEnd = '';
+
+  function todayStr() {
+    var d = new Date();
+    return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+  }
+
+  function subtractDays(dateStr, days) {
+    var parts = dateStr.split('-');
+    var d = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
+    d.setDate(d.getDate() - days);
+    return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+  }
+
+  function getDateRange() {
+    var end = todayStr();
+    var start;
+    if (activeRange === 'custom' && customStart && customEnd) {
+      start = customStart;
+      end = customEnd;
+    } else if (activeRange === '7d') {
+      start = subtractDays(end, 6);
+    } else if (activeRange === '90d') {
+      start = subtractDays(end, 89);
+    } else {
+      start = subtractDays(end, 29);
+    }
+    return { start: start, end: end };
+  }
+
+  function getDatesInRange(start, end) {
+    var dates = [];
+    var parts = start.split('-');
+    var current = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
+    var eParts = end.split('-');
+    var endDate = new Date(parseInt(eParts[0]), parseInt(eParts[1]) - 1, parseInt(eParts[2]));
+    while (current <= endDate) {
+      dates.push(current.getFullYear() + '-' + String(current.getMonth() + 1).padStart(2, '0') + '-' + String(current.getDate()).padStart(2, '0'));
+      current.setDate(current.getDate() + 1);
+    }
+    return dates;
+  }
+
+  function formatShortDate(dateStr) {
+    var parts = dateStr.split('-');
+    return parseInt(parts[1]) + '/' + parseInt(parts[2]);
+  }
+
+  function escapeHtml(str) {
+    return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+
+  // --- SVG Chart Builders ---
+
+  function buildFeelingChart(entries, dates) {
+    var points = [];
+    var dataPoints = [];
+    dates.forEach(function(d, i) {
+      var entry = entries[d];
+      if (entry && entry.feeling > 0) {
+        dataPoints.push({ idx: i, date: d, val: entry.feeling });
+      }
+    });
+    if (dataPoints.length < 2) {
+      return '<div class="chart-empty" role="img" aria-label="Not enough data for feeling trend">Log at least 2 days to see your feeling trend.</div>';
+    }
+
+    var w = 100;
+    var h = 40;
+    var padX = 8;
+    var padY = 4;
+    var plotW = w - padX * 2;
+    var plotH = h - padY * 2;
+    var maxIdx = dates.length - 1;
+
+    dataPoints.forEach(function(dp) {
+      var x = padX + (maxIdx > 0 ? (dp.idx / maxIdx) * plotW : plotW / 2);
+      var y = padY + plotH - ((dp.val - 1) / 4) * plotH;
+      points.push(x.toFixed(1) + ',' + y.toFixed(1));
+    });
+
+    var feelingColors = ['', 'var(--feeling-1)', 'var(--feeling-2)', 'var(--feeling-3)', 'var(--feeling-4)', 'var(--feeling-5)'];
+
+    var svg = '<svg class="chart-svg" viewBox="0 0 ' + w + ' ' + h + '" preserveAspectRatio="none" role="img" aria-label="Feeling trend over time">';
+    // Grid lines
+    for (var g = 1; g <= 5; g++) {
+      var gy = padY + plotH - ((g - 1) / 4) * plotH;
+      svg += '<line x1="' + padX + '" y1="' + gy.toFixed(1) + '" x2="' + (w - padX) + '" y2="' + gy.toFixed(1) + '" stroke="var(--border)" stroke-width="0.3" stroke-dasharray="1,1"/>';
+    }
+    // Line
+    svg += '<polyline points="' + points.join(' ') + '" fill="none" stroke="var(--primary)" stroke-width="0.8" stroke-linecap="round" stroke-linejoin="round"/>';
+    // Dots
+    dataPoints.forEach(function(dp) {
+      var x = padX + (maxIdx > 0 ? (dp.idx / maxIdx) * plotW : plotW / 2);
+      var y = padY + plotH - ((dp.val - 1) / 4) * plotH;
+      svg += '<circle cx="' + x.toFixed(1) + '" cy="' + y.toFixed(1) + '" r="1.2" fill="' + feelingColors[dp.val] + '" stroke="var(--surface)" stroke-width="0.3"/>';
+    });
+    svg += '</svg>';
+
+    // Y-axis labels
+    var labels = '<div class="chart-y-labels" aria-hidden="true"><span>Great</span><span>Good</span><span>Steady</span><span>Okay</span><span>Rough</span></div>';
+
+    // Accessible table
+    var table = '<table class="sr-only"><caption>Feeling trend data</caption><thead><tr><th>Date</th><th>Feeling</th></tr></thead><tbody>';
+    dataPoints.forEach(function(dp) {
+      var scale = APP_CONFIG.feelingScale || [];
+      var label = dp.val;
+      scale.forEach(function(s) { if (s.value === dp.val) label = s.label + ' (' + dp.val + ')'; });
+      table += '<tr><td>' + escapeHtml(dp.date) + '</td><td>' + escapeHtml(label) + '</td></tr>';
+    });
+    table += '</tbody></table>';
+
+    return '<div class="chart-wrapper chart-line-wrapper">' + labels + svg + '</div>' + table;
+  }
+
+  function buildSymptomChart(entries) {
+    var counts = {};
+    Object.keys(entries).forEach(function(d) {
+      var e = entries[d];
+      if (e.symptoms && typeof e.symptoms === 'object') {
+        Object.keys(e.symptoms).forEach(function(s) {
+          counts[s] = (counts[s] || 0) + 1;
+        });
+      }
+    });
+
+    var sorted = Object.keys(counts).map(function(s) { return { name: s, count: counts[s] }; });
+    sorted.sort(function(a, b) { return b.count - a.count; });
+    sorted = sorted.slice(0, 10);
+
+    if (sorted.length === 0) {
+      return '<div class="chart-empty" role="img" aria-label="No symptom data">No symptoms logged yet.</div>';
+    }
+
+    var maxCount = sorted[0].count;
+    var barH = 6;
+    var gap = 3;
+    var padL = 2;
+    var w = 100;
+    var h = sorted.length * (barH + gap) + gap;
+    var barArea = w - padL - 4;
+
+    var svg = '<svg class="chart-svg chart-bar-svg" viewBox="0 0 ' + w + ' ' + h + '" role="img" aria-label="Symptom frequency chart">';
+    sorted.forEach(function(item, i) {
+      var y = gap + i * (barH + gap);
+      var barW = maxCount > 0 ? (item.count / maxCount) * barArea : 0;
+      svg += '<rect x="' + padL + '" y="' + y + '" width="' + barW.toFixed(1) + '" height="' + barH + '" rx="1" fill="var(--primary)" opacity="' + (0.6 + 0.4 * (item.count / maxCount)).toFixed(2) + '"/>';
+      svg += '<text x="' + (padL + barW + 1.5).toFixed(1) + '" y="' + (y + barH * 0.75).toFixed(1) + '" class="chart-bar-count">' + item.count + '</text>';
+    });
+    svg += '</svg>';
+
+    var labels = '<div class="chart-h-labels" aria-hidden="true">';
+    sorted.forEach(function(item) {
+      labels += '<span class="chart-h-label">' + escapeHtml(item.name) + '</span>';
+    });
+    labels += '</div>';
+
+    var table = '<table class="sr-only"><caption>Symptom frequency</caption><thead><tr><th>Symptom</th><th>Days logged</th></tr></thead><tbody>';
+    sorted.forEach(function(item) {
+      table += '<tr><td>' + escapeHtml(item.name) + '</td><td>' + item.count + '</td></tr>';
+    });
+    table += '</tbody></table>';
+
+    return '<div class="chart-wrapper chart-hbar-wrapper">' + labels + svg + '</div>' + table;
+  }
+
+  function buildTriggerChart(entries) {
+    var counts = {};
+    Object.keys(entries).forEach(function(d) {
+      var e = entries[d];
+      if (Array.isArray(e.triggers)) {
+        e.triggers.forEach(function(t) {
+          counts[t] = (counts[t] || 0) + 1;
+        });
+      }
+    });
+
+    var sorted = Object.keys(counts).map(function(t) { return { name: t, count: counts[t] }; });
+    sorted.sort(function(a, b) { return b.count - a.count; });
+    sorted = sorted.slice(0, 10);
+
+    if (sorted.length === 0) {
+      return '<div class="chart-empty" role="img" aria-label="No trigger data">No triggers logged yet.</div>';
+    }
+
+    var maxCount = sorted[0].count;
+    var barH = 6;
+    var gap = 3;
+    var padL = 2;
+    var w = 100;
+    var h = sorted.length * (barH + gap) + gap;
+    var barArea = w - padL - 4;
+
+    var svg = '<svg class="chart-svg chart-bar-svg" viewBox="0 0 ' + w + ' ' + h + '" role="img" aria-label="Trigger frequency chart">';
+    sorted.forEach(function(item, i) {
+      var y = gap + i * (barH + gap);
+      var barW = maxCount > 0 ? (item.count / maxCount) * barArea : 0;
+      svg += '<rect x="' + padL + '" y="' + y + '" width="' + barW.toFixed(1) + '" height="' + barH + '" rx="1" fill="var(--accent)" opacity="' + (0.6 + 0.4 * (item.count / maxCount)).toFixed(2) + '"/>';
+      svg += '<text x="' + (padL + barW + 1.5).toFixed(1) + '" y="' + (y + barH * 0.75).toFixed(1) + '" class="chart-bar-count">' + item.count + '</text>';
+    });
+    svg += '</svg>';
+
+    var labels = '<div class="chart-h-labels" aria-hidden="true">';
+    sorted.forEach(function(item) {
+      labels += '<span class="chart-h-label">' + escapeHtml(item.name) + '</span>';
+    });
+    labels += '</div>';
+
+    var table = '<table class="sr-only"><caption>Trigger frequency</caption><thead><tr><th>Trigger</th><th>Days logged</th></tr></thead><tbody>';
+    sorted.forEach(function(item) {
+      table += '<tr><td>' + escapeHtml(item.name) + '</td><td>' + item.count + '</td></tr>';
+    });
+    table += '</tbody></table>';
+
+    return '<div class="chart-wrapper chart-hbar-wrapper">' + labels + svg + '</div>' + table;
+  }
+
+  function buildSleepChart(entries, dates) {
+    var dataPoints = [];
+    dates.forEach(function(d, i) {
+      var entry = entries[d];
+      if (entry && entry.sleep && entry.sleep.hours > 0) {
+        dataPoints.push({ idx: i, date: d, hours: entry.sleep.hours, quality: entry.sleep.quality || 0 });
+      }
+    });
+
+    if (dataPoints.length < 2) {
+      return '<div class="chart-empty" role="img" aria-label="Not enough sleep data">Log at least 2 days of sleep to see trends.</div>';
+    }
+
+    var w = 100;
+    var h = 40;
+    var padX = 8;
+    var padY = 4;
+    var plotW = w - padX * 2;
+    var plotH = h - padY * 2;
+    var maxIdx = dates.length - 1;
+    var maxH = 12;
+
+    var points = [];
+    dataPoints.forEach(function(dp) {
+      var x = padX + (maxIdx > 0 ? (dp.idx / maxIdx) * plotW : plotW / 2);
+      var y = padY + plotH - (Math.min(dp.hours, maxH) / maxH) * plotH;
+      points.push(x.toFixed(1) + ',' + y.toFixed(1));
+    });
+
+    var qualityColors = ['var(--text-secondary)', 'var(--feeling-1)', 'var(--feeling-2)', 'var(--feeling-3)', 'var(--feeling-4)', 'var(--feeling-5)'];
+
+    var svg = '<svg class="chart-svg" viewBox="0 0 ' + w + ' ' + h + '" preserveAspectRatio="none" role="img" aria-label="Sleep trend over time">';
+    // Grid lines at 4h, 8h, 12h
+    [4, 8, 12].forEach(function(hr) {
+      var gy = padY + plotH - (hr / maxH) * plotH;
+      svg += '<line x1="' + padX + '" y1="' + gy.toFixed(1) + '" x2="' + (w - padX) + '" y2="' + gy.toFixed(1) + '" stroke="var(--border)" stroke-width="0.3" stroke-dasharray="1,1"/>';
+    });
+    svg += '<polyline points="' + points.join(' ') + '" fill="none" stroke="var(--primary-light)" stroke-width="0.8" stroke-linecap="round" stroke-linejoin="round"/>';
+    dataPoints.forEach(function(dp) {
+      var x = padX + (maxIdx > 0 ? (dp.idx / maxIdx) * plotW : plotW / 2);
+      var y = padY + plotH - (Math.min(dp.hours, maxH) / maxH) * plotH;
+      var color = qualityColors[dp.quality] || qualityColors[0];
+      svg += '<circle cx="' + x.toFixed(1) + '" cy="' + y.toFixed(1) + '" r="1.2" fill="' + color + '" stroke="var(--surface)" stroke-width="0.3"/>';
+    });
+    svg += '</svg>';
+
+    var labels = '<div class="chart-y-labels" aria-hidden="true"><span>12h</span><span>8h</span><span>4h</span><span>0h</span></div>';
+
+    var table = '<table class="sr-only"><caption>Sleep trend data</caption><thead><tr><th>Date</th><th>Hours</th><th>Quality</th></tr></thead><tbody>';
+    dataPoints.forEach(function(dp) {
+      table += '<tr><td>' + escapeHtml(dp.date) + '</td><td>' + dp.hours + '</td><td>' + dp.quality + '/5</td></tr>';
+    });
+    table += '</tbody></table>';
+
+    return '<div class="chart-wrapper chart-line-wrapper">' + labels + svg + '</div>' + table;
+  }
+
+  function buildMedChart(entries) {
+    var meds = {};
+    Object.keys(entries).forEach(function(d) {
+      var e = entries[d];
+      if (e.medications && typeof e.medications === 'object') {
+        Object.keys(e.medications).forEach(function(m) {
+          if (!meds[m]) meds[m] = { taken: 0, total: 0 };
+          meds[m].total++;
+          if (e.medications[m] === 'taken') meds[m].taken++;
+        });
+      }
+    });
+
+    var items = Object.keys(meds).map(function(m) {
+      var pct = meds[m].total > 0 ? Math.round((meds[m].taken / meds[m].total) * 100) : 0;
+      return { name: m, taken: meds[m].taken, total: meds[m].total, pct: pct };
+    });
+    items.sort(function(a, b) { return b.total - a.total; });
+
+    if (items.length === 0) {
+      return '<div class="chart-empty" role="img" aria-label="No medication data">No medications logged yet.</div>';
+    }
+
+    var barH = 6;
+    var gap = 3;
+    var padL = 2;
+    var w = 100;
+    var h = items.length * (barH + gap) + gap;
+    var barArea = w - padL - 10;
+
+    var svg = '<svg class="chart-svg chart-bar-svg" viewBox="0 0 ' + w + ' ' + h + '" role="img" aria-label="Medication adherence chart">';
+    items.forEach(function(item, i) {
+      var y = gap + i * (barH + gap);
+      // Background bar (total)
+      svg += '<rect x="' + padL + '" y="' + y + '" width="' + barArea.toFixed(1) + '" height="' + barH + '" rx="1" fill="var(--border)" opacity="0.4"/>';
+      // Filled bar (taken pct)
+      var barW = (item.pct / 100) * barArea;
+      svg += '<rect x="' + padL + '" y="' + y + '" width="' + barW.toFixed(1) + '" height="' + barH + '" rx="1" fill="var(--success)" opacity="0.8"/>';
+      svg += '<text x="' + (padL + barArea + 1.5).toFixed(1) + '" y="' + (y + barH * 0.75).toFixed(1) + '" class="chart-bar-count">' + item.pct + '%</text>';
+    });
+    svg += '</svg>';
+
+    var labels = '<div class="chart-h-labels" aria-hidden="true">';
+    items.forEach(function(item) {
+      labels += '<span class="chart-h-label">' + escapeHtml(item.name) + '</span>';
+    });
+    labels += '</div>';
+
+    var table = '<table class="sr-only"><caption>Medication adherence</caption><thead><tr><th>Medication</th><th>Taken</th><th>Logged</th><th>Rate</th></tr></thead><tbody>';
+    items.forEach(function(item) {
+      table += '<tr><td>' + escapeHtml(item.name) + '</td><td>' + item.taken + '</td><td>' + item.total + '</td><td>' + item.pct + '%</td></tr>';
+    });
+    table += '</tbody></table>';
+
+    return '<div class="chart-wrapper chart-hbar-wrapper">' + labels + svg + '</div>' + table;
+  }
+
+  function buildCycleOverlay(entries, dates) {
+    var phaseColors = {
+      'Menstrual': 'var(--feeling-1)',
+      'Follicular': 'var(--feeling-4)',
+      'Ovulatory': 'var(--feeling-5)',
+      'Luteal': 'var(--feeling-2)'
+    };
+
+    var hasPhase = false;
+    dates.forEach(function(d) {
+      if (entries[d] && entries[d].cyclePhase) hasPhase = true;
+    });
+
+    if (!hasPhase) {
+      return '<div class="chart-empty" role="img" aria-label="No cycle data">No cycle phase data logged yet.</div>';
+    }
+
+    var w = 100;
+    var h = 12;
+    var maxIdx = dates.length - 1;
+
+    var svg = '<svg class="chart-svg chart-cycle-svg" viewBox="0 0 ' + w + ' ' + h + '" preserveAspectRatio="none" role="img" aria-label="Cycle phase overlay">';
+    dates.forEach(function(d, i) {
+      var entry = entries[d];
+      if (entry && entry.cyclePhase) {
+        var x = maxIdx > 0 ? (i / maxIdx) * w : 0;
+        var bw = maxIdx > 0 ? (1 / maxIdx) * w : w;
+        var color = phaseColors[entry.cyclePhase] || 'var(--text-secondary)';
+        svg += '<rect x="' + x.toFixed(2) + '" y="0" width="' + Math.max(bw, 0.5).toFixed(2) + '" height="' + h + '" fill="' + color + '" opacity="0.5"/>';
+      }
+    });
+    svg += '</svg>';
+
+    var legend = '<div class="cycle-legend" aria-hidden="true">';
+    var phases = APP_CONFIG.cyclePhases || [];
+    phases.forEach(function(p) {
+      legend += '<span class="cycle-legend-item"><span class="cycle-legend-swatch" style="background:' + (phaseColors[p] || 'var(--text-secondary)') + '"></span>' + escapeHtml(p) + '</span>';
+    });
+    legend += '</div>';
+
+    var table = '<table class="sr-only"><caption>Cycle phases</caption><thead><tr><th>Date</th><th>Phase</th></tr></thead><tbody>';
+    dates.forEach(function(d) {
+      var entry = entries[d];
+      if (entry && entry.cyclePhase) {
+        table += '<tr><td>' + escapeHtml(d) + '</td><td>' + escapeHtml(entry.cyclePhase) + '</td></tr>';
+      }
+    });
+    table += '</tbody></table>';
+
+    return svg + legend + table;
+  }
+
+  // --- Render ---
+
+  function render() {
+    var container = document.getElementById('view-charts');
+    if (!container) return;
+
+    var range = getDateRange();
+    var entries = Storage.getEntriesInRange(range.start, range.end);
+    var dates = getDatesInRange(range.start, range.end);
+    var entryCount = Object.keys(entries).length;
+
+    var html = '<div class="charts-view">';
+
+    // Time range selector
+    html += '<div class="chart-range-bar" role="group" aria-label="Time range">';
+    ['7d', '30d', '90d', 'custom'].forEach(function(r) {
+      var label = r === '7d' ? '7 days' : r === '30d' ? '30 days' : r === '90d' ? '90 days' : 'Custom';
+      html += '<button type="button" class="chart-range-btn' + (activeRange === r ? ' active' : '') + '" data-range="' + r + '" aria-pressed="' + (activeRange === r ? 'true' : 'false') + '">' + label + '</button>';
+    });
+    html += '</div>';
+
+    // Custom date inputs (shown only when custom is selected)
+    if (activeRange === 'custom') {
+      html += '<div class="chart-custom-range">';
+      html += '<label for="chart-start">From</label><input type="date" id="chart-start" value="' + escapeHtml(customStart || range.start) + '" aria-label="Start date">';
+      html += '<label for="chart-end">To</label><input type="date" id="chart-end" value="' + escapeHtml(customEnd || range.end) + '" aria-label="End date">';
+      html += '<button type="button" id="chart-apply-custom" class="btn btn-small">Apply</button>';
+      html += '</div>';
+    }
+
+    // Summary
+    html += '<p class="chart-summary">' + entryCount + ' day' + (entryCount !== 1 ? 's' : '') + ' logged in this period</p>';
+
+    if (entryCount === 0) {
+      html += '<div class="chart-empty-state"><p>No entries in this date range. Start logging to see your charts.</p></div>';
+    } else {
+      // Feeling Trend
+      html += '<section class="chart-section" aria-labelledby="chart-feeling-heading">';
+      html += '<h3 id="chart-feeling-heading" class="chart-section-title">Feeling Trend</h3>';
+      html += buildFeelingChart(entries, dates);
+      html += '</section>';
+
+      // Symptom Frequency
+      html += '<section class="chart-section" aria-labelledby="chart-symptom-heading">';
+      html += '<h3 id="chart-symptom-heading" class="chart-section-title">Top Symptoms</h3>';
+      html += buildSymptomChart(entries);
+      html += '</section>';
+
+      // Trigger Frequency
+      html += '<section class="chart-section" aria-labelledby="chart-trigger-heading">';
+      html += '<h3 id="chart-trigger-heading" class="chart-section-title">Trigger Frequency</h3>';
+      html += buildTriggerChart(entries);
+      html += '</section>';
+
+      // Sleep Trend
+      html += '<section class="chart-section" aria-labelledby="chart-sleep-heading">';
+      html += '<h3 id="chart-sleep-heading" class="chart-section-title">Sleep Trend</h3>';
+      html += buildSleepChart(entries, dates);
+      html += '</section>';
+
+      // Medication Adherence
+      html += '<section class="chart-section" aria-labelledby="chart-med-heading">';
+      html += '<h3 id="chart-med-heading" class="chart-section-title">Medication Adherence</h3>';
+      html += buildMedChart(entries);
+      html += '</section>';
+
+      // Cycle Overlay
+      html += '<section class="chart-section" aria-labelledby="chart-cycle-heading">';
+      html += '<h3 id="chart-cycle-heading" class="chart-section-title">Cycle Phases</h3>';
+      html += buildCycleOverlay(entries, dates);
+      html += '</section>';
+    }
+
+    html += '</div>';
+    container.innerHTML = html;
+    bindEvents();
+  }
+
+  function bindEvents() {
+    var rangeBtns = document.querySelectorAll('.chart-range-btn');
+    rangeBtns.forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        var r = this.getAttribute('data-range');
+        if (r === 'custom') {
+          activeRange = 'custom';
+          if (!customStart) {
+            customStart = subtractDays(todayStr(), 29);
+            customEnd = todayStr();
+          }
+        } else {
+          activeRange = r;
+        }
+        render();
+      });
+    });
+
+    var applyBtn = document.getElementById('chart-apply-custom');
+    if (applyBtn) {
+      applyBtn.addEventListener('click', function() {
+        var s = document.getElementById('chart-start');
+        var e = document.getElementById('chart-end');
+        if (s && e && s.value && e.value) {
+          customStart = s.value;
+          customEnd = e.value;
+          if (customStart > customEnd) {
+            var tmp = customStart;
+            customStart = customEnd;
+            customEnd = tmp;
+          }
+          render();
+        }
+      });
+    }
+  }
+
+  function init() {
+    document.addEventListener('viewchange', function(e) {
+      if (e.detail && e.detail.view === 'charts') {
+        render();
+      }
+    });
+  }
+
+  return { init: init };
+})();
+
+
+// === Insights Module ===
+var Insights = (function() {
+  'use strict';
+
+  var MIN_DAYS = 7;
+
+  function escapeHtml(str) {
+    return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+
+  function getAllEntries() {
+    return Storage.getAllEntries();
+  }
+
+  function countEntries(entries) {
+    return Object.keys(entries).length;
+  }
+
+  // --- Insight Generators ---
+
+  function sleepSymptomCorrelation(entries) {
+    var lowSleepDays = [];
+    var okSleepDays = [];
+
+    Object.keys(entries).forEach(function(d) {
+      var e = entries[d];
+      if (e.sleep && e.sleep.hours > 0) {
+        if (e.sleep.hours < 6) {
+          lowSleepDays.push(e);
+        } else {
+          okSleepDays.push(e);
+        }
+      }
+    });
+
+    if (lowSleepDays.length < 3) return null;
+
+    var lowSymptomCount = 0;
+    var okSymptomCount = 0;
+
+    lowSleepDays.forEach(function(e) {
+      if (e.symptoms) lowSymptomCount += Object.keys(e.symptoms).length;
+    });
+    okSleepDays.forEach(function(e) {
+      if (e.symptoms) okSymptomCount += Object.keys(e.symptoms).length;
+    });
+
+    var lowAvg = lowSleepDays.length > 0 ? (lowSymptomCount / lowSleepDays.length).toFixed(1) : 0;
+    var okAvg = okSleepDays.length > 0 ? (okSymptomCount / okSleepDays.length).toFixed(1) : 0;
+
+    if (parseFloat(lowAvg) <= parseFloat(okAvg)) return null;
+
+    return {
+      id: 'sleep-symptom-correlation',
+      title: 'Sleep and symptom patterns',
+      body: 'On nights with less than 6 hours of sleep, you logged an average of ' + lowAvg + ' symptoms the next day, compared to ' + okAvg + ' on better-rested days (' + lowSleepDays.length + ' low-sleep days observed).',
+      confidence: Math.min(lowSleepDays.length / 10, 1)
+    };
+  }
+
+  function triggerRanking(entries) {
+    var counts = {};
+    Object.keys(entries).forEach(function(d) {
+      var e = entries[d];
+      if (Array.isArray(e.triggers)) {
+        e.triggers.forEach(function(t) {
+          counts[t] = (counts[t] || 0) + 1;
+        });
+      }
+    });
+
+    var sorted = Object.keys(counts).map(function(t) { return { name: t, count: counts[t] }; });
+    sorted.sort(function(a, b) { return b.count - a.count; });
+
+    if (sorted.length === 0) return null;
+
+    var top3 = sorted.slice(0, 3);
+    var parts = top3.map(function(t) { return t.name + ' (' + t.count + 'x)'; });
+
+    return {
+      id: 'trigger-frequency',
+      title: 'Most common triggers',
+      body: 'Your top trigger' + (top3.length > 1 ? 's' : '') + ' this period: ' + parts.join(', ') + '.',
+      confidence: Math.min(sorted[0].count / 8, 1)
+    };
+  }
+
+  function cycleSymptomMap(entries) {
+    var phaseSymptoms = {};
+
+    Object.keys(entries).forEach(function(d) {
+      var e = entries[d];
+      if (e.cyclePhase && e.symptoms && typeof e.symptoms === 'object') {
+        if (!phaseSymptoms[e.cyclePhase]) phaseSymptoms[e.cyclePhase] = {};
+        Object.keys(e.symptoms).forEach(function(s) {
+          phaseSymptoms[e.cyclePhase][s] = (phaseSymptoms[e.cyclePhase][s] || 0) + 1;
+        });
+      }
+    });
+
+    var phases = Object.keys(phaseSymptoms);
+    if (phases.length < 2) return null;
+
+    var lines = [];
+    phases.forEach(function(phase) {
+      var symptoms = phaseSymptoms[phase];
+      var sorted = Object.keys(symptoms).map(function(s) { return { name: s, count: symptoms[s] }; });
+      sorted.sort(function(a, b) { return b.count - a.count; });
+      var top = sorted.slice(0, 3).map(function(s) { return s.name; });
+      if (top.length > 0) {
+        lines.push('<strong>' + escapeHtml(phase) + '</strong>: ' + top.map(function(s) { return escapeHtml(s); }).join(', '));
+      }
+    });
+
+    if (lines.length === 0) return null;
+
+    return {
+      id: 'cycle-symptom-map',
+      title: 'Symptoms by cycle phase',
+      body: lines.join('<br>'),
+      confidence: Math.min(phases.length / 4, 1)
+    };
+  }
+
+  function medicationAdherence(entries) {
+    var meds = {};
+    Object.keys(entries).forEach(function(d) {
+      var e = entries[d];
+      if (e.medications && typeof e.medications === 'object') {
+        Object.keys(e.medications).forEach(function(m) {
+          if (!meds[m]) meds[m] = { taken: 0, total: 0 };
+          meds[m].total++;
+          if (e.medications[m] === 'taken') meds[m].taken++;
+        });
+      }
+    });
+
+    var items = Object.keys(meds).map(function(m) {
+      var pct = meds[m].total > 0 ? Math.round((meds[m].taken / meds[m].total) * 100) : 0;
+      return { name: m, taken: meds[m].taken, total: meds[m].total, pct: pct };
+    });
+    items.sort(function(a, b) { return b.total - a.total; });
+
+    if (items.length === 0) return null;
+
+    var lines = items.map(function(item) {
+      return escapeHtml(item.name) + ': logged ' + item.taken + ' of ' + item.total + ' days (' + item.pct + '%)';
+    });
+
+    return {
+      id: 'medication-adherence',
+      title: 'Medication consistency',
+      body: lines.join('<br>'),
+      confidence: Math.min(items[0].total / 14, 1)
+    };
+  }
+
+  function feelingTrend(entries) {
+    var dates = Object.keys(entries).filter(function(d) {
+      return entries[d].feeling > 0;
+    });
+    dates.sort();
+
+    if (dates.length < 7) return null;
+
+    var half = Math.floor(dates.length / 2);
+    var firstHalf = dates.slice(0, half);
+    var secondHalf = dates.slice(half);
+
+    var avg = function(arr) {
+      var sum = 0;
+      arr.forEach(function(d) { sum += entries[d].feeling; });
+      return arr.length > 0 ? sum / arr.length : 0;
+    };
+
+    var avgFirst = avg(firstHalf);
+    var avgSecond = avg(secondHalf);
+    var diff = avgSecond - avgFirst;
+
+    if (Math.abs(diff) < 0.3) return null;
+
+    var direction = diff > 0 ? 'improving' : 'declining';
+    var body = 'Your average feeling has been ' + direction + ' — from ' + avgFirst.toFixed(1) + ' in the first half of this period to ' + avgSecond.toFixed(1) + ' in the second half.';
+
+    return {
+      id: 'feeling-trend',
+      title: 'Feeling trend',
+      body: body,
+      confidence: Math.min(dates.length / 20, 1)
+    };
+  }
+
+  function triggerSymptomCorrelation(entries) {
+    var triggerDays = {};
+    var noTriggerSymptoms = { count: 0, symptoms: 0 };
+
+    Object.keys(entries).forEach(function(d) {
+      var e = entries[d];
+      var symptomCount = e.symptoms ? Object.keys(e.symptoms).length : 0;
+
+      if (Array.isArray(e.triggers) && e.triggers.length > 0) {
+        e.triggers.forEach(function(t) {
+          if (!triggerDays[t]) triggerDays[t] = { count: 0, symptoms: 0 };
+          triggerDays[t].count++;
+          triggerDays[t].symptoms += symptomCount;
+        });
+      } else {
+        noTriggerSymptoms.count++;
+        noTriggerSymptoms.symptoms += symptomCount;
+      }
+    });
+
+    var baseAvg = noTriggerSymptoms.count > 0 ? noTriggerSymptoms.symptoms / noTriggerSymptoms.count : 0;
+    var insights = [];
+
+    Object.keys(triggerDays).forEach(function(t) {
+      var td = triggerDays[t];
+      if (td.count >= 3) {
+        var avg = td.symptoms / td.count;
+        if (avg > baseAvg + 0.5) {
+          insights.push({ trigger: t, avg: avg, count: td.count });
+        }
+      }
+    });
+
+    insights.sort(function(a, b) { return b.avg - a.avg; });
+    if (insights.length === 0) return null;
+
+    var top = insights.slice(0, 3);
+    var lines = top.map(function(item) {
+      return 'Days with <strong>' + escapeHtml(item.trigger) + '</strong> averaged ' + item.avg.toFixed(1) + ' symptoms (' + item.count + ' days)';
+    });
+
+    return {
+      id: 'trigger-symptom-correlation',
+      title: 'Triggers linked to more symptoms',
+      body: lines.join('<br>') + '<br>Compared to ' + baseAvg.toFixed(1) + ' symptoms on trigger-free days.',
+      confidence: Math.min(top[0].count / 8, 1)
+    };
+  }
+
+  // --- Render ---
+
+  function render() {
+    var container = document.getElementById('view-insights');
+    if (!container) return;
+
+    var entries = getAllEntries();
+    var total = countEntries(entries);
+
+    var html = '<div class="insights-view">';
+    html += '<h2 class="insights-heading">Smart Insights</h2>';
+
+    if (total < MIN_DAYS) {
+      html += '<div class="insights-placeholder">';
+      html += '<div class="insights-placeholder-icon" aria-hidden="true"><svg viewBox="0 0 48 48" width="48" height="48"><path d="M24 4a7 7 0 015 11.9V19a1 1 0 01-1 1h-8a1 1 0 01-1-1v-3.1A7 7 0 0124 4z" fill="none" stroke="var(--primary-light)" stroke-width="2"/><line x1="20" y1="24" x2="28" y2="24" stroke="var(--primary-light)" stroke-width="2" stroke-linecap="round"/><line x1="22" y1="28" x2="26" y2="28" stroke="var(--primary-light)" stroke-width="2" stroke-linecap="round"/></svg></div>';
+      html += '<p class="insights-placeholder-text">Insights will appear after you have logged at least ' + MIN_DAYS + ' days.</p>';
+      html += '<p class="insights-placeholder-count">You have logged <strong>' + total + '</strong> day' + (total !== 1 ? 's' : '') + ' so far. Keep going!</p>';
+      html += '</div>';
+    } else {
+      html += '<p class="insights-summary">Based on ' + total + ' days of data</p>';
+
+      // Generate all insights
+      var allInsights = [
+        feelingTrend(entries),
+        triggerRanking(entries),
+        sleepSymptomCorrelation(entries),
+        triggerSymptomCorrelation(entries),
+        cycleSymptomMap(entries),
+        medicationAdherence(entries)
+      ].filter(function(i) { return i !== null; });
+
+      // Sort by confidence descending
+      allInsights.sort(function(a, b) { return b.confidence - a.confidence; });
+
+      if (allInsights.length === 0) {
+        html += '<div class="insights-placeholder">';
+        html += '<p class="insights-placeholder-text">Not enough variation in your data to detect patterns yet. Keep logging and check back soon.</p>';
+        html += '</div>';
+      } else {
+        html += '<div class="insights-cards">';
+        allInsights.forEach(function(insight) {
+          var confLabel = insight.confidence >= 0.7 ? 'High' : insight.confidence >= 0.4 ? 'Medium' : 'Low';
+          var confClass = insight.confidence >= 0.7 ? 'high' : insight.confidence >= 0.4 ? 'medium' : 'low';
+          html += '<article class="insight-card" aria-label="' + escapeHtml(insight.title) + '">';
+          html += '<div class="insight-card-header">';
+          html += '<h3 class="insight-card-title">' + escapeHtml(insight.title) + '</h3>';
+          html += '<span class="insight-confidence insight-confidence-' + confClass + '" aria-label="Confidence: ' + confLabel + '">' + confLabel + '</span>';
+          html += '</div>';
+          html += '<p class="insight-card-body">' + insight.body + '</p>';
+          html += '</article>';
+        });
+        html += '</div>';
+      }
+
+      html += '<div class="insights-disclaimer">';
+      html += '<p>These patterns are based on your self-reported data and are for informational purposes only. They are not medical advice. Discuss any concerns with your healthcare provider.</p>';
+      html += '</div>';
+    }
+
+    html += '</div>';
+    container.innerHTML = html;
+  }
+
+  function init() {
+    document.addEventListener('viewchange', function(e) {
+      if (e.detail && e.detail.view === 'insights') {
+        render();
+      }
+    });
+  }
+
+  return { init: init };
+})();
+
+
 // === App Initialization ===
 (function() {
   'use strict';
@@ -2555,6 +3661,8 @@ var Calendar = (function() {
     Settings.init();
     QuickLog.init();
     Calendar.init();
+    Charts.init();
+    Insights.init();
 
     // Set initial view
     Navigation.switchTo('log');
