@@ -1,0 +1,119 @@
+{
+  "variant": "medication",
+  "name": "Medication & Supplement Tracker",
+  "tagline": "Stay organized. See your adherence. Bring proof to your pharmacist.",
+  "theme": {
+    "primary": "#4A6F8A",
+    "primaryLight": "#7A9DB8",
+    "primaryDark": "#345570",
+    "accent": "#C4865A",
+    "background": "#FAF8F5",
+    "surface": "#FFFFFF",
+    "surfaceAlt": "#F0EDE8",
+    "text": "#1E2A32",
+    "textSecondary": "#5A6B78",
+    "textMuted": "#8E9BA5",
+    "border": "#DDD8D0",
+    "accentWarm": "#C4865A",
+    "success": "#5E9E6B",
+    "warning": "#C4865A",
+    "error": "#B85A5A",
+    "severityNone": "#5E9E6B",
+    "severityMild": "#C4865A",
+    "severityModerate": "#C47A5A",
+    "severityHigh": "#B85A5A",
+    "severityExtreme": "#8B3A3A",
+    "adherenceHigh": "#5E9E6B",
+    "adherenceMid": "#C4865A",
+    "adherenceLow": "#B85A5A",
+    "dark": {
+      "background": "#141A1E",
+      "surface": "#1E2830",
+      "surfaceAlt": "#263038",
+      "text": "#E8ECF0",
+      "textSecondary": "#A0B0BC",
+      "textMuted": "#6E7E8A",
+      "border": "#354048",
+      "primary": "#7A9DB8",
+      "primaryLight": "#A3C1D4",
+      "primaryDark": "#4A6F8A",
+      "accentWarm": "#D4A07A",
+      "success": "#70B87E",
+      "severityNone": "#70B87E",
+      "severityMild": "#D4A07A",
+      "severityModerate": "#D49070",
+      "severityHigh": "#C87070",
+      "severityExtreme": "#D45555",
+      "adherenceHigh": "#70B87E",
+      "adherenceMid": "#D4A07A",
+      "adherenceLow": "#C87070"
+    }
+  },
+  "symptoms": [
+    "Nausea", "Dizziness", "Headache", "Fatigue",
+    "Stomach upset", "Drowsiness", "Dry mouth", "Appetite change",
+    "Muscle aches", "Brain fog", "Insomnia", "Mood change",
+    "Skin reaction", "Joint stiffness", "Constipation", "Heartburn"
+  ],
+  "triggers": [
+    "Missed dose", "Late dose", "Empty stomach", "Food interaction",
+    "Stress", "Poor sleep", "Alcohol", "Caffeine",
+    "Dehydration", "Weather change", "New medication", "Dose change"
+  ],
+  "medications": [
+    "Metformin", "Levothyroxine", "Lisinopril", "Atorvastatin",
+    "Omeprazole", "Amlodipine", "Metoprolol", "Gabapentin",
+    "Vitamin D3", "Omega-3 Fish Oil", "Magnesium", "Vitamin B12",
+    "Probiotics", "Iron", "Calcium", "CoQ10"
+  ],
+  "medicationCategories": [
+    { "key": "prescription", "label": "Prescription", "color": "#4A6F8A" },
+    { "key": "supplement", "label": "Supplement", "color": "#C4865A" },
+    { "key": "vitamin", "label": "Vitamin", "color": "#5E9E6B" }
+  ],
+  "medicationEffectiveness": [
+    { "value": 0, "label": "No help" },
+    { "value": 1, "label": "Some relief" },
+    { "value": 2, "label": "Good relief" },
+    { "value": 3, "label": "Resolved" }
+  ],
+  "mealOptions": ["Breakfast", "Lunch", "Dinner", "Snack"],
+  "exerciseTypes": [
+    "Walking", "Stretching", "Yoga", "Swimming",
+    "Light cycling", "Tai chi", "Gardening", "Rest day"
+  ],
+  "insightRules": [
+    {
+      "id": "medication-adherence",
+      "label": "Medication consistency",
+      "description": "Tracks daily medication check-in rate"
+    },
+    {
+      "id": "trigger-frequency",
+      "label": "Most common triggers",
+      "description": "Ranks triggers by frequency over the selected period"
+    },
+    {
+      "id": "sleep-symptom-correlation",
+      "label": "Sleep and symptom patterns",
+      "description": "Tracks whether poor sleep nights correlate with higher symptom days"
+    },
+    {
+      "id": "medication-side-effects",
+      "label": "Side effect patterns",
+      "description": "Tracks which medications correlate with reported symptoms"
+    }
+  ],
+  "severityLevels": [
+    { "key": "mild", "label": "Mild", "cssVar": "--severity-mild" },
+    { "key": "moderate", "label": "Moderate", "cssVar": "--severity-moderate" },
+    { "key": "severe", "label": "Severe", "cssVar": "--severity-high" }
+  ],
+  "feelingScale": [
+    { "value": 1, "label": "Rough", "color": "#B85A5A" },
+    { "value": 2, "label": "Okay", "color": "#C4865A" },
+    { "value": 3, "label": "Steady", "color": "#7A9DB8" },
+    { "value": 4, "label": "Good", "color": "#5E9E6B" },
+    { "value": 5, "label": "Great", "color": "#345570" }
+  ]
+}
