@@ -7,6 +7,8 @@
     Theme.init();
     Navigation.init();
     Settings.init();
+    QuickLog.init();
+    Calendar.init();
 
     // Set initial view
     Navigation.switchTo('log');

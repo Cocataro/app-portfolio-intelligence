@@ -37,15 +37,143 @@
 
     <main id="main-content" class="main-content" role="main">
       <div id="view-log" class="view active" role="tabpanel" aria-labelledby="nav-log">
-        <div class="view-placeholder">
-          <h2>Quick Log</h2>
-          <p>Log your daily symptoms, triggers, and medications.</p>
+        <div class="quick-log">
+          <div class="log-date-nav">
+            <button id="log-prev-day" class="icon-btn" aria-label="Previous day">
+              <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><polyline points="15 18 9 12 15 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            <button id="log-date-display" class="log-date-btn" aria-label="Select date">
+              <span id="log-date-text"></span>
+            </button>
+            <button id="log-next-day" class="icon-btn" aria-label="Next day">
+              <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><polyline points="9 18 15 12 9 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            <input type="date" id="log-date-picker" class="sr-only" aria-label="Pick a date">
+          </div>
+
+          <section class="log-section" aria-labelledby="feeling-heading">
+            <h3 id="feeling-heading" class="log-section-title">How are you feeling?</h3>
+            <div id="feeling-scale" class="feeling-scale" role="radiogroup" aria-label="Overall feeling"></div>
+          </section>
+
+          <section class="log-section" aria-labelledby="symptoms-heading">
+            <h3 id="symptoms-heading" class="log-section-title">Symptoms</h3>
+            <div id="symptom-chips" class="chip-list" role="group" aria-label="Symptom selection"></div>
+            <div id="symptom-severity-area" class="severity-area" hidden></div>
+            <div class="add-custom-row">
+              <input type="text" id="log-custom-symptom" placeholder="Add other symptom" aria-label="Add custom symptom" maxlength="50">
+              <button id="log-add-symptom" class="btn btn-small" aria-label="Add symptom">Add</button>
+            </div>
+          </section>
+
+          <section class="log-section" aria-labelledby="triggers-heading">
+            <h3 id="triggers-heading" class="log-section-title">Triggers</h3>
+            <div id="trigger-chips" class="chip-list" role="group" aria-label="Trigger selection"></div>
+            <div class="add-custom-row">
+              <input type="text" id="log-custom-trigger" placeholder="Add other trigger" aria-label="Add custom trigger" maxlength="50">
+              <button id="log-add-trigger" class="btn btn-small" aria-label="Add trigger">Add</button>
+            </div>
+          </section>
+
+          <section class="log-section" aria-labelledby="meds-heading">
+            <h3 id="meds-heading" class="log-section-title">Medications</h3>
+            <div id="medication-list" class="medication-list" role="group" aria-label="Medication tracking"></div>
+          </section>
+
+          <section class="log-section collapsible" aria-labelledby="meals-heading">
+            <button class="log-section-toggle" aria-expanded="false" aria-controls="meals-body">
+              <h3 id="meals-heading" class="log-section-title">Meals</h3>
+              <svg class="toggle-chevron" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><polyline points="6 9 12 15 18 9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            <div id="meals-body" class="collapsible-body" hidden>
+              <div id="meal-fields" class="meal-fields"></div>
+            </div>
+          </section>
+
+          <section class="log-section collapsible" aria-labelledby="exercise-heading">
+            <button class="log-section-toggle" aria-expanded="false" aria-controls="exercise-body">
+              <h3 id="exercise-heading" class="log-section-title">Exercise</h3>
+              <svg class="toggle-chevron" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><polyline points="6 9 12 15 18 9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            <div id="exercise-body" class="collapsible-body" hidden>
+              <div class="exercise-row">
+                <label for="exercise-type">Type</label>
+                <select id="exercise-type" aria-label="Exercise type"></select>
+              </div>
+              <div class="exercise-row">
+                <label for="exercise-duration">Minutes</label>
+                <input type="number" id="exercise-duration" min="0" max="600" step="5" placeholder="0" aria-label="Exercise duration in minutes">
+              </div>
+            </div>
+          </section>
+
+          <section class="log-section collapsible" aria-labelledby="cycle-heading">
+            <button class="log-section-toggle" aria-expanded="false" aria-controls="cycle-body">
+              <h3 id="cycle-heading" class="log-section-title">Cycle Phase</h3>
+              <svg class="toggle-chevron" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><polyline points="6 9 12 15 18 9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            <div id="cycle-body" class="collapsible-body" hidden>
+              <div id="cycle-chips" class="chip-list" role="radiogroup" aria-label="Cycle phase"></div>
+            </div>
+          </section>
+
+          <section class="log-section collapsible" aria-labelledby="sleep-heading">
+            <button class="log-section-toggle" aria-expanded="false" aria-controls="sleep-body">
+              <h3 id="sleep-heading" class="log-section-title">Sleep</h3>
+              <svg class="toggle-chevron" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><polyline points="6 9 12 15 18 9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            <div id="sleep-body" class="collapsible-body" hidden>
+              <div class="sleep-row">
+                <label for="sleep-hours">Hours</label>
+                <input type="number" id="sleep-hours" min="0" max="24" step="0.5" placeholder="0" aria-label="Hours of sleep">
+              </div>
+              <div class="sleep-row">
+                <label id="sleep-quality-label">Quality</label>
+                <div id="sleep-quality" class="quality-scale" role="radiogroup" aria-labelledby="sleep-quality-label"></div>
+              </div>
+            </div>
+          </section>
+
+          <section class="log-section" aria-labelledby="notes-heading">
+            <h3 id="notes-heading" class="log-section-title">Notes</h3>
+            <textarea id="log-notes" class="log-textarea" placeholder="Anything else to note..." aria-label="Additional notes" rows="3"></textarea>
+          </section>
+
+          <div class="log-actions">
+            <button id="log-save" class="btn btn-primary log-save-btn" aria-label="Save entry">Save Entry</button>
+          </div>
         </div>
       </div>
+
       <div id="view-calendar" class="view" role="tabpanel" aria-labelledby="nav-calendar" hidden>
-        <div class="view-placeholder">
-          <h2>Calendar</h2>
-          <p>See your month at a glance.</p>
+        <div class="calendar-view">
+          <div class="cal-header">
+            <button id="cal-prev" class="icon-btn" aria-label="Previous month">
+              <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><polyline points="15 18 9 12 15 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            <h2 id="cal-month-label" class="cal-month-label"></h2>
+            <button id="cal-next" class="icon-btn" aria-label="Next month">
+              <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><polyline points="9 18 15 12 9 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+          </div>
+          <div class="cal-weekdays" aria-hidden="true">
+            <span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span>
+          </div>
+          <div id="cal-grid" class="cal-grid" role="grid" aria-label="Calendar"></div>
+          <div class="cal-legend" aria-label="Color legend">
+            <span class="cal-legend-label">Feeling:</span>
+            <span class="cal-legend-item" style="--dot-color: var(--feeling-1)">Rough</span>
+            <span class="cal-legend-item" style="--dot-color: var(--feeling-2)">Okay</span>
+            <span class="cal-legend-item" style="--dot-color: var(--feeling-3)">Steady</span>
+            <span class="cal-legend-item" style="--dot-color: var(--feeling-4)">Good</span>
+            <span class="cal-legend-item" style="--dot-color: var(--feeling-5)">Great</span>
+          </div>
+          <div class="cal-legend cal-legend-dots" aria-label="Dot indicators">
+            <span class="cal-legend-label">Dots:</span>
+            <span class="cal-legend-dot-item"><span class="cal-dot cal-dot-symptom"></span>Symptoms</span>
+            <span class="cal-legend-dot-item"><span class="cal-dot cal-dot-med"></span>Meds</span>
+            <span class="cal-legend-dot-item"><span class="cal-dot cal-dot-exercise"></span>Exercise</span>
+          </div>
         </div>
       </div>
       <div id="view-charts" class="view" role="tabpanel" aria-labelledby="nav-charts" hidden>
