@@ -130,7 +130,7 @@ var QuickLog = (function() {
         if (selectedSymptoms[name]) {
           delete selectedSymptoms[name];
         } else {
-          selectedSymptoms[name] = 'none';
+          selectedSymptoms[name] = defaultSeverityKey;
         }
         renderSymptomChips();
         renderSeverityArea();
@@ -146,6 +146,7 @@ var QuickLog = (function() {
     { key: 'severe', label: 'Severe', cssVar: '--severity-high' },
     { key: 'unbearable', label: 'Unbearable', cssVar: '--severity-extreme' }
   ];
+  var defaultSeverityKey = severityLevels[0] ? severityLevels[0].key : 'none';
 
   function renderSeverityArea() {
     var area = document.getElementById('symptom-severity-area');
@@ -226,6 +227,13 @@ var QuickLog = (function() {
     if (!container) return;
     container.innerHTML = '';
     var meds = getAllMedications();
+    if (meds.length === 0) {
+      var hint = document.createElement('p');
+      hint.className = 'empty-hint';
+      hint.textContent = 'No medications set up yet. Add your medications in Settings.';
+      container.appendChild(hint);
+      return;
+    }
     meds.forEach(function(name) {
       var row = document.createElement('div');
       row.className = 'med-row';
@@ -469,6 +477,8 @@ var QuickLog = (function() {
         saveBtn.classList.add('save-pulse');
         setTimeout(function() { saveBtn.classList.remove('save-pulse'); }, 600);
       }
+      var banner = document.getElementById('welcome-banner');
+      if (banner) banner.remove();
       Settings.showToast('Entry saved');
     } else {
       Settings.showToast('Could not save — storage may be full');
@@ -507,7 +517,7 @@ var QuickLog = (function() {
     }
     // Auto-select the newly added symptom
     if (!selectedSymptoms[val]) {
-      selectedSymptoms[val] = 'none';
+      selectedSymptoms[val] = defaultSeverityKey;
     }
     input.value = '';
     renderSymptomChips();
@@ -564,6 +574,15 @@ var QuickLog = (function() {
       if (e.key === 'Enter') addCustomTriggerFromLog();
     });
 
+    // Hide cycle phase section if no phases configured
+    var phases = APP_CONFIG.cyclePhases || [];
+    if (phases.length === 0) {
+      var cycleSection = document.getElementById('cycle-heading');
+      if (cycleSection && cycleSection.closest('.log-section')) {
+        cycleSection.closest('.log-section').style.display = 'none';
+      }
+    }
+
     // Collapsibles
     initCollapsibles();
 
@@ -573,6 +592,19 @@ var QuickLog = (function() {
 
     // Set today and load
     setDate(todayStr());
+
+    // Show welcome banner for first-time users
+    if (Storage.getEntryCount() === 0) {
+      var logView = document.querySelector('.quick-log');
+      if (logView) {
+        var banner = document.createElement('div');
+        banner.className = 'welcome-banner';
+        banner.id = 'welcome-banner';
+        banner.innerHTML = '<h3>Welcome to your ' + (APP_CONFIG.name || 'Health Tracker') + '</h3>' +
+          '<p>Start by selecting how you\'re feeling, then tap any symptoms that apply. Your first entry takes less than a minute.</p>';
+        logView.insertBefore(banner, logView.children[1]);
+      }
+    }
   }
 
   function navigateToDate(dateStr) {

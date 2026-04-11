@@ -2813,7 +2813,7 @@ var QuickLog = (function() {
         if (selectedSymptoms[name]) {
           delete selectedSymptoms[name];
         } else {
-          selectedSymptoms[name] = 'none';
+          selectedSymptoms[name] = defaultSeverityKey;
         }
         renderSymptomChips();
         renderSeverityArea();
@@ -2829,6 +2829,7 @@ var QuickLog = (function() {
     { key: 'severe', label: 'Severe', cssVar: '--severity-high' },
     { key: 'unbearable', label: 'Unbearable', cssVar: '--severity-extreme' }
   ];
+  var defaultSeverityKey = severityLevels[0] ? severityLevels[0].key : 'none';
 
   function renderSeverityArea() {
     var area = document.getElementById('symptom-severity-area');
@@ -3199,7 +3200,7 @@ var QuickLog = (function() {
     }
     // Auto-select the newly added symptom
     if (!selectedSymptoms[val]) {
-      selectedSymptoms[val] = 'none';
+      selectedSymptoms[val] = defaultSeverityKey;
     }
     input.value = '';
     renderSymptomChips();

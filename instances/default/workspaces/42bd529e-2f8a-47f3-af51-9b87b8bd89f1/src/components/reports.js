@@ -69,15 +69,30 @@ var Reports = (function() {
     };
   }
 
+  function getSeverityKeys() {
+    var levels = APP_CONFIG.severityLevels || [
+      { key: 'none', label: 'None' },
+      { key: 'mild', label: 'Mild' },
+      { key: 'moderate', label: 'Moderate' },
+      { key: 'severe', label: 'Severe' },
+      { key: 'unbearable', label: 'Unbearable' }
+    ];
+    return levels;
+  }
+
   function buildSymptomFrequency(entries, dateKeys) {
     var counts = {};
     var severities = {};
+    var sevLevels = getSeverityKeys();
     dateKeys.forEach(function(d) {
       var e = entries[d];
       if (e.symptoms && typeof e.symptoms === 'object') {
         Object.keys(e.symptoms).forEach(function(s) {
           counts[s] = (counts[s] || 0) + 1;
-          if (!severities[s]) severities[s] = { none: 0, mild: 0, moderate: 0, severe: 0, unbearable: 0 };
+          if (!severities[s]) {
+            severities[s] = {};
+            sevLevels.forEach(function(l) { severities[s][l.key] = 0; });
+          }
           var sev = e.symptoms[s];
           if (severities[s][sev] !== undefined) severities[s][sev]++;
         });
@@ -185,20 +200,19 @@ var Reports = (function() {
 
     // Symptom frequency
     if (symptoms.length > 0) {
+      var sevLevels = getSeverityKeys();
       html += '<section class="report-section" aria-labelledby="report-symptoms-heading">';
       html += '<h4 id="report-symptoms-heading" class="report-section-title">Symptom Frequency</h4>';
       html += '<table class="report-table" aria-label="Symptom frequency table">';
-      html += '<thead><tr><th>Symptom</th><th>Days</th><th>None</th><th>Mild</th><th>Moderate</th><th>Severe</th><th>Unbearable</th></tr></thead>';
+      html += '<thead><tr><th>Symptom</th><th>Days</th>';
+      sevLevels.forEach(function(l) { html += '<th>' + escapeHtml(l.label) + '</th>'; });
+      html += '</tr></thead>';
       html += '<tbody>';
       symptoms.forEach(function(s) {
         html += '<tr>';
         html += '<td>' + escapeHtml(s.name) + '</td>';
         html += '<td>' + s.count + '</td>';
-        html += '<td>' + (s.severities.none || 0) + '</td>';
-        html += '<td>' + (s.severities.mild || 0) + '</td>';
-        html += '<td>' + (s.severities.moderate || 0) + '</td>';
-        html += '<td>' + (s.severities.severe || 0) + '</td>';
-        html += '<td>' + (s.severities.unbearable || 0) + '</td>';
+        sevLevels.forEach(function(l) { html += '<td>' + (s.severities[l.key] || 0) + '</td>'; });
         html += '</tr>';
       });
       html += '</tbody></table>';
@@ -309,9 +323,11 @@ var Reports = (function() {
     lines.push('');
 
     if (symptoms.length > 0) {
+      var sevLevels = getSeverityKeys();
       lines.push('--- Symptom Frequency ---');
       symptoms.forEach(function(s) {
-        lines.push(s.name + ': ' + s.count + ' days (none: ' + (s.severities.none || 0) + ', mild: ' + (s.severities.mild || 0) + ', moderate: ' + (s.severities.moderate || 0) + ', severe: ' + (s.severities.severe || 0) + ', unbearable: ' + (s.severities.unbearable || 0) + ')');
+        var parts = sevLevels.map(function(l) { return l.label.toLowerCase() + ': ' + (s.severities[l.key] || 0); });
+        lines.push(s.name + ': ' + s.count + ' days (' + parts.join(', ') + ')');
       });
       lines.push('');
     }
