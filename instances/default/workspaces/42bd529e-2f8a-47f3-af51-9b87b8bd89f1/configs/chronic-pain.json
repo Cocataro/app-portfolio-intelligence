@@ -1,0 +1,142 @@
+{
+  "variant": "chronic-pain",
+  "name": "Chronic Pain & Fibromyalgia Tracker",
+  "tagline": "Track gently. Find patterns. Bring proof to your doctor.",
+  "theme": {
+    "primary": "#9E7B6B",
+    "primaryLight": "#C49A88",
+    "primaryDark": "#8B6A5B",
+    "accent": "#7A9478",
+    "background": "#F7F3EE",
+    "surface": "#EFEBE4",
+    "surfaceAlt": "#E7E2DA",
+    "text": "#3B352E",
+    "textSecondary": "#7A7267",
+    "textMuted": "#A69E93",
+    "border": "#D8D1C7",
+    "accentSage": "#7A9478",
+    "accentAmber": "#C4A86B",
+    "success": "#7A9478",
+    "warning": "#C4A86B",
+    "error": "#A85D5D",
+    "severityNone": "#7A9478",
+    "severityMild": "#C4A86B",
+    "severityModerate": "#B87D6B",
+    "severityHigh": "#A85D5D",
+    "severityExtreme": "#8B4040",
+    "energyLow": "#B87D6B",
+    "energyMed": "#C4A86B",
+    "energyHigh": "#7A9478",
+    "dark": {
+      "background": "#1A1714",
+      "surface": "#23201C",
+      "surfaceAlt": "#2D2924",
+      "text": "#DDD6CC",
+      "textSecondary": "#9B9388",
+      "textMuted": "#6B6359",
+      "border": "#3A352F",
+      "primary": "#C49A88",
+      "primaryLight": "#D4AA98",
+      "primaryDark": "#9E7B6B",
+      "accentSage": "#8FB893",
+      "accentAmber": "#D4B87A",
+      "success": "#8FB893",
+      "severityNone": "#8FB893",
+      "severityMild": "#D4B87A",
+      "severityModerate": "#C8907A",
+      "severityHigh": "#C47474",
+      "severityExtreme": "#D45555",
+      "energyLow": "#C8907A",
+      "energyMed": "#D4B87A",
+      "energyHigh": "#8FB893"
+    }
+  },
+  "symptoms": [
+    "Widespread pain", "Fatigue", "Brain fog", "Stiffness",
+    "Joint pain", "Muscle aches", "Headache", "Numbness/tingling",
+    "Sleep disturbance", "Dizziness", "Nausea", "Digestive issues",
+    "Jaw pain (TMJ)", "Sensitivity to light", "Sensitivity to sound",
+    "Temperature sensitivity", "Swelling", "Low mood", "Anxiety"
+  ],
+  "painTypes": [
+    "Aching", "Burning", "Stabbing", "Throbbing", "Tingling",
+    "Stiffness", "Pressure", "Shooting", "Cramping"
+  ],
+  "bodyRegions": [
+    "Head", "Neck", "Shoulders", "Upper back", "Lower back",
+    "Arms", "Hands", "Chest", "Abdomen", "Hips",
+    "Upper legs", "Lower legs", "Feet", "Everywhere"
+  ],
+  "triggers": [
+    "Poor sleep", "Stress", "Weather change", "Barometric pressure",
+    "Overexertion", "Sedentary day", "Certain foods", "Alcohol",
+    "Caffeine", "Dehydration", "Hormonal changes", "Cold exposure",
+    "Humidity", "Emotional stress", "Skipped medication"
+  ],
+  "medications": [
+    "Pregabalin (Lyrica)", "Duloxetine (Cymbalta)", "Gabapentin",
+    "Amitriptyline", "Cyclobenzaprine", "Naproxen", "Ibuprofen",
+    "Acetaminophen", "Tramadol", "Lidocaine patch",
+    "Magnesium", "Vitamin D", "CoQ10", "Turmeric/Curcumin",
+    "CBD oil", "Fish oil"
+  ],
+  "medicationEffectiveness": [
+    { "value": 0, "label": "No help" },
+    { "value": 1, "label": "Some relief" },
+    { "value": 2, "label": "Good relief" },
+    { "value": 3, "label": "Resolved" }
+  ],
+  "mealOptions": ["Breakfast", "Lunch", "Dinner", "Snack"],
+  "exerciseTypes": [
+    "Gentle walking", "Stretching", "Yoga", "Swimming",
+    "Tai chi", "Pilates", "Recumbent cycling", "Rest day"
+  ],
+  "energyLevels": [
+    { "value": 1, "label": "Crashed", "color": "#B87D6B" },
+    { "value": 2, "label": "Very low", "color": "#C4A86B" },
+    { "value": 3, "label": "Low", "color": "#C4A86B" },
+    { "value": 4, "label": "Okay", "color": "#7A9478" },
+    { "value": 5, "label": "Good", "color": "#7A9478" }
+  ],
+  "moodLevels": [
+    { "value": 1, "label": "Struggling" },
+    { "value": 2, "label": "Low" },
+    { "value": 3, "label": "Okay" },
+    { "value": 4, "label": "Good" },
+    { "value": 5, "label": "Great" }
+  ],
+  "insightRules": [
+    {
+      "id": "sleep-pain-correlation",
+      "label": "Sleep and pain patterns",
+      "description": "Tracks whether poor sleep nights correlate with higher pain days"
+    },
+    {
+      "id": "trigger-frequency",
+      "label": "Most common triggers",
+      "description": "Ranks triggers by frequency over the selected period"
+    },
+    {
+      "id": "medication-effectiveness",
+      "label": "Medication impact",
+      "description": "Tracks which medications correlate with lower pain levels"
+    },
+    {
+      "id": "energy-pain-correlation",
+      "label": "Energy and pain patterns",
+      "description": "Shows how energy levels relate to pain severity over time"
+    },
+    {
+      "id": "flare-pattern",
+      "label": "Flare patterns",
+      "description": "Identifies common precursors and durations of pain flares"
+    }
+  ],
+  "feelingScale": [
+    { "value": 1, "label": "Rough", "color": "#A85D5D" },
+    { "value": 2, "label": "Okay", "color": "#C4A86B" },
+    { "value": 3, "label": "Steady", "color": "#9E7B6B" },
+    { "value": 4, "label": "Good", "color": "#7A9478" },
+    { "value": 5, "label": "Great", "color": "#8B6A5B" }
+  ]
+}
