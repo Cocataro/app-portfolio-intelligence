@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Medication & Supplement Tracker</title>
+  <script>(function(){try{var s=JSON.parse(localStorage.getItem('healthtracker_medication_settings'));var m=s&&s.darkMode||'auto';var t=m==='auto'?(window.matchMedia&&window.matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light'):m;document.documentElement.setAttribute('data-theme',t)}catch(e){}})()</script>
   <style>
     /* === CSS Variables — Medication & Supplement Tracker === */
 /* Warm slate blue + amber accent. Trustworthy, calm, readable for older demographic. */
@@ -727,7 +728,7 @@ select:focus:not(:focus-visible) {
 }
 .med-name {
   font-size: 1rem;
-  font-weight: 600;
+  font-weight: 700;
   flex: 1;
   min-width: 0;
   overflow: hidden;
@@ -1739,11 +1740,11 @@ select:focus:not(:focus-visible) {
   <div class="app-layout">
     <nav id="sidebar-nav" class="sidebar-nav" role="navigation" aria-label="Main navigation">
       <ul class="nav-list" role="tablist">
-        <li role="presentation"><button role="tab" class="nav-btn active" data-view="log" aria-selected="true" aria-controls="view-log"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" fill="none" stroke="currentColor" stroke-width="2"/><polyline points="14 2 14 8 20 8" fill="none" stroke="currentColor" stroke-width="2"/><line x1="16" y1="13" x2="8" y2="13" stroke="currentColor" stroke-width="2"/><line x1="16" y1="17" x2="8" y2="17" stroke="currentColor" stroke-width="2"/></svg><span>Log</span></button></li>
-        <li role="presentation"><button role="tab" class="nav-btn" data-view="calendar" aria-selected="false" aria-controls="view-calendar"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><line x1="16" y1="2" x2="16" y2="6" stroke="currentColor" stroke-width="2"/><line x1="8" y1="2" x2="8" y2="6" stroke="currentColor" stroke-width="2"/><line x1="3" y1="10" x2="21" y2="10" stroke="currentColor" stroke-width="2"/></svg><span>Calendar</span></button></li>
-        <li role="presentation"><button role="tab" class="nav-btn" data-view="charts" aria-selected="false" aria-controls="view-charts"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><rect x="3" y="12" width="4" height="9" fill="currentColor" rx="1"/><rect x="10" y="7" width="4" height="14" fill="currentColor" rx="1"/><rect x="17" y="3" width="4" height="18" fill="currentColor" rx="1"/></svg><span>Charts</span></button></li>
-        <li role="presentation"><button role="tab" class="nav-btn" data-view="insights" aria-selected="false" aria-controls="view-insights"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M9 18h6M10 22h4M12 2a7 7 0 015 11.9V17a1 1 0 01-1 1H8a1 1 0 01-1-1v-3.1A7 7 0 0112 2z" fill="none" stroke="currentColor" stroke-width="2"/></svg><span>Insights</span></button></li>
-        <li role="presentation"><button role="tab" class="nav-btn" data-view="reports" aria-selected="false" aria-controls="view-reports"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M17 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V5a2 2 0 00-2-2z" fill="none" stroke="currentColor" stroke-width="2"/><line x1="9" y1="7" x2="15" y2="7" stroke="currentColor" stroke-width="2"/><line x1="9" y1="11" x2="15" y2="11" stroke="currentColor" stroke-width="2"/><line x1="9" y1="15" x2="12" y2="15" stroke="currentColor" stroke-width="2"/></svg><span>Reports</span></button></li>
+        <li role="presentation"><button role="tab" id="nav-log" class="nav-btn active" data-view="log" aria-selected="true" aria-controls="view-log"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" fill="none" stroke="currentColor" stroke-width="2"/><polyline points="14 2 14 8 20 8" fill="none" stroke="currentColor" stroke-width="2"/><line x1="16" y1="13" x2="8" y2="13" stroke="currentColor" stroke-width="2"/><line x1="16" y1="17" x2="8" y2="17" stroke="currentColor" stroke-width="2"/></svg><span>Log</span></button></li>
+        <li role="presentation"><button role="tab" id="nav-calendar" class="nav-btn" data-view="calendar" aria-selected="false" aria-controls="view-calendar"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><line x1="16" y1="2" x2="16" y2="6" stroke="currentColor" stroke-width="2"/><line x1="8" y1="2" x2="8" y2="6" stroke="currentColor" stroke-width="2"/><line x1="3" y1="10" x2="21" y2="10" stroke="currentColor" stroke-width="2"/></svg><span>Calendar</span></button></li>
+        <li role="presentation"><button role="tab" id="nav-charts" class="nav-btn" data-view="charts" aria-selected="false" aria-controls="view-charts"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><rect x="3" y="12" width="4" height="9" fill="currentColor" rx="1"/><rect x="10" y="7" width="4" height="14" fill="currentColor" rx="1"/><rect x="17" y="3" width="4" height="18" fill="currentColor" rx="1"/></svg><span>Charts</span></button></li>
+        <li role="presentation"><button role="tab" id="nav-insights" class="nav-btn" data-view="insights" aria-selected="false" aria-controls="view-insights"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M9 18h6M10 22h4M12 2a7 7 0 015 11.9V17a1 1 0 01-1 1H8a1 1 0 01-1-1v-3.1A7 7 0 0112 2z" fill="none" stroke="currentColor" stroke-width="2"/></svg><span>Insights</span></button></li>
+        <li role="presentation"><button role="tab" id="nav-reports" class="nav-btn" data-view="reports" aria-selected="false" aria-controls="view-reports"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M17 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V5a2 2 0 00-2-2z" fill="none" stroke="currentColor" stroke-width="2"/><line x1="9" y1="7" x2="15" y2="7" stroke="currentColor" stroke-width="2"/><line x1="9" y1="11" x2="15" y2="11" stroke="currentColor" stroke-width="2"/><line x1="9" y1="15" x2="12" y2="15" stroke="currentColor" stroke-width="2"/></svg><span>Reports</span></button></li>
       </ul>
     </nav>
 
@@ -2727,7 +2728,7 @@ var Settings = (function() {
     renderCustomLists();
   }
 
-  function showConfirm(title, message, onConfirm) {
+  function showConfirm(title, message, onConfirm, onCancel) {
     var overlay = document.getElementById('confirm-dialog');
     var titleEl = document.getElementById('confirm-title');
     var msgEl = document.getElementById('confirm-message');
@@ -2737,7 +2738,7 @@ var Settings = (function() {
     titleEl.textContent = title;
     msgEl.textContent = message;
     overlay.removeAttribute('hidden');
-    okBtn.focus();
+    cancelBtn.focus();
 
     function cleanup() {
       overlay.setAttribute('hidden', '');
@@ -2745,9 +2746,9 @@ var Settings = (function() {
       okBtn.removeEventListener('click', handleOk);
       overlay.removeEventListener('keydown', handleEscape);
     }
-    function handleCancel() { cleanup(); }
+    function handleCancel() { cleanup(); if (onCancel) onCancel(); }
     function handleOk() { cleanup(); onConfirm(); }
-    function handleEscape(e) { if (e.key === 'Escape') cleanup(); }
+    function handleEscape(e) { if (e.key === 'Escape') { cleanup(); if (onCancel) onCancel(); } }
 
     cancelBtn.addEventListener('click', handleCancel);
     okBtn.addEventListener('click', handleOk);
@@ -2815,6 +2816,7 @@ var Settings = (function() {
     document.getElementById('restore-input').addEventListener('change', function(e) {
       var file = e.target.files[0];
       if (!file) return;
+      var inputEl = e.target;
       showConfirm('Restore from backup?', 'This will merge the backup data with your current entries. Continue?', function() {
         Storage.restoreFromFile(file, function(err, count) {
           if (err) {
@@ -2822,8 +2824,10 @@ var Settings = (function() {
           } else {
             showToast('Restored ' + count + ' entries');
           }
-          e.target.value = '';
+          inputEl.value = '';
         });
+      }, function() {
+        inputEl.value = '';
       });
     });
 
@@ -2835,6 +2839,12 @@ var Settings = (function() {
         function() {
           Storage.clearAll();
           showToast('All data cleared');
+          if (typeof Calendar !== 'undefined' && Calendar.render) Calendar.render();
+          var activeView = document.querySelector('.nav-btn.active');
+          if (activeView) {
+            var view = activeView.getAttribute('data-view');
+            document.dispatchEvent(new CustomEvent('viewchange', { detail: { view: view } }));
+          }
         }
       );
     });
@@ -3605,8 +3615,13 @@ var Calendar = (function() {
     });
 
     document.getElementById('cal-next').addEventListener('click', function() {
-      currentMonth++;
-      if (currentMonth > 11) { currentMonth = 0; currentYear++; }
+      var now = new Date();
+      var nextMonth = currentMonth + 1;
+      var nextYear = currentYear;
+      if (nextMonth > 11) { nextMonth = 0; nextYear++; }
+      if (nextYear > now.getFullYear() || (nextYear === now.getFullYear() && nextMonth > now.getMonth())) return;
+      currentMonth = nextMonth;
+      currentYear = nextYear;
       render();
     });
 
@@ -4659,7 +4674,7 @@ var Reports = (function() {
       var sevLevels = getSeverityKeys();
       html += '<section class="report-section" aria-labelledby="report-symptoms-heading">';
       html += '<h4 id="report-symptoms-heading" class="report-section-title">Symptom Frequency</h4>';
-      html += '<table class="report-table" aria-label="Symptom frequency table">';
+      html += '<div class="report-table-wrapper"><table class="report-table" aria-label="Symptom frequency table">';
       html += '<thead><tr><th>Symptom</th><th>Days</th>';
       sevLevels.forEach(function(l) { html += '<th>' + escapeHtml(l.label) + '</th>'; });
       html += '</tr></thead>';
@@ -4671,7 +4686,7 @@ var Reports = (function() {
         sevLevels.forEach(function(l) { html += '<td>' + (s.severities[l.key] || 0) + '</td>'; });
         html += '</tr>';
       });
-      html += '</tbody></table>';
+      html += '</tbody></table></div>';
       html += '</section>';
     }
 
@@ -4679,7 +4694,7 @@ var Reports = (function() {
     if (meds.length > 0) {
       html += '<section class="report-section" aria-labelledby="report-meds-heading">';
       html += '<h4 id="report-meds-heading" class="report-section-title">Medication Adherence</h4>';
-      html += '<table class="report-table" aria-label="Medication adherence table">';
+      html += '<div class="report-table-wrapper"><table class="report-table" aria-label="Medication adherence table">';
       html += '<thead><tr><th>Medication</th><th>Taken</th><th>Skipped</th><th>Logged</th><th>Rate</th></tr></thead>';
       html += '<tbody>';
       meds.forEach(function(m) {
@@ -4691,7 +4706,7 @@ var Reports = (function() {
         html += '<td>' + m.pct + '%</td>';
         html += '</tr>';
       });
-      html += '</tbody></table>';
+      html += '</tbody></table></div>';
       html += '</section>';
     }
 
@@ -4699,13 +4714,13 @@ var Reports = (function() {
     if (cycle.length > 0) {
       html += '<section class="report-section" aria-labelledby="report-cycle-heading">';
       html += '<h4 id="report-cycle-heading" class="report-section-title">Cycle Overview</h4>';
-      html += '<table class="report-table" aria-label="Cycle phase table">';
+      html += '<div class="report-table-wrapper"><table class="report-table" aria-label="Cycle phase table">';
       html += '<thead><tr><th>Phase</th><th>Days</th></tr></thead>';
       html += '<tbody>';
       cycle.forEach(function(c) {
         html += '<tr><td>' + escapeHtml(c.phase) + '</td><td>' + c.days + '</td></tr>';
       });
-      html += '</tbody></table>';
+      html += '</tbody></table></div>';
       html += '</section>';
     }
 
@@ -4713,7 +4728,7 @@ var Reports = (function() {
     if (feelings.length > 0) {
       html += '<section class="report-section" aria-labelledby="report-feeling-heading">';
       html += '<h4 id="report-feeling-heading" class="report-section-title">Feeling Trend</h4>';
-      html += '<table class="report-table" aria-label="Feeling trend table">';
+      html += '<div class="report-table-wrapper"><table class="report-table" aria-label="Feeling trend table">';
       html += '<thead><tr><th>Date</th><th>Feeling</th></tr></thead>';
       html += '<tbody>';
       var scale = APP_CONFIG.feelingScale || [];
@@ -4722,7 +4737,7 @@ var Reports = (function() {
         scale.forEach(function(s) { if (s.value === f.feeling) label = s.label + ' (' + f.feeling + ')'; });
         html += '<tr><td>' + formatDate(f.date) + '</td><td>' + escapeHtml(label) + '</td></tr>';
       });
-      html += '</tbody></table>';
+      html += '</tbody></table></div>';
       html += '</section>';
     }
 
@@ -5097,8 +5112,7 @@ var Reports = (function() {
   'use strict';
 
   function initApp() {
-    // Initialize modules in order
-    Theme.init();
+    // Initialize modules in order (Theme.init already called in boot)
     Navigation.init();
     Settings.init();
     QuickLog.init();
