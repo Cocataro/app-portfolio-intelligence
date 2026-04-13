@@ -662,6 +662,112 @@ select:focus:not(:focus-visible) {
 .feeling-num { font-size: 1.125rem; font-weight: 700; line-height: 1; }
 .feeling-label { font-size: 0.6875rem; font-weight: 500; }
 
+/* Pain Scale */
+.pain-scale-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.pain-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 8px;
+  border-radius: 4px;
+  background: linear-gradient(to right, var(--success) 0%, var(--severity-mild) 40%, var(--severity-high) 70%, var(--severity-extreme) 100%);
+  outline: none;
+  cursor: pointer;
+}
+.pain-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--surface);
+  border: 3px solid var(--primary);
+  cursor: pointer;
+  box-shadow: 0 1px 4px var(--shadow);
+}
+.pain-slider::-moz-range-thumb {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--surface);
+  border: 3px solid var(--primary);
+  cursor: pointer;
+  box-shadow: 0 1px 4px var(--shadow);
+}
+.pain-slider:focus-visible::-webkit-slider-thumb {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+.pain-slider:focus-visible::-moz-range-thumb {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+.pain-scale-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.6875rem;
+  color: var(--text-muted);
+  padding: 0 2px;
+}
+.pain-scale-value {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  font-size: 0.9375rem;
+}
+#pain-value-display {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--primary);
+  min-width: 1.5em;
+}
+#pain-value-label {
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+}
+
+/* Flare Toggle */
+.flare-toggle-wrapper {
+  display: flex;
+}
+.flare-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0.75rem 1.25rem;
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--text);
+  cursor: pointer;
+  font-size: 0.9375rem;
+  min-height: 44px;
+  transition: border-color 0.15s, background 0.15s;
+}
+.flare-btn:hover {
+  border-color: var(--severity-high);
+}
+.flare-btn.active {
+  background: var(--severity-high);
+  border-color: var(--severity-high);
+  color: #fff;
+}
+.flare-btn:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+.flare-icon {
+  display: flex;
+  align-items: center;
+}
+.flare-label {
+  font-weight: 500;
+}
+
 /* Severity area */
 .severity-area {
   margin-top: 0.75rem;
@@ -1822,6 +1928,42 @@ select:focus:not(:focus-visible) {
             <div id="feeling-scale" class="feeling-scale" role="radiogroup" aria-label="Overall feeling"></div>
           </section>
 
+          <section id="pain-section" class="log-section" aria-labelledby="pain-heading" hidden>
+            <h3 id="pain-heading" class="log-section-title">Pain Level</h3>
+            <div class="pain-scale-wrapper">
+              <input type="range" id="pain-scale" class="pain-slider" min="0" max="10" value="0" step="1" aria-label="Pain level 0 to 10" aria-valuemin="0" aria-valuemax="10">
+              <div class="pain-scale-labels" aria-hidden="true">
+                <span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span>
+              </div>
+              <div class="pain-scale-value" aria-live="polite">
+                <span id="pain-value-display">0</span>
+                <span id="pain-value-label">No pain</span>
+              </div>
+            </div>
+          </section>
+
+          <section id="pain-type-section" class="log-section" aria-labelledby="pain-type-heading" hidden>
+            <h3 id="pain-type-heading" class="log-section-title">Pain Type</h3>
+            <div id="pain-type-chips" class="chip-list" role="group" aria-label="Pain type selection"></div>
+          </section>
+
+          <section id="body-region-section" class="log-section" aria-labelledby="body-region-heading" hidden>
+            <h3 id="body-region-heading" class="log-section-title">Where does it hurt?</h3>
+            <div id="body-region-chips" class="chip-list" role="group" aria-label="Body region selection"></div>
+          </section>
+
+          <section id="flare-section" class="log-section" aria-labelledby="flare-heading" hidden>
+            <h3 id="flare-heading" class="log-section-title">Flare Day?</h3>
+            <div class="flare-toggle-wrapper">
+              <button type="button" id="flare-toggle" class="flare-btn" role="switch" aria-checked="false" aria-label="Mark as flare day">
+                <span class="flare-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" width="22" height="22"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </span>
+                <span class="flare-label">This is a flare day</span>
+              </button>
+            </div>
+          </section>
+
           <section class="log-section" aria-labelledby="symptoms-heading">
             <h3 id="symptoms-heading" class="log-section-title">Symptoms</h3>
             <div id="symptom-chips" class="chip-list" role="group" aria-label="Symptom selection"></div>
@@ -2228,9 +2370,19 @@ var Setup = (function() {
 
   var SETUP_KEY = 'healthtracker_' + APP_CONFIG.variant + '_settings';
   var currentStep = 0;
-  var totalSteps = 4;
+  var isPregnancy = APP_CONFIG.variant === 'pregnancy';
+  var totalSteps = isPregnancy ? 5 : 4;
   var selectedSymptoms = [];
   var userName = '';
+  var dueDate = '';
+
+  // Maps step index to step ID based on variant
+  function getStepId(step) {
+    if (isPregnancy) {
+      return ['welcome', 'name', 'duedate', 'symptoms', 'done'][step];
+    }
+    return ['welcome', 'name', 'symptoms', 'done'][step];
+  }
 
   function isFirstTime() {
     try {
@@ -2261,6 +2413,21 @@ var Setup = (function() {
     overlay.removeAttribute('hidden');
     document.body.classList.add('setup-active');
 
+    // Generate progress dots based on totalSteps
+    var progressContainer = overlay.querySelector('.setup-progress');
+    if (progressContainer) {
+      var existingDots = progressContainer.querySelectorAll('.setup-progress-dot');
+      // Rebuild dots to match totalSteps
+      existingDots.forEach(function(d) { d.remove(); });
+      for (var i = 0; i < totalSteps; i++) {
+        var dot = document.createElement('span');
+        dot.className = 'setup-progress-dot' + (i === 0 ? ' active' : '');
+        dot.setAttribute('aria-label', getStepId(i));
+        if (i === 0) dot.setAttribute('aria-current', 'step');
+        progressContainer.appendChild(dot);
+      }
+    }
+
     renderStep(0);
     bindEvents(onComplete);
     updateProgress();
@@ -2278,17 +2445,21 @@ var Setup = (function() {
     if (!container) return;
 
     var html = '';
-    switch (step) {
-      case 0:
+    var stepId = getStepId(step);
+    switch (stepId) {
+      case 'welcome':
         html = renderWelcome();
         break;
-      case 1:
+      case 'name':
         html = renderName();
         break;
-      case 2:
+      case 'duedate':
+        html = renderDueDate();
+        break;
+      case 'symptoms':
         html = renderSymptoms();
         break;
-      case 3:
+      case 'done':
         html = renderDone();
         break;
     }
@@ -2325,6 +2496,17 @@ var Setup = (function() {
       '<div class="setup-input-group">' +
         '<label for="setup-name-input" class="sr-only">Your name (optional)</label>' +
         '<input type="text" id="setup-name-input" class="setup-input" placeholder="Your name (optional)" maxlength="30" aria-label="Your name (optional)" value="' + escapeHtml(userName) + '">' +
+      '</div>' +
+    '</div>';
+  }
+
+  function renderDueDate() {
+    return '<div class="setup-step setup-due-date">' +
+      '<h2 tabindex="-1" class="setup-heading">When is your due date?</h2>' +
+      '<p class="setup-text">This helps calculate your trimester and week. You can update it anytime in Settings.</p>' +
+      '<div class="setup-input-group">' +
+        '<label for="setup-due-date-input" class="sr-only">Expected due date</label>' +
+        '<input type="date" id="setup-due-date-input" class="setup-input" aria-label="Expected due date" value="' + escapeHtml(dueDate) + '">' +
       '</div>' +
     '</div>';
   }
@@ -2416,10 +2598,14 @@ var Setup = (function() {
     var nextBtn = document.getElementById('setup-next');
     if (nextBtn) {
       nextBtn.addEventListener('click', function() {
-        // Save name from step 1
-        if (currentStep === 1) {
+        var stepId = getStepId(currentStep);
+        if (stepId === 'name') {
           var input = document.getElementById('setup-name-input');
           if (input) userName = input.value.trim();
+        }
+        if (stepId === 'duedate') {
+          var dateInput = document.getElementById('setup-due-date-input');
+          if (dateInput) dueDate = dateInput.value.trim();
         }
 
         if (currentStep < totalSteps - 1) {
@@ -2434,9 +2620,14 @@ var Setup = (function() {
     var backBtn = document.getElementById('setup-back');
     if (backBtn) {
       backBtn.addEventListener('click', function() {
-        if (currentStep === 1) {
+        var stepId = getStepId(currentStep);
+        if (stepId === 'name') {
           var input = document.getElementById('setup-name-input');
           if (input) userName = input.value.trim();
+        }
+        if (stepId === 'duedate') {
+          var dateInput = document.getElementById('setup-due-date-input');
+          if (dateInput) dueDate = dateInput.value.trim();
         }
         if (currentStep > 0) {
           renderStep(currentStep - 1);
@@ -2448,8 +2639,12 @@ var Setup = (function() {
     var skipBtn = document.getElementById('setup-skip');
     if (skipBtn) {
       skipBtn.addEventListener('click', function() {
-        if (currentStep === 1) {
+        var stepId = getStepId(currentStep);
+        if (stepId === 'name') {
           userName = '';
+        }
+        if (stepId === 'duedate') {
+          dueDate = '';
         }
         if (currentStep < totalSteps - 1) {
           renderStep(currentStep + 1);
@@ -2487,7 +2682,7 @@ var Setup = (function() {
 
     // Keyboard: Enter on name input advances
     overlay.addEventListener('keydown', function(e) {
-      if (e.key === 'Enter' && e.target.id === 'setup-name-input') {
+      if (e.key === 'Enter' && (e.target.id === 'setup-name-input' || e.target.id === 'setup-due-date-input')) {
         e.preventDefault();
         if (nextBtn) nextBtn.click();
       }
@@ -2507,6 +2702,7 @@ var Setup = (function() {
     settings.setupComplete = true;
     settings.userName = userName;
     settings.activeSymptoms = activeSymptoms;
+    if (dueDate) settings.dueDate = dueDate;
     Storage.saveSettings(settings);
 
     // Transition out
@@ -2691,6 +2887,17 @@ var Settings = (function() {
     if (!panel) return;
     panel.removeAttribute('hidden');
     renderCustomLists();
+    // Populate due date if pregnancy variant
+    var dueDateInput = document.getElementById('settings-due-date');
+    if (dueDateInput && typeof PregnancyStorage !== 'undefined') {
+      dueDateInput.value = PregnancyStorage.getDueDate() || '';
+    }
+    // Populate dark mode select
+    var darkModeSelect = document.getElementById('dark-mode-select');
+    if (darkModeSelect) {
+      var settings = Storage.getSettings();
+      darkModeSelect.value = settings.darkMode || 'auto';
+    }
     // Focus the close button
     var close = document.getElementById('settings-close');
     if (close) close.focus();
@@ -2791,7 +2998,7 @@ var Settings = (function() {
     titleEl.textContent = title;
     msgEl.textContent = message;
     overlay.removeAttribute('hidden');
-    okBtn.focus();
+    cancelBtn.focus();
 
     function cleanup() {
       overlay.setAttribute('hidden', '');
@@ -2835,6 +3042,30 @@ var Settings = (function() {
     document.getElementById('settings-panel').addEventListener('click', function(e) {
       if (e.target === document.getElementById('settings-panel')) close();
     });
+
+    // Due date (pregnancy variant)
+    var dueDateInput = document.getElementById('settings-due-date');
+    if (dueDateInput && typeof PregnancyStorage !== 'undefined') {
+      dueDateInput.addEventListener('change', function() {
+        var val = this.value;
+        if (val) {
+          PregnancyStorage.setDueDate(val);
+          showToast('Due date updated');
+          if (typeof Dashboard !== 'undefined') Dashboard.render();
+        }
+      });
+    }
+
+    // Dark mode select
+    var darkModeSelect = document.getElementById('dark-mode-select');
+    if (darkModeSelect) {
+      darkModeSelect.addEventListener('change', function() {
+        var s = Storage.getSettings();
+        s.darkMode = this.value;
+        Storage.saveSettings(s);
+        if (typeof Theme !== 'undefined') Theme.apply(this.value);
+      });
+    }
 
     // Custom item add buttons
     document.getElementById('add-custom-symptom').addEventListener('click', function() {
@@ -2909,6 +3140,15 @@ var QuickLog = (function() {
   var selectedFeeling = 0;
   var selectedCyclePhase = '';
   var sleepQuality = 0;
+  var painLevel = 0;
+  var selectedPainTypes = [];
+  var selectedBodyRegions = [];
+  var isFlareDay = false;
+
+  var hasPainFields = !!(APP_CONFIG.painTypes && APP_CONFIG.painTypes.length);
+
+  var painLabels = ['No pain', 'Minimal', 'Mild', 'Uncomfortable', 'Moderate',
+    'Distracting', 'Distressing', 'Unmanageable', 'Intense', 'Severe', 'Worst possible'];
 
   function todayStr() {
     var d = new Date();
@@ -3011,6 +3251,78 @@ var QuickLog = (function() {
 
       container.appendChild(btn);
     });
+  }
+
+  function renderPainScale() {
+    var slider = document.getElementById('pain-scale');
+    var display = document.getElementById('pain-value-display');
+    var label = document.getElementById('pain-value-label');
+    if (!slider || !display || !label) return;
+    slider.value = painLevel;
+    display.textContent = painLevel;
+    label.textContent = painLabels[painLevel] || '';
+    slider.style.setProperty('--pain-pct', (painLevel / 10 * 100) + '%');
+  }
+
+  function renderPainTypeChips() {
+    var container = document.getElementById('pain-type-chips');
+    if (!container) return;
+    container.innerHTML = '';
+    var types = APP_CONFIG.painTypes || [];
+    types.forEach(function(name) {
+      var chip = document.createElement('button');
+      chip.type = 'button';
+      chip.className = 'chip';
+      chip.textContent = name;
+      chip.setAttribute('aria-pressed', selectedPainTypes.indexOf(name) !== -1 ? 'true' : 'false');
+      if (selectedPainTypes.indexOf(name) !== -1) chip.classList.add('selected');
+      chip.addEventListener('click', function() {
+        var idx = selectedPainTypes.indexOf(name);
+        if (idx !== -1) {
+          selectedPainTypes.splice(idx, 1);
+        } else {
+          selectedPainTypes.push(name);
+        }
+        renderPainTypeChips();
+      });
+      container.appendChild(chip);
+    });
+  }
+
+  function renderBodyRegionChips() {
+    var container = document.getElementById('body-region-chips');
+    if (!container) return;
+    container.innerHTML = '';
+    var regions = APP_CONFIG.bodyRegions || [];
+    regions.forEach(function(name) {
+      var chip = document.createElement('button');
+      chip.type = 'button';
+      chip.className = 'chip';
+      chip.textContent = name;
+      chip.setAttribute('aria-pressed', selectedBodyRegions.indexOf(name) !== -1 ? 'true' : 'false');
+      if (selectedBodyRegions.indexOf(name) !== -1) chip.classList.add('selected');
+      chip.addEventListener('click', function() {
+        var idx = selectedBodyRegions.indexOf(name);
+        if (idx !== -1) {
+          selectedBodyRegions.splice(idx, 1);
+        } else {
+          selectedBodyRegions.push(name);
+        }
+        renderBodyRegionChips();
+      });
+      container.appendChild(chip);
+    });
+  }
+
+  function renderFlareToggle() {
+    var btn = document.getElementById('flare-toggle');
+    if (!btn) return;
+    btn.setAttribute('aria-checked', isFlareDay ? 'true' : 'false');
+    if (isFlareDay) {
+      btn.classList.add('active');
+    } else {
+      btn.classList.remove('active');
+    }
   }
 
   function renderSymptomChips() {
@@ -3273,6 +3585,14 @@ var QuickLog = (function() {
       notes: ''
     };
 
+    // Pain fields (chronic-pain variant)
+    if (hasPainFields) {
+      entry.painLevel = painLevel;
+      entry.painTypes = selectedPainTypes.slice();
+      entry.bodyRegions = selectedBodyRegions.slice();
+      entry.isFlare = isFlareDay;
+    }
+
     // Symptoms with severity
     entry.symptoms = JSON.parse(JSON.stringify(selectedSymptoms));
 
@@ -3316,6 +3636,10 @@ var QuickLog = (function() {
     selectedFeeling = 0;
     selectedCyclePhase = '';
     sleepQuality = 0;
+    painLevel = 0;
+    selectedPainTypes = [];
+    selectedBodyRegions = [];
+    isFlareDay = false;
 
     var entry = Storage.getEntry(dateStr);
     if (entry) {
@@ -3335,10 +3659,24 @@ var QuickLog = (function() {
       if (entry.sleep) {
         sleepQuality = entry.sleep.quality || 0;
       }
+
+      // Pain fields
+      if (hasPainFields) {
+        painLevel = entry.painLevel || 0;
+        if (Array.isArray(entry.painTypes)) selectedPainTypes = entry.painTypes.slice();
+        if (Array.isArray(entry.bodyRegions)) selectedBodyRegions = entry.bodyRegions.slice();
+        isFlareDay = !!entry.isFlare;
+      }
     }
 
     // Render all sections
     renderFeelingScale();
+    if (hasPainFields) {
+      renderPainScale();
+      renderPainTypeChips();
+      renderBodyRegionChips();
+      renderFlareToggle();
+    }
     renderSymptomChips();
     renderSeverityArea();
     renderTriggerChips();
@@ -3473,6 +3811,32 @@ var QuickLog = (function() {
     document.getElementById('log-custom-trigger').addEventListener('keydown', function(e) {
       if (e.key === 'Enter') addCustomTriggerFromLog();
     });
+
+    // Show pain sections if variant has pain fields
+    if (hasPainFields) {
+      ['pain-section', 'pain-type-section', 'body-region-section', 'flare-section'].forEach(function(id) {
+        var el = document.getElementById(id);
+        if (el) el.removeAttribute('hidden');
+      });
+
+      // Pain slider
+      var painSlider = document.getElementById('pain-scale');
+      if (painSlider) {
+        painSlider.addEventListener('input', function() {
+          painLevel = parseInt(this.value) || 0;
+          renderPainScale();
+        });
+      }
+
+      // Flare toggle
+      var flareBtn = document.getElementById('flare-toggle');
+      if (flareBtn) {
+        flareBtn.addEventListener('click', function() {
+          isFlareDay = !isFlareDay;
+          renderFlareToggle();
+        });
+      }
+    }
 
     // Hide cycle phase section if no phases configured
     var phases = APP_CONFIG.cyclePhases || [];
@@ -5151,8 +5515,7 @@ var Reports = (function() {
   'use strict';
 
   function initApp() {
-    // Initialize modules in order
-    Theme.init();
+    // Initialize modules in order (Theme.init() already called in boot())
     Navigation.init();
     Settings.init();
     if (typeof Dashboard !== 'undefined') Dashboard.init();

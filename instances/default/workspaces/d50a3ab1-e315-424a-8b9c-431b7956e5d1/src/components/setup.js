@@ -4,10 +4,19 @@ var Setup = (function() {
 
   var SETUP_KEY = 'healthtracker_' + APP_CONFIG.variant + '_settings';
   var currentStep = 0;
-  var totalSteps = 5;
+  var isPregnancy = APP_CONFIG.variant === 'pregnancy';
+  var totalSteps = isPregnancy ? 5 : 4;
   var selectedSymptoms = [];
   var userName = '';
   var dueDate = '';
+
+  // Maps step index to step ID based on variant
+  function getStepId(step) {
+    if (isPregnancy) {
+      return ['welcome', 'name', 'duedate', 'symptoms', 'done'][step];
+    }
+    return ['welcome', 'name', 'symptoms', 'done'][step];
+  }
 
   function isFirstTime() {
     try {
@@ -38,6 +47,21 @@ var Setup = (function() {
     overlay.removeAttribute('hidden');
     document.body.classList.add('setup-active');
 
+    // Generate progress dots based on totalSteps
+    var progressContainer = overlay.querySelector('.setup-progress');
+    if (progressContainer) {
+      var existingDots = progressContainer.querySelectorAll('.setup-progress-dot');
+      // Rebuild dots to match totalSteps
+      existingDots.forEach(function(d) { d.remove(); });
+      for (var i = 0; i < totalSteps; i++) {
+        var dot = document.createElement('span');
+        dot.className = 'setup-progress-dot' + (i === 0 ? ' active' : '');
+        dot.setAttribute('aria-label', getStepId(i));
+        if (i === 0) dot.setAttribute('aria-current', 'step');
+        progressContainer.appendChild(dot);
+      }
+    }
+
     renderStep(0);
     bindEvents(onComplete);
     updateProgress();
@@ -55,20 +79,21 @@ var Setup = (function() {
     if (!container) return;
 
     var html = '';
-    switch (step) {
-      case 0:
+    var stepId = getStepId(step);
+    switch (stepId) {
+      case 'welcome':
         html = renderWelcome();
         break;
-      case 1:
+      case 'name':
         html = renderName();
         break;
-      case 2:
+      case 'duedate':
         html = renderDueDate();
         break;
-      case 3:
+      case 'symptoms':
         html = renderSymptoms();
         break;
-      case 4:
+      case 'done':
         html = renderDone();
         break;
     }
@@ -207,13 +232,12 @@ var Setup = (function() {
     var nextBtn = document.getElementById('setup-next');
     if (nextBtn) {
       nextBtn.addEventListener('click', function() {
-        // Save name from step 1
-        if (currentStep === 1) {
+        var stepId = getStepId(currentStep);
+        if (stepId === 'name') {
           var input = document.getElementById('setup-name-input');
           if (input) userName = input.value.trim();
         }
-        // Save due date from step 2
-        if (currentStep === 2) {
+        if (stepId === 'duedate') {
           var dateInput = document.getElementById('setup-due-date-input');
           if (dateInput) dueDate = dateInput.value.trim();
         }
@@ -230,11 +254,12 @@ var Setup = (function() {
     var backBtn = document.getElementById('setup-back');
     if (backBtn) {
       backBtn.addEventListener('click', function() {
-        if (currentStep === 1) {
+        var stepId = getStepId(currentStep);
+        if (stepId === 'name') {
           var input = document.getElementById('setup-name-input');
           if (input) userName = input.value.trim();
         }
-        if (currentStep === 2) {
+        if (stepId === 'duedate') {
           var dateInput = document.getElementById('setup-due-date-input');
           if (dateInput) dueDate = dateInput.value.trim();
         }
@@ -248,10 +273,11 @@ var Setup = (function() {
     var skipBtn = document.getElementById('setup-skip');
     if (skipBtn) {
       skipBtn.addEventListener('click', function() {
-        if (currentStep === 1) {
+        var stepId = getStepId(currentStep);
+        if (stepId === 'name') {
           userName = '';
         }
-        if (currentStep === 2) {
+        if (stepId === 'duedate') {
           dueDate = '';
         }
         if (currentStep < totalSteps - 1) {

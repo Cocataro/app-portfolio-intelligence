@@ -56,6 +56,42 @@
             <div id="feeling-scale" class="feeling-scale" role="radiogroup" aria-label="Overall feeling"></div>
           </section>
 
+          <section id="pain-section" class="log-section" aria-labelledby="pain-heading" hidden>
+            <h3 id="pain-heading" class="log-section-title">Pain Level</h3>
+            <div class="pain-scale-wrapper">
+              <input type="range" id="pain-scale" class="pain-slider" min="0" max="10" value="0" step="1" aria-label="Pain level 0 to 10" aria-valuemin="0" aria-valuemax="10">
+              <div class="pain-scale-labels" aria-hidden="true">
+                <span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span>
+              </div>
+              <div class="pain-scale-value" aria-live="polite">
+                <span id="pain-value-display">0</span>
+                <span id="pain-value-label">No pain</span>
+              </div>
+            </div>
+          </section>
+
+          <section id="pain-type-section" class="log-section" aria-labelledby="pain-type-heading" hidden>
+            <h3 id="pain-type-heading" class="log-section-title">Pain Type</h3>
+            <div id="pain-type-chips" class="chip-list" role="group" aria-label="Pain type selection"></div>
+          </section>
+
+          <section id="body-region-section" class="log-section" aria-labelledby="body-region-heading" hidden>
+            <h3 id="body-region-heading" class="log-section-title">Where does it hurt?</h3>
+            <div id="body-region-chips" class="chip-list" role="group" aria-label="Body region selection"></div>
+          </section>
+
+          <section id="flare-section" class="log-section" aria-labelledby="flare-heading" hidden>
+            <h3 id="flare-heading" class="log-section-title">Flare Day?</h3>
+            <div class="flare-toggle-wrapper">
+              <button type="button" id="flare-toggle" class="flare-btn" role="switch" aria-checked="false" aria-label="Mark as flare day">
+                <span class="flare-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" width="22" height="22"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </span>
+                <span class="flare-label">This is a flare day</span>
+              </button>
+            </div>
+          </section>
+
           <section class="log-section" aria-labelledby="symptoms-heading">
             <h3 id="symptoms-heading" class="log-section-title">Symptoms</h3>
             <div id="symptom-chips" class="chip-list" role="group" aria-label="Symptom selection"></div>

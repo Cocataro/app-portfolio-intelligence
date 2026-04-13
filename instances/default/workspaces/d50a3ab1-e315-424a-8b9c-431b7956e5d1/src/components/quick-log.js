@@ -9,6 +9,15 @@ var QuickLog = (function() {
   var selectedFeeling = 0;
   var selectedCyclePhase = '';
   var sleepQuality = 0;
+  var painLevel = 0;
+  var selectedPainTypes = [];
+  var selectedBodyRegions = [];
+  var isFlareDay = false;
+
+  var hasPainFields = !!(APP_CONFIG.painTypes && APP_CONFIG.painTypes.length);
+
+  var painLabels = ['No pain', 'Minimal', 'Mild', 'Uncomfortable', 'Moderate',
+    'Distracting', 'Distressing', 'Unmanageable', 'Intense', 'Severe', 'Worst possible'];
 
   function todayStr() {
     var d = new Date();
@@ -111,6 +120,78 @@ var QuickLog = (function() {
 
       container.appendChild(btn);
     });
+  }
+
+  function renderPainScale() {
+    var slider = document.getElementById('pain-scale');
+    var display = document.getElementById('pain-value-display');
+    var label = document.getElementById('pain-value-label');
+    if (!slider || !display || !label) return;
+    slider.value = painLevel;
+    display.textContent = painLevel;
+    label.textContent = painLabels[painLevel] || '';
+    slider.style.setProperty('--pain-pct', (painLevel / 10 * 100) + '%');
+  }
+
+  function renderPainTypeChips() {
+    var container = document.getElementById('pain-type-chips');
+    if (!container) return;
+    container.innerHTML = '';
+    var types = APP_CONFIG.painTypes || [];
+    types.forEach(function(name) {
+      var chip = document.createElement('button');
+      chip.type = 'button';
+      chip.className = 'chip';
+      chip.textContent = name;
+      chip.setAttribute('aria-pressed', selectedPainTypes.indexOf(name) !== -1 ? 'true' : 'false');
+      if (selectedPainTypes.indexOf(name) !== -1) chip.classList.add('selected');
+      chip.addEventListener('click', function() {
+        var idx = selectedPainTypes.indexOf(name);
+        if (idx !== -1) {
+          selectedPainTypes.splice(idx, 1);
+        } else {
+          selectedPainTypes.push(name);
+        }
+        renderPainTypeChips();
+      });
+      container.appendChild(chip);
+    });
+  }
+
+  function renderBodyRegionChips() {
+    var container = document.getElementById('body-region-chips');
+    if (!container) return;
+    container.innerHTML = '';
+    var regions = APP_CONFIG.bodyRegions || [];
+    regions.forEach(function(name) {
+      var chip = document.createElement('button');
+      chip.type = 'button';
+      chip.className = 'chip';
+      chip.textContent = name;
+      chip.setAttribute('aria-pressed', selectedBodyRegions.indexOf(name) !== -1 ? 'true' : 'false');
+      if (selectedBodyRegions.indexOf(name) !== -1) chip.classList.add('selected');
+      chip.addEventListener('click', function() {
+        var idx = selectedBodyRegions.indexOf(name);
+        if (idx !== -1) {
+          selectedBodyRegions.splice(idx, 1);
+        } else {
+          selectedBodyRegions.push(name);
+        }
+        renderBodyRegionChips();
+      });
+      container.appendChild(chip);
+    });
+  }
+
+  function renderFlareToggle() {
+    var btn = document.getElementById('flare-toggle');
+    if (!btn) return;
+    btn.setAttribute('aria-checked', isFlareDay ? 'true' : 'false');
+    if (isFlareDay) {
+      btn.classList.add('active');
+    } else {
+      btn.classList.remove('active');
+    }
   }
 
   function renderSymptomChips() {
@@ -373,6 +454,14 @@ var QuickLog = (function() {
       notes: ''
     };
 
+    // Pain fields (chronic-pain variant)
+    if (hasPainFields) {
+      entry.painLevel = painLevel;
+      entry.painTypes = selectedPainTypes.slice();
+      entry.bodyRegions = selectedBodyRegions.slice();
+      entry.isFlare = isFlareDay;
+    }
+
     // Symptoms with severity
     entry.symptoms = JSON.parse(JSON.stringify(selectedSymptoms));
 
@@ -416,6 +505,10 @@ var QuickLog = (function() {
     selectedFeeling = 0;
     selectedCyclePhase = '';
     sleepQuality = 0;
+    painLevel = 0;
+    selectedPainTypes = [];
+    selectedBodyRegions = [];
+    isFlareDay = false;
 
     var entry = Storage.getEntry(dateStr);
     if (entry) {
@@ -435,10 +528,24 @@ var QuickLog = (function() {
       if (entry.sleep) {
         sleepQuality = entry.sleep.quality || 0;
       }
+
+      // Pain fields
+      if (hasPainFields) {
+        painLevel = entry.painLevel || 0;
+        if (Array.isArray(entry.painTypes)) selectedPainTypes = entry.painTypes.slice();
+        if (Array.isArray(entry.bodyRegions)) selectedBodyRegions = entry.bodyRegions.slice();
+        isFlareDay = !!entry.isFlare;
+      }
     }
 
     // Render all sections
     renderFeelingScale();
+    if (hasPainFields) {
+      renderPainScale();
+      renderPainTypeChips();
+      renderBodyRegionChips();
+      renderFlareToggle();
+    }
     renderSymptomChips();
     renderSeverityArea();
     renderTriggerChips();
@@ -573,6 +680,32 @@ var QuickLog = (function() {
     document.getElementById('log-custom-trigger').addEventListener('keydown', function(e) {
       if (e.key === 'Enter') addCustomTriggerFromLog();
     });
+
+    // Show pain sections if variant has pain fields
+    if (hasPainFields) {
+      ['pain-section', 'pain-type-section', 'body-region-section', 'flare-section'].forEach(function(id) {
+        var el = document.getElementById(id);
+        if (el) el.removeAttribute('hidden');
+      });
+
+      // Pain slider
+      var painSlider = document.getElementById('pain-scale');
+      if (painSlider) {
+        painSlider.addEventListener('input', function() {
+          painLevel = parseInt(this.value) || 0;
+          renderPainScale();
+        });
+      }
+
+      // Flare toggle
+      var flareBtn = document.getElementById('flare-toggle');
+      if (flareBtn) {
+        flareBtn.addEventListener('click', function() {
+          isFlareDay = !isFlareDay;
+          renderFlareToggle();
+        });
+      }
+    }
 
     // Hide cycle phase section if no phases configured
     var phases = APP_CONFIG.cyclePhases || [];

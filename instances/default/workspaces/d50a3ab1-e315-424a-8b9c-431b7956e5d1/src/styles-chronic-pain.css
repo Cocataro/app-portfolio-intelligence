@@ -655,6 +655,112 @@ select:focus:not(:focus-visible) {
 .feeling-num { font-size: 1.125rem; font-weight: 700; line-height: 1; }
 .feeling-label { font-size: 0.6875rem; font-weight: 500; }
 
+/* Pain Scale */
+.pain-scale-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.pain-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 8px;
+  border-radius: 4px;
+  background: linear-gradient(to right, var(--success) 0%, var(--severity-mild) 40%, var(--severity-high) 70%, var(--severity-extreme) 100%);
+  outline: none;
+  cursor: pointer;
+}
+.pain-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--surface);
+  border: 3px solid var(--primary);
+  cursor: pointer;
+  box-shadow: 0 1px 4px var(--shadow);
+}
+.pain-slider::-moz-range-thumb {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--surface);
+  border: 3px solid var(--primary);
+  cursor: pointer;
+  box-shadow: 0 1px 4px var(--shadow);
+}
+.pain-slider:focus-visible::-webkit-slider-thumb {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+.pain-slider:focus-visible::-moz-range-thumb {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+.pain-scale-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.6875rem;
+  color: var(--text-muted);
+  padding: 0 2px;
+}
+.pain-scale-value {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  font-size: 0.9375rem;
+}
+#pain-value-display {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--primary);
+  min-width: 1.5em;
+}
+#pain-value-label {
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+}
+
+/* Flare Toggle */
+.flare-toggle-wrapper {
+  display: flex;
+}
+.flare-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0.75rem 1.25rem;
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--text);
+  cursor: pointer;
+  font-size: 0.9375rem;
+  min-height: 44px;
+  transition: border-color 0.15s, background 0.15s;
+}
+.flare-btn:hover {
+  border-color: var(--severity-high);
+}
+.flare-btn.active {
+  background: var(--severity-high);
+  border-color: var(--severity-high);
+  color: #fff;
+}
+.flare-btn:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+.flare-icon {
+  display: flex;
+  align-items: center;
+}
+.flare-label {
+  font-weight: 500;
+}
+
 /* Severity area */
 .severity-area {
   margin-top: 0.75rem;
