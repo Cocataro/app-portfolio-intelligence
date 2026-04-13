@@ -284,7 +284,7 @@ function formatDuration(ms){
   const h=Math.floor(m/60);const rm=m%60;
   return h+"h"+(rm?" "+rm+"m":"");
 }
-function elapsed(ts){return formatDuration(Date.now()-ts)}
+function elapsed(ts){return formatDuration(Date.now()-new Date(ts).getTime())}
 
 // --- Main view ---
 let statusInterval=null;
@@ -381,7 +381,7 @@ function renderHistory(){
     const st=new Date(a.started_at).getTime();
     const et=a.ended_at?new Date(a.ended_at).getTime():null;
     const dur=et?formatDuration(et-st):"In progress";
-    const medsStr=a.meds.length?a.meds.map(m=>m.name).join(", "):"None";
+    const medsStr=a.meds.length?a.meds.map(m=>escHtml(m.name)).join(", "):"None";
     const pressure=a.barometric_pressure_mb?' | Pressure: '+a.barometric_pressure_mb+' hPa':'';
     return '<li class="history-item"><div class="history-date">'+formatDate(a.started_at)+'</div><div class="history-detail">Started: '+formatTime(a.started_at)+' | Duration: '+dur+pressure+'</div>'+(a.meds.length?'<div class="history-meds">Meds: '+medsStr+'</div>':'')+'</li>';
   }).join("");
@@ -425,7 +425,7 @@ function renderInsights(){
     card("This week",weekCount+" attack"+(weekCount!==1?"s":""),"Last 7 days"),
     card("This month",monthCount+" attack"+(monthCount!==1?"s":""),"Last 30 days"),
     card("Avg duration",completed.length?formatDuration(avgDur):"N/A","From "+completed.length+" completed attack"+(completed.length!==1?"s":"")),
-    card("Most used med",topMed,topCount?topCount+" time"+(topCount!==1?"s":""):""),
+    card("Most used med",escHtml(topMed),topCount?topCount+" time"+(topCount!==1?"s":""):""),
     card("Days since last",daysSince+"","Streak counter")
   ].join("");
 }
