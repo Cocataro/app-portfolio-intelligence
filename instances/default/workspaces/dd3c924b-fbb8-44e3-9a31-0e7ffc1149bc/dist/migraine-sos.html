@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>Migraine SOS</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+--bg:#0a0a0a;--bg2:#141414;--bg3:#1e1e1e;
+--fg:#cccccc;--fg2:#888888;--fg3:#555555;
+--accent:#e04040;--accent-dim:#802020;
+--green:#30a060;--green-dim:#1a5535;
+--blue:#4488cc;--blue-dim:#264466;
+--border:#333333;
+--radius:12px;
+--font:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+}
+.light{
+--bg:#f5f5f5;--bg2:#ffffff;--bg3:#e8e8e8;
+--fg:#1a1a1a;--fg2:#555555;--fg3:#999999;
+--accent:#cc2020;--accent-dim:#ffcccc;
+--green:#208040;--green-dim:#c8f0d8;
+--blue:#2266aa;--blue-dim:#c8ddf0;
+--border:#cccccc;
+}
+html{font-size:18px;font-family:var(--font)}
+body{background:var(--bg);color:var(--fg);min-height:100vh;min-height:100dvh;display:flex;flex-direction:column;overflow-x:hidden}
+button{font-family:var(--font);cursor:pointer;border:none;border-radius:var(--radius);font-size:1.33rem;font-weight:600;touch-action:manipulation;-webkit-tap-highlight-color:transparent;transition:opacity .1s}
+button:active{opacity:.8}
+button:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+
+/* Nav tabs */
+.nav{display:flex;background:var(--bg2);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:10}
+.nav button{flex:1;background:transparent;color:var(--fg2);padding:14px 8px;border-radius:0;font-size:1rem;border-bottom:3px solid transparent}
+.nav button[aria-selected="true"]{color:var(--fg);border-bottom-color:var(--accent)}
+.nav button:focus-visible{outline-offset:-2px}
+
+/* Views */
+.view{display:none;flex:1;padding:16px;overflow-y:auto}
+.view.active{display:flex;flex-direction:column}
+
+/* Main view */
+.main-view{align-items:center;justify-content:center;gap:20px;padding:24px 16px}
+.status-msg{font-size:1.1rem;color:var(--fg2);text-align:center;min-height:2.5rem;line-height:1.4}
+.status-msg .time{color:var(--fg);font-weight:600}
+.btn-group{display:flex;flex-direction:column;gap:16px;width:100%;max-width:400px;align-items:center}
+.btn-main{min-height:80px;width:60%;min-width:220px;max-width:360px}
+.btn-start{background:var(--accent);color:#fff}
+.btn-start:disabled{background:var(--accent-dim);color:var(--fg3);cursor:default;opacity:1}
+.btn-end{background:var(--green);color:#fff}
+.btn-end:disabled{background:var(--green-dim);color:var(--fg3);cursor:default;opacity:1}
+.btn-meds{background:var(--blue);color:#fff}
+
+/* Pulse animation */
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(224,64,64,.5)}70%{box-shadow:0 0 0 12px rgba(224,64,64,0)}100%{box-shadow:0 0 0 0 rgba(224,64,64,0)}}
+.pulse{animation:pulse .4s ease-out}
+
+/* Med picker */
+.med-picker{display:none;gap:10px;flex-wrap:wrap;justify-content:center;width:100%;max-width:400px}
+.med-picker.show{display:flex}
+.med-picker button{background:var(--bg3);color:var(--fg);border:1px solid var(--border);padding:12px 20px;font-size:1.1rem;min-height:56px;flex:1;min-width:100px}
+.med-picker button:hover{border-color:var(--blue)}
+.med-cancel{font-size:.9rem!important;color:var(--fg2)!important;min-height:40px!important;background:transparent!important;border:none!important}
+
+/* Pressure input */
+.pressure-row{display:flex;align-items:center;gap:10px;margin-top:8px}
+.pressure-row label{color:var(--fg2);font-size:.9rem;white-space:nowrap}
+.pressure-row input{background:var(--bg2);border:1px solid var(--border);color:var(--fg);padding:8px 12px;border-radius:8px;font-size:1rem;width:120px;font-family:var(--font)}
+.pressure-row input:focus{outline:2px solid var(--blue);border-color:var(--blue)}
+.pressure-row button{background:var(--bg3);color:var(--fg2);padding:8px 14px;font-size:.85rem;min-height:auto}
+
+/* History view */
+.history-list{list-style:none;display:flex;flex-direction:column;gap:8px}
+.history-item{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px}
+.history-date{font-weight:600;font-size:1rem;margin-bottom:4px}
+.history-detail{color:var(--fg2);font-size:.9rem;line-height:1.5}
+.history-meds{color:var(--blue);font-size:.85rem;margin-top:4px}
+.empty-state{color:var(--fg2);text-align:center;padding:40px 16px;font-size:1rem}
+
+/* Insights view */
+.insight-cards{display:flex;flex-direction:column;gap:12px}
+.insight-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:16px}
+.insight-label{color:var(--fg2);font-size:.85rem;margin-bottom:4px}
+.insight-value{font-size:1.5rem;font-weight:700}
+.insight-sub{color:var(--fg2);font-size:.85rem;margin-top:2px}
+
+/* Settings view */
+.settings-section{margin-bottom:24px}
+.settings-section h3{font-size:1rem;color:var(--fg2);margin-bottom:12px;font-weight:600}
+.setting-row{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--border)}
+.setting-row:last-child{border-bottom:none}
+.setting-label{font-size:1rem}
+.toggle{position:relative;width:52px;height:28px;background:var(--fg3);border-radius:14px;cursor:pointer;transition:background .15s}
+.toggle.on{background:var(--green)}
+.toggle::after{content:"";position:absolute;top:3px;left:3px;width:22px;height:22px;background:#fff;border-radius:50%;transition:transform .15s}
+.toggle.on::after{transform:translateX(24px)}
+.btn-settings{background:var(--bg3);color:var(--fg);border:1px solid var(--border);padding:12px 20px;font-size:1rem;width:100%;margin-top:8px}
+.btn-danger{border-color:var(--accent);color:var(--accent)}
+.med-config{display:flex;flex-direction:column;gap:8px}
+.med-config-row{display:flex;gap:8px;align-items:center}
+.med-config-row input{flex:1;background:var(--bg2);border:1px solid var(--border);color:var(--fg);padding:8px 12px;border-radius:8px;font-size:1rem;font-family:var(--font)}
+.med-config-row input:focus{outline:2px solid var(--blue);border-color:var(--blue)}
+.med-config-row button{background:var(--bg3);color:var(--accent);border:1px solid var(--border);padding:8px 12px;font-size:.9rem;min-height:auto}
+.btn-add-med{background:transparent;color:var(--blue);border:1px dashed var(--border);padding:10px;font-size:.9rem;width:100%}
+
+.privacy-note{color:var(--fg3);font-size:.8rem;text-align:center;padding:12px 16px;border-top:1px solid var(--border);margin-top:auto}
+
+/* Print */
+@media print{
+body{background:#fff;color:#000}
+.nav,.main-view,.settings-view,.privacy-note{display:none!important}
+.view.print-target{display:flex!important;flex-direction:column}
+.history-item{border:1px solid #ccc;break-inside:avoid}
+.history-date{color:#000}.history-detail,.history-meds{color:#333}
+.insight-card{border:1px solid #ccc}.insight-label{color:#333}.insight-value{color:#000}
+}
+</style>
+</head>
+<body>
+
+<nav class="nav" role="tablist" aria-label="Main navigation">
+<button role="tab" aria-selected="true" aria-controls="view-main" id="tab-main" tabindex="0">Track</button>
+<button role="tab" aria-selected="false" aria-controls="view-history" id="tab-history" tabindex="-1">History</button>
+<button role="tab" aria-selected="false" aria-controls="view-insights" id="tab-insights" tabindex="-1">Insights</button>
+<button role="tab" aria-selected="false" aria-controls="view-settings" id="tab-settings" tabindex="-1">Settings</button>
+</nav>
+
+<div class="view main-view active" id="view-main" role="tabpanel" aria-labelledby="tab-main">
+<div class="status-msg" id="statusMsg" aria-live="polite">Ready to track.</div>
+<div class="btn-group">
+<button class="btn-main btn-start" id="btnStart" aria-label="Attack started">Attack started</button>
+<button class="btn-main btn-end" id="btnEnd" disabled aria-label="Attack ended">Attack ended</button>
+<button class="btn-main btn-meds" id="btnMeds" aria-label="Took medication">Took meds</button>
+</div>
+<div class="med-picker" id="medPicker" role="group" aria-label="Select medication"></div>
+<div class="pressure-row" id="pressureRow" style="display:none">
+<label for="pressureInput">Pressure (hPa):</label>
+<input type="text" id="pressureInput" inputmode="decimal" autocomplete="off" placeholder="e.g. 1013">
+<button id="btnSavePressure">Save</button>
+</div>
+</div>
+
+<div class="view" id="view-history" role="tabpanel" aria-labelledby="tab-history">
+<ul class="history-list" id="historyList"></ul>
+</div>
+
+<div class="view" id="view-insights" role="tabpanel" aria-labelledby="tab-insights">
+<div class="insight-cards" id="insightCards"></div>
+</div>
+
+<div class="view settings-view" id="view-settings" role="tabpanel" aria-labelledby="tab-settings">
+<div class="settings-section">
+<h3>Appearance</h3>
+<div class="setting-row">
+<span class="setting-label">Light mode</span>
+<div class="toggle" id="toggleTheme" role="switch" aria-checked="false" aria-label="Toggle light mode" tabindex="0"></div>
+</div>
+</div>
+<div class="settings-section">
+<h3>Medications</h3>
+<div class="med-config" id="medConfig"></div>
+<button class="btn-add-med" id="btnAddMed">+ Add medication</button>
+</div>
+<div class="settings-section">
+<h3>Data</h3>
+<button class="btn-settings" id="btnExportCSV">Export CSV</button>
+<button class="btn-settings" id="btnExportJSON">Export JSON</button>
+<button class="btn-settings btn-danger" id="btnClearAll">Clear all data</button>
+</div>
+</div>
+
+<div class="privacy-note">All data stored locally on your device. Nothing leaves this app.</div>
+
+<script>
+(function(){
+"use strict";
+const NS="migraine-sos-v1";
+const K={attacks:NS+".attacks",meds:NS+".meds",settings:NS+".settings",version:NS+".version"};
+
+// --- Storage helpers ---
+function load(k,def){try{const v=localStorage.getItem(k);return v?JSON.parse(v):def}catch(e){return def}}
+function save(k,v){localStorage.setItem(k,JSON.stringify(v))}
+
+// --- State ---
+let attacks=load(K.attacks,[]);
+let medLogs=load(K.meds,[]);
+let settings=load(K.settings,{lightMode:false,medications:["Triptan","NSAID","Other"]});
+
+// Ensure version
+if(!localStorage.getItem(K.version))localStorage.setItem(K.version,"1");
+
+// --- DOM ---
+const $=id=>document.getElementById(id);
+const tabs=document.querySelectorAll('.nav [role="tab"]');
+const views={main:$("view-main"),history:$("view-history"),insights:$("view-insights"),settings:$("view-settings")};
+const statusMsg=$("statusMsg");
+const btnStart=$("btnStart");
+const btnEnd=$("btnEnd");
+const btnMeds=$("btnMeds");
+const medPicker=$("medPicker");
+const pressureRow=$("pressureRow");
+const pressureInput=$("pressureInput");
+
+// --- Tabs ---
+function switchTab(tabBtn){
+  tabs.forEach(t=>{t.setAttribute("aria-selected","false");t.tabIndex=-1});
+  tabBtn.setAttribute("aria-selected","true");
+  tabBtn.tabIndex=0;
+  tabBtn.focus();
+  Object.values(views).forEach(v=>v.classList.remove("active","print-target"));
+  const target=tabBtn.getAttribute("aria-controls");
+  const v=document.getElementById(target);
+  v.classList.add("active");
+  if(target==="view-history"){renderHistory();v.classList.add("print-target")}
+  if(target==="view-insights"){renderInsights();v.classList.add("print-target")}
+  if(target==="view-settings")renderSettings();
+  if(target==="view-main")refreshMain();
+  hideMedPicker();
+}
+tabs.forEach(t=>{
+  t.addEventListener("click",()=>switchTab(t));
+  t.addEventListener("keydown",e=>{
+    const idx=[...tabs].indexOf(t);
+    let next=-1;
+    if(e.key==="ArrowRight")next=(idx+1)%tabs.length;
+    else if(e.key==="ArrowLeft")next=(idx-1+tabs.length)%tabs.length;
+    else if(e.key==="Home")next=0;
+    else if(e.key==="End")next=tabs.length-1;
+    if(next>=0){e.preventDefault();switchTab(tabs[next])}
+  });
+});
+
+// --- Active attack helpers ---
+function getActive(){return attacks.find(a=>!a.endTime)||null}
+function formatTime(ts){const d=new Date(ts);return d.toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"})}
+function formatDate(ts){const d=new Date(ts);return d.toLocaleDateString([],{weekday:"short",month:"short",day:"numeric"})}
+function formatDuration(ms){
+  if(ms<60000)return "<1 min";
+  const m=Math.floor(ms/60000);
+  if(m<60)return m+"m";
+  const h=Math.floor(m/60);const rm=m%60;
+  return h+"h"+(rm?" "+rm+"m":"");
+}
+function elapsed(ts){return formatDuration(Date.now()-ts)}
+
+// --- Main view ---
+let statusInterval=null;
+function refreshMain(){
+  const a=getActive();
+  clearInterval(statusInterval);
+  if(a){
+    btnStart.disabled=true;
+    btnEnd.disabled=false;
+    pressureRow.style.display="flex";
+    if(a.pressure)pressureInput.value=a.pressure;
+    else pressureInput.value="";
+    const update=()=>{statusMsg.innerHTML='Attack in progress since <span class="time">'+formatTime(a.startTime)+'</span> ('+elapsed(a.startTime)+')'};
+    update();
+    statusInterval=setInterval(update,10000);
+  }else{
+    btnStart.disabled=false;
+    btnEnd.disabled=true;
+    pressureRow.style.display="none";
+    statusMsg.textContent="Ready to track.";
+  }
+}
+
+// --- Pulse feedback ---
+function doPulse(btn){btn.classList.remove("pulse");void btn.offsetWidth;btn.classList.add("pulse")}
+
+// --- Attack start ---
+btnStart.addEventListener("click",()=>{
+  if(getActive())return;
+  const a={id:Date.now().toString(36)+Math.random().toString(36).slice(2,6),startTime:Date.now(),endTime:null,pressure:null,meds:[]};
+  attacks.unshift(a);
+  save(K.attacks,attacks);
+  doPulse(btnStart);
+  refreshMain();
+});
+
+// --- Attack end ---
+btnEnd.addEventListener("click",()=>{
+  const a=getActive();
+  if(!a)return;
+  a.endTime=Date.now();
+  save(K.attacks,attacks);
+  doPulse(btnEnd);
+  hideMedPicker();
+  refreshMain();
+});
+
+// --- Meds ---
+function showMedPicker(){
+  medPicker.innerHTML="";
+  settings.medications.forEach(m=>{
+    const b=document.createElement("button");
+    b.textContent=m;
+    b.addEventListener("click",()=>logMed(m));
+    medPicker.appendChild(b);
+  });
+  const cancel=document.createElement("button");
+  cancel.textContent="Cancel";
+  cancel.className="med-cancel";
+  cancel.addEventListener("click",hideMedPicker);
+  medPicker.appendChild(cancel);
+  medPicker.classList.add("show");
+}
+function hideMedPicker(){medPicker.classList.remove("show")}
+
+function logMed(name){
+  const active=getActive();
+  const entry={id:Date.now().toString(36)+Math.random().toString(36).slice(2,6),time:Date.now(),name:name,attackId:active?active.id:null,preventive:!active};
+  medLogs.unshift(entry);
+  save(K.meds,medLogs);
+  if(active){active.meds.push({name:name,time:Date.now()});save(K.attacks,attacks)}
+  hideMedPicker();
+  doPulse(btnMeds);
+}
+
+btnMeds.addEventListener("click",showMedPicker);
+
+// --- Pressure ---
+$("btnSavePressure").addEventListener("click",()=>{
+  const a=getActive();
+  if(!a)return;
+  a.pressure=pressureInput.value.trim()||null;
+  save(K.attacks,attacks);
+  doPulse($("btnSavePressure"));
+});
+
+// --- History ---
+function renderHistory(){
+  const list=$("historyList");
+  if(attacks.length===0){list.innerHTML='<li class="empty-state">No attacks recorded yet.</li>';return}
+  list.innerHTML=attacks.map(a=>{
+    const dur=a.endTime?formatDuration(a.endTime-a.startTime):"In progress";
+    const medsStr=a.meds.length?a.meds.map(m=>m.name).join(", "):"None";
+    const pressure=a.pressure?' | Pressure: '+a.pressure+' hPa':'';
+    return '<li class="history-item"><div class="history-date">'+formatDate(a.startTime)+'</div><div class="history-detail">Started: '+formatTime(a.startTime)+' | Duration: '+dur+pressure+'</div>'+(a.meds.length?'<div class="history-meds">Meds: '+medsStr+'</div>':'')+'</li>';
+  }).join("");
+}
+
+// --- Insights ---
+function renderInsights(){
+  const cards=$("insightCards");
+  if(attacks.length===0){cards.innerHTML='<div class="empty-state">No data yet. Start tracking to see insights.</div>';return}
+
+  const now=Date.now();
+  const week=7*24*60*60*1000;
+  const month=30*24*60*60*1000;
+
+  const weekCount=attacks.filter(a=>now-a.startTime<week).length;
+  const monthCount=attacks.filter(a=>now-a.startTime<month).length;
+
+  const completed=attacks.filter(a=>a.endTime);
+  let avgDur=0;
+  if(completed.length){
+    avgDur=completed.reduce((s,a)=>s+(a.endTime-a.startTime),0)/completed.length;
+  }
+
+  // Most common med
+  const medCounts={};
+  medLogs.forEach(m=>{medCounts[m.name]=(medCounts[m.name]||0)+1});
+  let topMed="None";let topCount=0;
+  for(const[n,c]of Object.entries(medCounts)){if(c>topCount){topMed=n;topCount=c}}
+
+  // Days since last
+  const last=attacks.length?attacks[0]:null;
+  let daysSince="N/A";
+  if(last){
+    const end=last.endTime||now;
+    daysSince=Math.floor((now-end)/(24*60*60*1000));
+    if(daysSince===0&&last.endTime)daysSince="<1";
+    if(!last.endTime)daysSince="Active now";
+  }
+
+  cards.innerHTML=[
+    card("This week",weekCount+" attack"+(weekCount!==1?"s":""),"Last 7 days"),
+    card("This month",monthCount+" attack"+(monthCount!==1?"s":""),"Last 30 days"),
+    card("Avg duration",completed.length?formatDuration(avgDur):"N/A","From "+completed.length+" completed attack"+(completed.length!==1?"s":"")),
+    card("Most used med",topMed,topCount?topCount+" time"+(topCount!==1?"s":""):""),
+    card("Days since last",daysSince+"","Streak counter")
+  ].join("");
+}
+function card(label,value,sub){
+  return '<div class="insight-card"><div class="insight-label">'+label+'</div><div class="insight-value">'+value+'</div>'+(sub?'<div class="insight-sub">'+sub+'</div>':'')+'</div>';
+}
+
+// --- Settings ---
+function renderSettings(){
+  // Theme toggle
+  const tog=$("toggleTheme");
+  tog.className="toggle"+(settings.lightMode?" on":"");
+  tog.setAttribute("aria-checked",settings.lightMode?"true":"false");
+
+  // Med config
+  const mc=$("medConfig");
+  mc.innerHTML=settings.medications.map((m,i)=>'<div class="med-config-row"><input type="text" value="'+escHtml(m)+'" data-idx="'+i+'" aria-label="Medication '+(i+1)+' name"><button data-delidx="'+i+'" aria-label="Remove '+escHtml(m)+'">Remove</button></div>').join("");
+
+  mc.querySelectorAll("input").forEach(inp=>{
+    inp.addEventListener("change",()=>{
+      settings.medications[parseInt(inp.dataset.idx)]=inp.value.trim()||settings.medications[parseInt(inp.dataset.idx)];
+      save(K.settings,settings);
+    });
+  });
+  mc.querySelectorAll("button[data-delidx]").forEach(b=>{
+    b.addEventListener("click",()=>{
+      if(settings.medications.length<=1)return;
+      settings.medications.splice(parseInt(b.dataset.delidx),1);
+      save(K.settings,settings);
+      renderSettings();
+    });
+  });
+}
+function escHtml(s){return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;")}
+
+// Theme toggle
+$("toggleTheme").addEventListener("click",()=>{
+  settings.lightMode=!settings.lightMode;
+  save(K.settings,settings);
+  applyTheme();
+  renderSettings();
+});
+$("toggleTheme").addEventListener("keydown",e=>{
+  if(e.key===" "||e.key==="Enter"){e.preventDefault();$("toggleTheme").click()}
+});
+
+function applyTheme(){
+  document.documentElement.classList.toggle("light",settings.lightMode);
+}
+applyTheme();
+
+// Add med
+$("btnAddMed").addEventListener("click",()=>{
+  const name=prompt("Medication name:");
+  if(name&&name.trim()){
+    settings.medications.push(name.trim());
+    save(K.settings,settings);
+    renderSettings();
+  }
+});
+
+// Export CSV
+$("btnExportCSV").addEventListener("click",()=>{
+  let csv="Date,Start Time,End Time,Duration (min),Pressure (hPa),Medications\r\n";
+  attacks.forEach(a=>{
+    const d=new Date(a.startTime);
+    const date=d.toISOString().slice(0,10);
+    const start=d.toISOString();
+    const end=a.endTime?new Date(a.endTime).toISOString():"";
+    const dur=a.endTime?Math.round((a.endTime-a.startTime)/60000):"";
+    const pres=a.pressure||"";
+    const meds=a.meds.map(m=>m.name).join("; ");
+    csv+=csvField(date)+","+csvField(start)+","+csvField(end)+","+csvField(String(dur))+","+csvField(pres)+","+csvField(meds)+"\r\n";
+  });
+  // Append med log
+  csv+="\r\nMedication Log\r\nDate,Time,Medication,Type\r\n";
+  medLogs.forEach(m=>{
+    const d=new Date(m.time);
+    csv+=csvField(d.toISOString().slice(0,10))+","+csvField(d.toISOString())+","+csvField(m.name)+","+csvField(m.preventive?"Preventive":"During attack")+"\r\n";
+  });
+  download("migraine-sos-export.csv",csv,"text/csv");
+});
+
+function csvField(s){if(/[",\r\n]/.test(s))return '"'+s.replace(/"/g,'""')+'"';return s}
+
+// Export JSON
+$("btnExportJSON").addEventListener("click",()=>{
+  const data={version:localStorage.getItem(K.version),attacks:attacks,meds:medLogs,settings:settings,exportedAt:new Date().toISOString()};
+  download("migraine-sos-export.json",JSON.stringify(data,null,2),"application/json");
+});
+
+function download(name,content,type){
+  const blob=new Blob([content],{type:type});
+  const a=document.createElement("a");
+  a.href=URL.createObjectURL(blob);a.download=name;
+  document.body.appendChild(a);a.click();document.body.removeChild(a);
+  URL.revokeObjectURL(a.href);
+}
+
+// Clear all
+$("btnClearAll").addEventListener("click",()=>{
+  if(!confirm("This will permanently delete ALL your migraine data. Are you sure?"))return;
+  if(!confirm("Really? This cannot be undone."))return;
+  attacks=[];medLogs=[];
+  save(K.attacks,attacks);save(K.meds,medLogs);
+  refreshMain();
+});
+
+// --- Init ---
+refreshMain();
+})();
+</script>
+</body>
+</html>
