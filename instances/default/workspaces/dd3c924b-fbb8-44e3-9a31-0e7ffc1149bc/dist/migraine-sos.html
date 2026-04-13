@@ -166,7 +166,11 @@ body{background:#fff;color:#000}
 <h3>Data</h3>
 <button class="btn-settings" id="btnExportCSV">Export CSV</button>
 <button class="btn-settings" id="btnExportJSON">Export JSON</button>
+<label class="btn-settings" id="btnImportJSON" tabindex="0" role="button" style="text-align:center;cursor:pointer">Import JSON<input type="file" accept=".json,application/json" id="fileImportJSON" style="display:none"></label>
 <button class="btn-settings btn-danger" id="btnClearAll">Clear all data</button>
+</div>
+<div class="settings-section">
+<p style="color:var(--fg2);font-size:.9rem;line-height:1.5">Pro version with insights dashboard and doctor summary export — coming soon. Your data exports cleanly — no re-entry.</p>
 </div>
 </div>
 
@@ -175,12 +179,47 @@ body{background:#fff;color:#000}
 <script>
 (function(){
 "use strict";
-const NS="migraine-sos-v1";
+const NS="qhc-migraine-sos-v1";
+const OLD_NS="migraine-sos-v1";
 const K={attacks:NS+".attacks",meds:NS+".meds",settings:NS+".settings",version:NS+".version"};
+const OLD_K={attacks:OLD_NS+".attacks",meds:OLD_NS+".meds",settings:OLD_NS+".settings",version:OLD_NS+".version"};
 
 // --- Storage helpers ---
 function load(k,def){try{const v=localStorage.getItem(k);return v?JSON.parse(v):def}catch(e){return def}}
 function save(k,v){localStorage.setItem(k,JSON.stringify(v))}
+
+// --- Migrate from old namespace ---
+function migrateNamespace(){
+  if(localStorage.getItem(K.version))return;
+  if(!localStorage.getItem(OLD_K.version))return;
+  [["attacks"],["meds"],["settings"],["version"]].forEach(function(pair){
+    const old=OLD_K[pair[0]],nu=K[pair[0]];
+    const v=localStorage.getItem(old);
+    if(v!==null){localStorage.setItem(nu,v);localStorage.removeItem(old)}
+  });
+}
+
+// --- Migrate internal field names from camelCase to snake_case ---
+function migrateFields(attacksArr,medLogsArr){
+  let changed=false;
+  attacksArr.forEach(function(a){
+    if("startTime" in a){a.started_at=new Date(a.startTime).toISOString();delete a.startTime;changed=true}
+    if("endTime" in a){a.ended_at=a.endTime?new Date(a.endTime).toISOString():null;delete a.endTime;changed=true}
+    if("pressure" in a){a.barometric_pressure_mb=a.pressure?parseFloat(a.pressure):null;delete a.pressure;changed=true}
+    if(a.meds){a.meds.forEach(function(m){
+      if("time" in m){m.taken_at=new Date(m.time).toISOString();delete m.time;changed=true}
+    })}
+    if(typeof a.started_at==="number"){a.started_at=new Date(a.started_at).toISOString();changed=true}
+    if(typeof a.ended_at==="number"){a.ended_at=new Date(a.ended_at).toISOString();changed=true}
+  });
+  medLogsArr.forEach(function(m){
+    if("time" in m){m.taken_at=new Date(m.time).toISOString();delete m.time;changed=true}
+    if("attackId" in m){m.attack_id=m.attackId;delete m.attackId;changed=true}
+  });
+  return changed;
+}
+
+migrateNamespace();
 
 // --- State ---
 let attacks=load(K.attacks,[]);
@@ -189,6 +228,9 @@ let settings=load(K.settings,{lightMode:false,medications:["Triptan","NSAID","Ot
 
 // Ensure version
 if(!localStorage.getItem(K.version))localStorage.setItem(K.version,"1");
+
+// Run field migration
+if(migrateFields(attacks,medLogs)){save(K.attacks,attacks);save(K.meds,medLogs)}
 
 // --- DOM ---
 const $=id=>document.getElementById(id);
@@ -232,7 +274,7 @@ tabs.forEach(t=>{
 });
 
 // --- Active attack helpers ---
-function getActive(){return attacks.find(a=>!a.endTime)||null}
+function getActive(){return attacks.find(a=>!a.ended_at)||null}
 function formatTime(ts){const d=new Date(ts);return d.toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"})}
 function formatDate(ts){const d=new Date(ts);return d.toLocaleDateString([],{weekday:"short",month:"short",day:"numeric"})}
 function formatDuration(ms){
@@ -253,9 +295,9 @@ function refreshMain(){
     btnStart.disabled=true;
     btnEnd.disabled=false;
     pressureRow.style.display="flex";
-    if(a.pressure)pressureInput.value=a.pressure;
+    if(a.barometric_pressure_mb)pressureInput.value=a.barometric_pressure_mb;
     else pressureInput.value="";
-    const update=()=>{statusMsg.innerHTML='Attack in progress since <span class="time">'+formatTime(a.startTime)+'</span> ('+elapsed(a.startTime)+')'};
+    const update=()=>{statusMsg.innerHTML='Attack in progress since <span class="time">'+formatTime(a.started_at)+'</span> ('+elapsed(a.started_at)+')'};
     update();
     statusInterval=setInterval(update,10000);
   }else{
@@ -272,7 +314,7 @@ function doPulse(btn){btn.classList.remove("pulse");void btn.offsetWidth;btn.cla
 // --- Attack start ---
 btnStart.addEventListener("click",()=>{
   if(getActive())return;
-  const a={id:Date.now().toString(36)+Math.random().toString(36).slice(2,6),startTime:Date.now(),endTime:null,pressure:null,meds:[]};
+  const a={id:Date.now().toString(36)+Math.random().toString(36).slice(2,6),started_at:new Date().toISOString(),ended_at:null,barometric_pressure_mb:null,meds:[]};
   attacks.unshift(a);
   save(K.attacks,attacks);
   doPulse(btnStart);
@@ -283,7 +325,7 @@ btnStart.addEventListener("click",()=>{
 btnEnd.addEventListener("click",()=>{
   const a=getActive();
   if(!a)return;
-  a.endTime=Date.now();
+  a.ended_at=new Date().toISOString();
   save(K.attacks,attacks);
   doPulse(btnEnd);
   hideMedPicker();
@@ -310,10 +352,11 @@ function hideMedPicker(){medPicker.classList.remove("show")}
 
 function logMed(name){
   const active=getActive();
-  const entry={id:Date.now().toString(36)+Math.random().toString(36).slice(2,6),time:Date.now(),name:name,attackId:active?active.id:null,preventive:!active};
+  const now=new Date().toISOString();
+  const entry={id:Date.now().toString(36)+Math.random().toString(36).slice(2,6),taken_at:now,name:name,attack_id:active?active.id:null,preventive:!active};
   medLogs.unshift(entry);
   save(K.meds,medLogs);
-  if(active){active.meds.push({name:name,time:Date.now()});save(K.attacks,attacks)}
+  if(active){active.meds.push({name:name,taken_at:now});save(K.attacks,attacks)}
   hideMedPicker();
   doPulse(btnMeds);
 }
@@ -324,7 +367,8 @@ btnMeds.addEventListener("click",showMedPicker);
 $("btnSavePressure").addEventListener("click",()=>{
   const a=getActive();
   if(!a)return;
-  a.pressure=pressureInput.value.trim()||null;
+  const v=pressureInput.value.trim();
+  a.barometric_pressure_mb=v?parseFloat(v):null;
   save(K.attacks,attacks);
   doPulse($("btnSavePressure"));
 });
@@ -334,10 +378,12 @@ function renderHistory(){
   const list=$("historyList");
   if(attacks.length===0){list.innerHTML='<li class="empty-state">No attacks recorded yet.</li>';return}
   list.innerHTML=attacks.map(a=>{
-    const dur=a.endTime?formatDuration(a.endTime-a.startTime):"In progress";
+    const st=new Date(a.started_at).getTime();
+    const et=a.ended_at?new Date(a.ended_at).getTime():null;
+    const dur=et?formatDuration(et-st):"In progress";
     const medsStr=a.meds.length?a.meds.map(m=>m.name).join(", "):"None";
-    const pressure=a.pressure?' | Pressure: '+a.pressure+' hPa':'';
-    return '<li class="history-item"><div class="history-date">'+formatDate(a.startTime)+'</div><div class="history-detail">Started: '+formatTime(a.startTime)+' | Duration: '+dur+pressure+'</div>'+(a.meds.length?'<div class="history-meds">Meds: '+medsStr+'</div>':'')+'</li>';
+    const pressure=a.barometric_pressure_mb?' | Pressure: '+a.barometric_pressure_mb+' hPa':'';
+    return '<li class="history-item"><div class="history-date">'+formatDate(a.started_at)+'</div><div class="history-detail">Started: '+formatTime(a.started_at)+' | Duration: '+dur+pressure+'</div>'+(a.meds.length?'<div class="history-meds">Meds: '+medsStr+'</div>':'')+'</li>';
   }).join("");
 }
 
@@ -350,13 +396,13 @@ function renderInsights(){
   const week=7*24*60*60*1000;
   const month=30*24*60*60*1000;
 
-  const weekCount=attacks.filter(a=>now-a.startTime<week).length;
-  const monthCount=attacks.filter(a=>now-a.startTime<month).length;
+  const weekCount=attacks.filter(a=>now-new Date(a.started_at).getTime()<week).length;
+  const monthCount=attacks.filter(a=>now-new Date(a.started_at).getTime()<month).length;
 
-  const completed=attacks.filter(a=>a.endTime);
+  const completed=attacks.filter(a=>a.ended_at);
   let avgDur=0;
   if(completed.length){
-    avgDur=completed.reduce((s,a)=>s+(a.endTime-a.startTime),0)/completed.length;
+    avgDur=completed.reduce((s,a)=>s+(new Date(a.ended_at).getTime()-new Date(a.started_at).getTime()),0)/completed.length;
   }
 
   // Most common med
@@ -369,10 +415,10 @@ function renderInsights(){
   const last=attacks.length?attacks[0]:null;
   let daysSince="N/A";
   if(last){
-    const end=last.endTime||now;
+    const end=last.ended_at?new Date(last.ended_at).getTime():now;
     daysSince=Math.floor((now-end)/(24*60*60*1000));
-    if(daysSince===0&&last.endTime)daysSince="<1";
-    if(!last.endTime)daysSince="Active now";
+    if(daysSince===0&&last.ended_at)daysSince="<1";
+    if(!last.ended_at)daysSince="Active now";
   }
 
   cards.innerHTML=[
@@ -445,30 +491,90 @@ $("btnAddMed").addEventListener("click",()=>{
 $("btnExportCSV").addEventListener("click",()=>{
   let csv="Date,Start Time,End Time,Duration (min),Pressure (hPa),Medications\r\n";
   attacks.forEach(a=>{
-    const d=new Date(a.startTime);
+    const d=new Date(a.started_at);
     const date=d.toISOString().slice(0,10);
-    const start=d.toISOString();
-    const end=a.endTime?new Date(a.endTime).toISOString():"";
-    const dur=a.endTime?Math.round((a.endTime-a.startTime)/60000):"";
-    const pres=a.pressure||"";
+    const start=a.started_at;
+    const end=a.ended_at||"";
+    const dur=a.ended_at?Math.round((new Date(a.ended_at).getTime()-new Date(a.started_at).getTime())/60000):"";
+    const pres=a.barometric_pressure_mb!=null?String(a.barometric_pressure_mb):"";
     const meds=a.meds.map(m=>m.name).join("; ");
     csv+=csvField(date)+","+csvField(start)+","+csvField(end)+","+csvField(String(dur))+","+csvField(pres)+","+csvField(meds)+"\r\n";
   });
   // Append med log
   csv+="\r\nMedication Log\r\nDate,Time,Medication,Type\r\n";
   medLogs.forEach(m=>{
-    const d=new Date(m.time);
-    csv+=csvField(d.toISOString().slice(0,10))+","+csvField(d.toISOString())+","+csvField(m.name)+","+csvField(m.preventive?"Preventive":"During attack")+"\r\n";
+    const d=new Date(m.taken_at);
+    csv+=csvField(d.toISOString().slice(0,10))+","+csvField(m.taken_at)+","+csvField(m.name)+","+csvField(m.preventive?"Preventive":"During attack")+"\r\n";
   });
   download("migraine-sos-export.csv",csv,"text/csv");
 });
 
 function csvField(s){if(/[",\r\n]/.test(s))return '"'+s.replace(/"/g,'""')+'"';return s}
 
+// --- qhcExport / qhcImport reusable helpers ---
+function qhcExport(productSlug){
+  return {
+    schema_version:1,
+    product:productSlug,
+    exported_at:new Date().toISOString(),
+    attacks:attacks.map(a=>({
+      id:a.id,
+      started_at:a.started_at,
+      ended_at:a.ended_at||null,
+      meds:(a.meds||[]).map(m=>({name:m.name,taken_at:m.taken_at})),
+      barometric_pressure_mb:a.barometric_pressure_mb!=null?a.barometric_pressure_mb:null
+    })),
+    settings:{custom_meds:settings.medications,theme:settings.lightMode?"light":"dark"}
+  };
+}
+
+function qhcImport(productSlug,json){
+  if(!json||json.product!==productSlug)throw new Error("Invalid import: product mismatch");
+  if(json.schema_version!==1)throw new Error("Unsupported schema version: "+json.schema_version);
+  attacks=(json.attacks||[]).map(a=>({
+    id:a.id,
+    started_at:a.started_at,
+    ended_at:a.ended_at||null,
+    barometric_pressure_mb:a.barometric_pressure_mb!=null?a.barometric_pressure_mb:null,
+    meds:(a.meds||[]).map(m=>({name:m.name,taken_at:m.taken_at}))
+  }));
+  const s=json.settings||{};
+  settings.medications=s.custom_meds&&s.custom_meds.length?s.custom_meds:["Triptan","NSAID","Other"];
+  settings.lightMode=s.theme==="light";
+  // Rebuild medLogs from attack meds
+  medLogs=[];
+  attacks.forEach(a=>{(a.meds||[]).forEach(m=>{
+    medLogs.push({id:Date.now().toString(36)+Math.random().toString(36).slice(2,6),taken_at:m.taken_at,name:m.name,attack_id:a.id,preventive:false});
+  })});
+  save(K.attacks,attacks);save(K.meds,medLogs);save(K.settings,settings);
+  applyTheme();refreshMain();
+}
+
 // Export JSON
 $("btnExportJSON").addEventListener("click",()=>{
-  const data={version:localStorage.getItem(K.version),attacks:attacks,meds:medLogs,settings:settings,exportedAt:new Date().toISOString()};
+  const data=qhcExport("migraine-sos");
   download("migraine-sos-export.json",JSON.stringify(data,null,2),"application/json");
+});
+
+// Import JSON
+$("fileImportJSON").addEventListener("change",e=>{
+  const file=e.target.files[0];
+  if(!file)return;
+  const reader=new FileReader();
+  reader.onload=function(ev){
+    try{
+      const json=JSON.parse(ev.target.result);
+      if(!confirm("This will replace all current data with the imported file. Continue?"))return;
+      qhcImport("migraine-sos",json);
+      alert("Import successful.");
+      renderSettings();
+    }catch(err){alert("Import failed: "+err.message)}
+  };
+  reader.readAsText(file);
+  e.target.value="";
+});
+$("btnImportJSON").addEventListener("keydown",e=>{
+  if(e.key===" "||e.key==="Enter"){e.preventDefault();$("fileImportJSON").click()}
 });
 
 function download(name,content,type){
