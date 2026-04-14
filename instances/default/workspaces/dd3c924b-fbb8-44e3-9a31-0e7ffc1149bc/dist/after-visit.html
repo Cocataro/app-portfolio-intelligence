@@ -57,6 +57,10 @@ a{color:var(--accent)}
 .visit-item-feeling[data-feel="heard"]{background:var(--green-dim);color:var(--heard)}
 .visit-item-feeling[data-feel="unsure"]{background:rgba(196,126,32,.15);color:var(--unsure)}
 .visit-item-feeling[data-feel="dismissed"]{background:var(--red-dim);color:var(--dismissed)}
+html:not(.light) .visit-item-feeling[data-feel="heard"],html:not(.light) .summary-feel[data-feel="heard"]{color:#fff}
+html:not(.light) .visit-item-feeling[data-feel="dismissed"],html:not(.light) .summary-feel[data-feel="dismissed"]{color:#fff}
+.light .visit-item-feeling[data-feel="heard"],.light .summary-feel[data-feel="heard"]{color:#1a6e30}
+.light .visit-item-feeling[data-feel="dismissed"],.light .summary-feel[data-feel="dismissed"]{color:#a01818}
 .visit-item-actions{display:flex;gap:6px}
 .visit-item-actions button{background:var(--bg3);color:var(--fg3);padding:6px 8px;font-size:.75rem;border:1px solid var(--border)}
 .visit-item-actions button:hover{color:var(--fg)}
@@ -93,6 +97,8 @@ input[type="date"].form-input,input[type="text"].form-input{height:44px}
 .feel-btn[aria-pressed="true"][data-feel="heard"]{background:var(--heard);color:#fff}
 .feel-btn[aria-pressed="true"][data-feel="unsure"]{background:var(--unsure);color:#fff}
 .feel-btn[aria-pressed="true"][data-feel="dismissed"]{background:var(--dismissed);color:#fff}
+html:not(.light) .feel-btn[aria-pressed="true"][data-feel="unsure"]{background:#9a6418}
+html:not(.light) .feel-btn[aria-pressed="true"][data-feel="dismissed"]{background:#c04040}
 
 /* Next steps entries */
 .next-step-row{display:flex;gap:6px;align-items:flex-start}
