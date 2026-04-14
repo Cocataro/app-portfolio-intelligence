@@ -1,0 +1,1023 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>After-Visit Capture Kit</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+--bg:#0a0a0a;--bg2:#141414;--bg3:#1e1e1e;
+--fg:#cccccc;--fg2:#aaaaaa;--fg3:#555555;
+--accent:#3670a8;--accent-dim:#264466;
+--green:#267a49;--green-dim:#1a5535;
+--red:#cc3333;--red-dim:#802020;
+--orange:#c47e20;
+--border:#333333;
+--radius:10px;
+--font:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+--heard:#267a49;--unsure:#c47e20;--dismissed:#cc3333;
+}
+.light{
+--bg:#f5f5f5;--bg2:#ffffff;--bg3:#e8e8e8;
+--fg:#1a1a1a;--fg2:#555555;--fg3:#999999;
+--accent:#2266aa;--accent-dim:#c8ddf0;
+--green:#208040;--green-dim:#c8f0d8;
+--red:#cc2020;--red-dim:#ffcccc;
+--orange:#a06010;
+--border:#cccccc;
+--heard:#208040;--unsure:#a06010;--dismissed:#cc2020;
+}
+html{font-size:17px;font-family:var(--font)}
+body{background:var(--bg);color:var(--fg);min-height:100vh;min-height:100dvh;display:flex;flex-direction:column;overflow-x:hidden}
+button{font-family:var(--font);cursor:pointer;border:none;border-radius:var(--radius);font-size:1rem;font-weight:600;touch-action:manipulation;-webkit-tap-highlight-color:transparent;transition:opacity .1s}
+button:active{opacity:.8}
+button:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+input,textarea,select{font-family:var(--font);font-size:1rem}
+a{color:var(--accent)}
+
+/* Nav */
+.nav{display:flex;background:var(--bg2);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:10}
+.nav button{flex:1;background:transparent;color:var(--fg2);padding:12px 6px;border-radius:0;font-size:.9rem;border-bottom:3px solid transparent}
+.nav button[aria-selected="true"]{color:var(--fg);border-bottom-color:var(--accent)}
+.nav button:focus-visible{outline-offset:-2px}
+
+/* Views */
+.view{display:none;flex:1;padding:16px;overflow-y:auto}
+.view.active{display:flex;flex-direction:column;gap:16px}
+
+/* Visit list */
+.visit-list{display:flex;flex-direction:column;gap:8px}
+.visit-item{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:12px 16px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;transition:border-color .1s}
+.visit-item:hover,.visit-item:focus-visible{border-color:var(--accent)}
+.visit-item-info{display:flex;flex-direction:column;gap:2px}
+.visit-item-date{font-weight:700;font-size:1rem}
+.visit-item-dr{font-size:.85rem;color:var(--fg2)}
+.visit-item-feeling{font-size:.75rem;padding:3px 8px;border-radius:6px;font-weight:600}
+.visit-item-feeling[data-feel="heard"]{background:var(--green-dim);color:var(--heard)}
+.visit-item-feeling[data-feel="unsure"]{background:rgba(196,126,32,.15);color:var(--unsure)}
+.visit-item-feeling[data-feel="dismissed"]{background:var(--red-dim);color:var(--dismissed)}
+.visit-item-actions{display:flex;gap:6px}
+.visit-item-actions button{background:var(--bg3);color:var(--fg3);padding:6px 8px;font-size:.75rem;border:1px solid var(--border)}
+.visit-item-actions button:hover{color:var(--fg)}
+
+.btn-new-visit{background:var(--accent);color:#fff;padding:14px 24px;font-size:1rem;width:100%}
+.btn-secondary{background:var(--bg3);color:var(--fg);border:1px solid var(--border);padding:10px 18px;font-size:.95rem;width:100%}
+
+.empty-state{text-align:center;padding:40px 20px;color:var(--fg2)}
+.empty-state h2{font-size:1.2rem;margin-bottom:8px;color:var(--fg)}
+.empty-state p{font-size:.9rem;line-height:1.5;margin-bottom:20px}
+
+/* Form */
+.form-section{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;display:flex;flex-direction:column;gap:10px}
+.form-section h3{font-size:.85rem;color:var(--fg3);text-transform:uppercase;letter-spacing:.05em}
+.form-label{font-size:.95rem;font-weight:600;display:block;margin-bottom:4px}
+.form-sublabel{font-size:.8rem;color:var(--fg3);margin-bottom:6px;line-height:1.4}
+.form-input{width:100%;background:var(--bg3);border:1px solid var(--border);color:var(--fg);padding:10px 12px;border-radius:8px;font-size:.95rem;line-height:1.4}
+.form-input:focus{outline:2px solid var(--accent);border-color:var(--accent)}
+.form-input::placeholder{color:var(--fg3)}
+textarea.form-input{resize:vertical;min-height:60px}
+input[type="date"].form-input,input[type="text"].form-input{height:44px}
+
+/* Bullet list entry */
+.bullet-list{display:flex;flex-direction:column;gap:6px}
+.bullet-row{display:flex;gap:6px;align-items:center}
+.bullet-row input{flex:1}
+.bullet-row button{background:var(--bg3);color:var(--red);border:1px solid var(--border);padding:6px 10px;font-size:.85rem;flex-shrink:0}
+.btn-add-bullet{background:var(--bg3);color:var(--accent);border:1px solid var(--border);padding:8px 12px;font-size:.85rem;align-self:flex-start}
+
+/* Feeling selector */
+.feel-group{display:flex;gap:0;border-radius:8px;overflow:hidden;border:1px solid var(--border)}
+.feel-btn{background:var(--bg3);color:var(--fg2);padding:10px 14px;font-size:.85rem;font-weight:600;border-radius:0;border:none;border-right:1px solid var(--border);flex:1}
+.feel-btn:last-child{border-right:none}
+.feel-btn[aria-pressed="true"][data-feel="heard"]{background:var(--heard);color:#fff}
+.feel-btn[aria-pressed="true"][data-feel="unsure"]{background:var(--unsure);color:#fff}
+.feel-btn[aria-pressed="true"][data-feel="dismissed"]{background:var(--dismissed);color:#fff}
+
+/* Next steps entries */
+.next-step-row{display:flex;gap:6px;align-items:flex-start}
+.next-step-row select{background:var(--bg3);border:1px solid var(--border);color:var(--fg);padding:8px;border-radius:8px;font-size:.85rem;flex-shrink:0;height:44px}
+.next-step-row input{flex:1}
+.next-step-row button{flex-shrink:0}
+
+/* Generated message */
+.msg-preview{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:12px 14px;font-size:.9rem;line-height:1.5;color:var(--fg);white-space:pre-wrap;word-wrap:break-word;max-height:300px;overflow-y:auto}
+.btn-copy{background:var(--accent);color:#fff;padding:10px 18px;font-size:.95rem;align-self:flex-start}
+.btn-copy.copied{background:var(--green)}
+
+/* Form actions bar */
+.form-actions{display:flex;gap:8px;flex-wrap:wrap}
+.form-actions button{flex:1;min-width:120px}
+.btn-save{background:var(--green);color:#fff;padding:12px 18px;font-size:1rem}
+.btn-back{background:var(--bg3);color:var(--fg);border:1px solid var(--border);padding:12px 18px;font-size:1rem}
+.btn-delete{background:transparent;color:var(--red);border:1px solid var(--red-dim);padding:12px 18px;font-size:1rem}
+
+/* Doctor Summary */
+.summary-header{text-align:center;margin-bottom:12px}
+.summary-header h2{font-size:1.2rem;font-weight:700}
+.summary-header p{color:var(--fg2);font-size:.85rem;margin-top:4px}
+.summary-visit{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;break-inside:avoid;display:flex;flex-direction:column;gap:10px}
+.summary-visit h3{font-size:1rem;font-weight:700;border-bottom:1px solid var(--border);padding-bottom:6px}
+.summary-section-label{font-size:.8rem;color:var(--fg3);text-transform:uppercase;letter-spacing:.04em;margin-top:4px}
+.summary-bullets{list-style:disc;padding-left:18px;font-size:.9rem;color:var(--fg);line-height:1.5}
+.summary-text{font-size:.9rem;color:var(--fg2);line-height:1.5}
+.summary-feel{font-size:.85rem;padding:3px 10px;border-radius:6px;display:inline-block;font-weight:600}
+.summary-feel[data-feel="heard"]{background:var(--green-dim);color:var(--heard)}
+.summary-feel[data-feel="unsure"]{background:rgba(196,126,32,.15);color:var(--unsure)}
+.summary-feel[data-feel="dismissed"]{background:var(--red-dim);color:var(--dismissed)}
+.summary-unresolved{background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;break-inside:avoid}
+.summary-unresolved h3{font-size:1rem;font-weight:700;border-bottom:1px solid var(--border);padding-bottom:6px;margin-bottom:8px}
+.btn-print{background:var(--accent);color:#fff;padding:12px 24px;font-size:1rem;align-self:center}
+
+/* Settings */
+.settings-section{margin-bottom:20px}
+.settings-section h3{font-size:1rem;color:var(--fg2);margin-bottom:10px;font-weight:600}
+.setting-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border)}
+.setting-row:last-child{border-bottom:none}
+.setting-label{font-size:.95rem}
+.toggle{position:relative;width:48px;height:26px;background:var(--fg3);border-radius:13px;cursor:pointer;transition:background .15s;border:none;padding:0}
+.toggle.on{background:var(--green)}
+.toggle::after{content:"";position:absolute;top:2px;left:2px;width:22px;height:22px;background:#fff;border-radius:50%;transition:transform .15s}
+.toggle.on::after{transform:translateX(22px)}
+.btn-settings{background:var(--bg3);color:var(--fg);border:1px solid var(--border);padding:10px 18px;font-size:.95rem;width:100%;margin-top:6px}
+.btn-danger{border-color:var(--red);color:var(--red)}
+
+.privacy-note{color:var(--fg3);font-size:.75rem;text-align:center;padding:10px 16px;border-top:1px solid var(--border);margin-top:auto;line-height:1.4}
+
+/* Print */
+@media print{
+html{font-size:11pt}
+body{background:#fff;color:#000}
+.nav,.capture-view,.settings-view,.privacy-note,.btn-print,.no-print,.visits-view{display:none!important}
+.view.print-target{display:flex!important;flex-direction:column;gap:10px;padding:0}
+.summary-visit{border:1px solid #999;page-break-inside:avoid;padding:10px 12px}
+.summary-visit h3{border-bottom:1px solid #999;color:#000}
+.summary-section-label{color:#666}
+.summary-bullets{color:#000}
+.summary-text{color:#333}
+.summary-feel{border:1px solid #ccc}
+.summary-feel[data-feel="heard"]{background:#dfd;color:#060}
+.summary-feel[data-feel="unsure"]{background:#ffd;color:#860}
+.summary-feel[data-feel="dismissed"]{background:#fdd;color:#900}
+.summary-unresolved{border:1px solid #999;page-break-inside:avoid}
+.summary-unresolved h3{color:#000;border-bottom:1px solid #999}
+.summary-header h2{color:#000}
+.summary-header p{color:#333}
+@page{margin:0.6in;size:letter}
+}
+
+/* Responsive */
+@media(max-width:400px){
+.feel-btn{padding:8px 8px;font-size:.78rem}
+.form-actions button{min-width:0}
+}
+</style>
+</head>
+<body>
+
+<nav class="nav" role="tablist" aria-label="Main navigation">
+<button role="tab" aria-selected="true" aria-controls="view-visits" id="tab-visits" tabindex="0">Visits</button>
+<button role="tab" aria-selected="false" aria-controls="view-capture" id="tab-capture" tabindex="-1">Capture</button>
+<button role="tab" aria-selected="false" aria-controls="view-summary" id="tab-summary" tabindex="-1">Doctor Summary</button>
+<button role="tab" aria-selected="false" aria-controls="view-settings" id="tab-settings" tabindex="-1">Settings</button>
+</nav>
+
+<div class="view visits-view active" id="view-visits" role="tabpanel" aria-labelledby="tab-visits">
+<div id="visitsList"></div>
+</div>
+
+<div class="view capture-view" id="view-capture" role="tabpanel" aria-labelledby="tab-capture">
+<div id="captureForm"></div>
+</div>
+
+<div class="view" id="view-summary" role="tabpanel" aria-labelledby="tab-summary">
+<div class="summary-header">
+  <h2>After-Visit Summary &mdash; For Your Doctor</h2>
+  <p id="summaryDateRange"></p>
+  <p style="margin-top:6px;font-size:.8rem;color:var(--fg3)">Personal reflection tool. Not medical advice.</p>
+</div>
+<div id="summaryContent" style="display:flex;flex-direction:column;gap:12px"></div>
+<button class="btn-print no-print" id="btnPrint" style="margin-top:16px">Print Summary</button>
+</div>
+
+<div class="view settings-view" id="view-settings" role="tabpanel" aria-labelledby="tab-settings">
+<div class="settings-section">
+  <h3>Appearance</h3>
+  <div class="setting-row">
+    <span class="setting-label">Light mode</span>
+    <button class="toggle" id="toggleTheme" role="switch" aria-checked="false" aria-label="Toggle light mode"></button>
+  </div>
+</div>
+<div class="settings-section">
+  <h3>Doctor Name Default</h3>
+  <input type="text" class="form-input" id="defaultDrName" placeholder="e.g., Dr. Martinez" aria-label="Default doctor name" style="margin-top:4px">
+  <p style="color:var(--fg3);font-size:.8rem;margin-top:6px">Pre-fills the doctor name field on new visits.</p>
+</div>
+<div class="settings-section">
+  <h3>Data</h3>
+  <button class="btn-settings" id="btnExportJSON">Export JSON</button>
+  <button class="btn-settings" id="btnExportCSV">Export CSV</button>
+  <button class="btn-settings" id="btnImportJSON">Import JSON</button>
+  <input type="file" id="fileImport" accept=".json" style="display:none">
+  <button class="btn-settings btn-danger" id="btnClear">Clear all data</button>
+</div>
+<div class="settings-section">
+  <h3>About</h3>
+  <p style="font-size:.85rem;color:var(--fg2);line-height:1.5">
+    After-Visit Capture Kit v1.0<br>
+    Capture what you forgot to say, what the doctor said, and what to do next &mdash; within 5 minutes of walking out.<br><br>
+    All data stored locally on your device. No data is sent anywhere.
+  </p>
+</div>
+</div>
+
+<div class="privacy-note">All data stored locally on your device. Nothing is sent anywhere.</div>
+
+<script>
+(function(){
+"use strict";
+
+/* ── Constants ── */
+const NS = "qhc-after-visit-v1";
+const SLUG = "after-visit";
+const SCHEMA_VERSION = 1;
+
+const FEELINGS = [
+  {id:"heard",label:"Heard"},
+  {id:"unsure",label:"Unsure"},
+  {id:"dismissed",label:"Dismissed"}
+];
+
+const NEXT_STEP_TYPES = [
+  {id:"medication",label:"New Med"},
+  {id:"test",label:"Test/Lab"},
+  {id:"referral",label:"Referral"},
+  {id:"followUp",label:"Follow-up"},
+  {id:"other",label:"Other"}
+];
+
+/* ── Storage helpers ── */
+function loadData(){
+  try{const d=localStorage.getItem(NS);return d?JSON.parse(d):null}catch(e){return null}
+}
+function saveData(d){
+  d.schemaVersion=SCHEMA_VERSION;
+  d.slug=SLUG;
+  d.updatedAt=new Date().toISOString();
+  localStorage.setItem(NS,JSON.stringify(d));
+}
+function getOrCreateData(){
+  let d=loadData();
+  if(!d){
+    d={
+      schemaVersion:SCHEMA_VERSION,
+      slug:SLUG,
+      resourceType:"AfterVisitCaptureLog",
+      visits:[],
+      settings:{defaultDrName:""},
+      createdAt:new Date().toISOString(),
+      updatedAt:new Date().toISOString()
+    };
+    saveData(d);
+  }
+  return d;
+}
+
+function generateId(){
+  return Date.now().toString(36)+Math.random().toString(36).slice(2,7);
+}
+
+function createEmptyVisit(){
+  return {
+    id:generateId(),
+    visitDate:new Date().toISOString().slice(0,10),
+    practitionerName:data.settings.defaultDrName||"",
+    forgotToMention:[],
+    whatDoctorSaid:"",
+    nextSteps:[],
+    dontUnderstand:"",
+    visitFeeling:"",
+    portalMessageDraft:"",
+    unresolvedForNextVisit:[],
+    createdAt:new Date().toISOString(),
+    updatedAt:new Date().toISOString()
+  };
+}
+
+/* ── Date helpers ── */
+function formatDateShort(s){
+  if(!s) return "";
+  const p=s.split("-");
+  const d=new Date(+p[0],+p[1]-1,+p[2]);
+  return d.toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"});
+}
+
+/* ── State ── */
+let data=getOrCreateData();
+let editingVisitId=null;
+
+/* ── Tab navigation ── */
+const tabs=document.querySelectorAll(".nav button[role=tab]");
+const views={
+  "view-visits":document.getElementById("view-visits"),
+  "view-capture":document.getElementById("view-capture"),
+  "view-summary":document.getElementById("view-summary"),
+  "view-settings":document.getElementById("view-settings")
+};
+
+function switchTab(tabBtn){
+  tabs.forEach(t=>{t.setAttribute("aria-selected","false");t.tabIndex=-1});
+  Object.values(views).forEach(v=>v.classList.remove("active","print-target"));
+  tabBtn.setAttribute("aria-selected","true");
+  tabBtn.tabIndex=0;
+  tabBtn.focus();
+  const viewId=tabBtn.getAttribute("aria-controls");
+  views[viewId].classList.add("active");
+  if(viewId==="view-visits") renderVisitsList();
+  if(viewId==="view-summary"){views[viewId].classList.add("print-target");renderSummary()}
+  if(viewId==="view-capture"&&!editingVisitId) startNewVisit();
+}
+
+tabs.forEach(t=>{
+  t.addEventListener("click",()=>switchTab(t));
+  t.addEventListener("keydown",e=>{
+    const idx=[...tabs].indexOf(t);
+    let next=-1;
+    if(e.key==="ArrowRight") next=(idx+1)%tabs.length;
+    else if(e.key==="ArrowLeft") next=(idx-1+tabs.length)%tabs.length;
+    else if(e.key==="Home") next=0;
+    else if(e.key==="End") next=tabs.length-1;
+    if(next>=0){e.preventDefault();switchTab(tabs[next])}
+  });
+});
+
+/* ── Visits list ── */
+const visitsListEl=document.getElementById("visitsList");
+
+function renderVisitsList(){
+  visitsListEl.innerHTML="";
+
+  if(data.visits.length===0){
+    const empty=document.createElement("div");
+    empty.className="empty-state";
+    empty.innerHTML='<h2>No visits captured yet</h2><p>Just left a doctor\'s appointment? Tap below to capture what you forgot to say, what the doctor said, and what to do next &mdash; before you forget.</p>';
+    visitsListEl.appendChild(empty);
+  } else {
+    const list=document.createElement("div");
+    list.className="visit-list";
+    // Sort newest first
+    const sorted=[...data.visits].sort((a,b)=>b.visitDate.localeCompare(a.visitDate)||b.createdAt.localeCompare(a.createdAt));
+    sorted.forEach(v=>{
+      const item=document.createElement("div");
+      item.className="visit-item";
+      item.tabIndex=0;
+      item.setAttribute("role","button");
+      item.setAttribute("aria-label","Edit visit on "+formatDateShort(v.visitDate)+(v.practitionerName?" with "+v.practitionerName:""));
+
+      const info=document.createElement("div");
+      info.className="visit-item-info";
+      const dateEl=document.createElement("span");
+      dateEl.className="visit-item-date";
+      dateEl.textContent=formatDateShort(v.visitDate);
+      info.appendChild(dateEl);
+      if(v.practitionerName){
+        const drEl=document.createElement("span");
+        drEl.className="visit-item-dr";
+        drEl.textContent=v.practitionerName;
+        info.appendChild(drEl);
+      }
+      item.appendChild(info);
+
+      const right=document.createElement("div");
+      right.style.display="flex";right.style.alignItems="center";right.style.gap="8px";
+      if(v.visitFeeling){
+        const feel=document.createElement("span");
+        feel.className="visit-item-feeling";
+        feel.setAttribute("data-feel",v.visitFeeling);
+        feel.textContent=v.visitFeeling.charAt(0).toUpperCase()+v.visitFeeling.slice(1);
+        right.appendChild(feel);
+      }
+      item.appendChild(right);
+
+      function openVisit(){editingVisitId=v.id;renderCaptureForm();switchTab(tabs[1])}
+      item.addEventListener("click",openVisit);
+      item.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();openVisit()}});
+      list.appendChild(item);
+    });
+    visitsListEl.appendChild(list);
+  }
+
+  const newBtn=document.createElement("button");
+  newBtn.className="btn-new-visit";
+  newBtn.textContent="+ New Post-Visit Capture";
+  newBtn.style.marginTop="12px";
+  newBtn.addEventListener("click",()=>{startNewVisit();switchTab(tabs[1])});
+  visitsListEl.appendChild(newBtn);
+}
+
+function startNewVisit(){
+  const visit=createEmptyVisit();
+  data.visits.push(visit);
+  saveData(data);
+  editingVisitId=visit.id;
+  renderCaptureForm();
+}
+
+function getVisit(id){return data.visits.find(v=>v.id===id)}
+
+/* ── Capture form ── */
+const captureFormEl=document.getElementById("captureForm");
+
+function renderCaptureForm(){
+  captureFormEl.innerHTML="";
+  const visit=getVisit(editingVisitId);
+  if(!visit){renderVisitsList();switchTab(tabs[0]);return}
+
+  let saveTimer=null;
+  function autoSave(){
+    clearTimeout(saveTimer);
+    saveTimer=setTimeout(()=>{visit.updatedAt=new Date().toISOString();saveData(data)},400);
+  }
+  function immediateSave(){
+    clearTimeout(saveTimer);
+    visit.updatedAt=new Date().toISOString();
+    saveData(data);
+  }
+
+  // ── Date & Doctor ──
+  const metaSection=document.createElement("div");
+  metaSection.className="form-section";
+  const metaH=document.createElement("h3");
+  metaH.textContent="Visit Details";
+  metaSection.appendChild(metaH);
+
+  const dateLabel=document.createElement("label");
+  dateLabel.className="form-label";
+  dateLabel.textContent="Date";
+  dateLabel.htmlFor="field-date";
+  metaSection.appendChild(dateLabel);
+  const dateInput=document.createElement("input");
+  dateInput.type="date";
+  dateInput.className="form-input";
+  dateInput.id="field-date";
+  dateInput.value=visit.visitDate;
+  dateInput.addEventListener("change",()=>{visit.visitDate=dateInput.value;immediateSave()});
+  metaSection.appendChild(dateInput);
+
+  const drLabel=document.createElement("label");
+  drLabel.className="form-label";
+  drLabel.textContent="Doctor / Provider";
+  drLabel.htmlFor="field-dr";
+  drLabel.style.marginTop="8px";
+  metaSection.appendChild(drLabel);
+  const drInput=document.createElement("input");
+  drInput.type="text";
+  drInput.className="form-input";
+  drInput.id="field-dr";
+  drInput.placeholder="e.g., Dr. Martinez";
+  drInput.value=visit.practitionerName;
+  drInput.addEventListener("input",()=>{visit.practitionerName=drInput.value;autoSave()});
+  drInput.addEventListener("blur",immediateSave);
+  metaSection.appendChild(drInput);
+  captureFormEl.appendChild(metaSection);
+
+  // ── What I forgot to mention ──
+  const forgotSection=document.createElement("div");
+  forgotSection.className="form-section";
+  const forgotH=document.createElement("h3");
+  forgotH.textContent="What I Forgot to Mention";
+  forgotSection.appendChild(forgotH);
+  const forgotSub=document.createElement("p");
+  forgotSub.className="form-sublabel";
+  forgotSub.textContent="Symptoms, concerns, or questions you didn\u2019t get to say.";
+  forgotSection.appendChild(forgotSub);
+
+  function renderBullets(arr,container,placeholder){
+    container.innerHTML="";
+    const list=document.createElement("div");
+    list.className="bullet-list";
+
+    arr.forEach((item,i)=>{
+      const row=document.createElement("div");
+      row.className="bullet-row";
+      const inp=document.createElement("input");
+      inp.type="text";
+      inp.className="form-input";
+      inp.placeholder=placeholder;
+      inp.value=item;
+      inp.setAttribute("aria-label","Item "+(i+1));
+      inp.addEventListener("input",()=>{arr[i]=inp.value;autoSave()});
+      inp.addEventListener("blur",immediateSave);
+      row.appendChild(inp);
+      const rmBtn=document.createElement("button");
+      rmBtn.textContent="\u00D7";
+      rmBtn.setAttribute("aria-label","Remove item "+(i+1));
+      rmBtn.addEventListener("click",()=>{arr.splice(i,1);immediateSave();renderBullets(arr,container,placeholder)});
+      row.appendChild(rmBtn);
+      list.appendChild(row);
+    });
+
+    const addBtn=document.createElement("button");
+    addBtn.className="btn-add-bullet";
+    addBtn.textContent="+ Add";
+    addBtn.addEventListener("click",()=>{arr.push("");immediateSave();renderBullets(arr,container,placeholder);const inputs=container.querySelectorAll("input");if(inputs.length)inputs[inputs.length-1].focus()});
+    list.appendChild(addBtn);
+    container.appendChild(list);
+  }
+
+  const forgotBullets=document.createElement("div");
+  if(visit.forgotToMention.length===0) visit.forgotToMention.push("");
+  renderBullets(visit.forgotToMention,forgotBullets,"e.g., I\u2019ve been getting headaches every morning");
+  forgotSection.appendChild(forgotBullets);
+  captureFormEl.appendChild(forgotSection);
+
+  // ── What the doctor said ──
+  const saidSection=document.createElement("div");
+  saidSection.className="form-section";
+  const saidH=document.createElement("h3");
+  saidH.textContent="What the Doctor Said";
+  saidSection.appendChild(saidH);
+  const saidSub=document.createElement("p");
+  saidSub.className="form-sublabel";
+  saidSub.textContent="Summary in your own words. What do you remember them saying?";
+  saidSection.appendChild(saidSub);
+  const saidText=document.createElement("textarea");
+  saidText.className="form-input";
+  saidText.rows=3;
+  saidText.placeholder="e.g., Said my labs look fine but wants to re-check thyroid in 6 weeks\u2026";
+  saidText.setAttribute("aria-label","What the doctor said");
+  saidText.value=visit.whatDoctorSaid;
+  saidText.addEventListener("input",()=>{visit.whatDoctorSaid=saidText.value;autoSave()});
+  saidText.addEventListener("blur",immediateSave);
+  saidSection.appendChild(saidText);
+  captureFormEl.appendChild(saidSection);
+
+  // ── What I'm supposed to do next ──
+  const nextSection=document.createElement("div");
+  nextSection.className="form-section";
+  const nextH=document.createElement("h3");
+  nextH.textContent="What I\u2019m Supposed to Do Next";
+  nextSection.appendChild(nextH);
+  const nextSub=document.createElement("p");
+  nextSub.className="form-sublabel";
+  nextSub.textContent="New medications, tests, referrals, or follow-up appointments.";
+  nextSection.appendChild(nextSub);
+
+  function renderNextSteps(){
+    nextStepsContainer.innerHTML="";
+    const list=document.createElement("div");
+    list.className="bullet-list";
+
+    visit.nextSteps.forEach((step,i)=>{
+      const row=document.createElement("div");
+      row.className="next-step-row";
+      const sel=document.createElement("select");
+      sel.setAttribute("aria-label","Step type for item "+(i+1));
+      NEXT_STEP_TYPES.forEach(t=>{
+        const opt=document.createElement("option");
+        opt.value=t.id;opt.textContent=t.label;
+        if(step.stepType===t.id) opt.selected=true;
+        sel.appendChild(opt);
+      });
+      sel.addEventListener("change",()=>{step.stepType=sel.value;immediateSave()});
+      row.appendChild(sel);
+
+      const inp=document.createElement("input");
+      inp.type="text";
+      inp.className="form-input";
+      inp.placeholder="e.g., Start metformin 500mg";
+      inp.value=step.description||"";
+      inp.setAttribute("aria-label","Next step "+(i+1));
+      inp.addEventListener("input",()=>{step.description=inp.value;autoSave()});
+      inp.addEventListener("blur",immediateSave);
+      row.appendChild(inp);
+
+      const rmBtn=document.createElement("button");
+      rmBtn.textContent="\u00D7";
+      rmBtn.className="bullet-row button";
+      rmBtn.style.cssText="background:var(--bg3);color:var(--red);border:1px solid var(--border);padding:6px 10px;font-size:.85rem;flex-shrink:0;height:44px";
+      rmBtn.setAttribute("aria-label","Remove step "+(i+1));
+      rmBtn.addEventListener("click",()=>{visit.nextSteps.splice(i,1);immediateSave();renderNextSteps()});
+      row.appendChild(rmBtn);
+      list.appendChild(row);
+    });
+
+    const addBtn=document.createElement("button");
+    addBtn.className="btn-add-bullet";
+    addBtn.textContent="+ Add step";
+    addBtn.addEventListener("click",()=>{visit.nextSteps.push({stepType:"medication",description:""});immediateSave();renderNextSteps();const inputs=nextStepsContainer.querySelectorAll("input");if(inputs.length)inputs[inputs.length-1].focus()});
+    list.appendChild(addBtn);
+    nextStepsContainer.appendChild(list);
+  }
+
+  const nextStepsContainer=document.createElement("div");
+  if(visit.nextSteps.length===0) visit.nextSteps.push({stepType:"medication",description:""});
+  renderNextSteps();
+  nextSection.appendChild(nextStepsContainer);
+  captureFormEl.appendChild(nextSection);
+
+  // ── What I don't understand ──
+  const confusedSection=document.createElement("div");
+  confusedSection.className="form-section";
+  const confusedH=document.createElement("h3");
+  confusedH.textContent="What I Don\u2019t Understand";
+  confusedSection.appendChild(confusedH);
+  const confusedSub=document.createElement("p");
+  confusedSub.className="form-sublabel";
+  confusedSub.textContent="Questions for your patient portal message or next visit.";
+  confusedSection.appendChild(confusedSub);
+  const confusedText=document.createElement("textarea");
+  confusedText.className="form-input";
+  confusedText.rows=3;
+  confusedText.placeholder="e.g., Why did they say to stop taking vitamin D? I thought I was low\u2026";
+  confusedText.setAttribute("aria-label","What I don\u2019t understand");
+  confusedText.value=visit.dontUnderstand;
+  confusedText.addEventListener("input",()=>{visit.dontUnderstand=confusedText.value;autoSave()});
+  confusedText.addEventListener("blur",immediateSave);
+  confusedSection.appendChild(confusedText);
+  captureFormEl.appendChild(confusedSection);
+
+  // ── How did I feel ──
+  const feelSection=document.createElement("div");
+  feelSection.className="form-section";
+  const feelH=document.createElement("h3");
+  feelH.textContent="How Did I Feel About This Visit?";
+  feelSection.appendChild(feelH);
+
+  const feelGroup=document.createElement("div");
+  feelGroup.className="feel-group";
+  feelGroup.setAttribute("role","radiogroup");
+  feelGroup.setAttribute("aria-label","Visit feeling");
+
+  FEELINGS.forEach(f=>{
+    const btn=document.createElement("button");
+    btn.className="feel-btn";
+    btn.setAttribute("role","radio");
+    btn.setAttribute("data-feel",f.id);
+    btn.setAttribute("aria-checked",visit.visitFeeling===f.id?"true":"false");
+    btn.setAttribute("aria-pressed",visit.visitFeeling===f.id?"true":"false");
+    btn.tabIndex=visit.visitFeeling===f.id?0:-1;
+    btn.textContent=f.label;
+    btn.addEventListener("click",()=>{
+      visit.visitFeeling=f.id;
+      immediateSave();
+      feelGroup.querySelectorAll(".feel-btn").forEach(b=>{
+        const isCur=b.getAttribute("data-feel")===f.id;
+        b.setAttribute("aria-checked",isCur?"true":"false");
+        b.setAttribute("aria-pressed",isCur?"true":"false");
+        b.tabIndex=isCur?0:-1;
+      });
+    });
+    btn.addEventListener("keydown",e=>{
+      const btns=[...feelGroup.querySelectorAll(".feel-btn")];
+      const idx=btns.indexOf(btn);
+      let next=-1;
+      if(e.key==="ArrowRight"||e.key==="ArrowDown") next=(idx+1)%btns.length;
+      else if(e.key==="ArrowLeft"||e.key==="ArrowUp") next=(idx-1+btns.length)%btns.length;
+      if(next>=0){e.preventDefault();btns[next].click();btns[next].focus()}
+    });
+    feelGroup.appendChild(btn);
+  });
+  feelSection.appendChild(feelGroup);
+  captureFormEl.appendChild(feelSection);
+
+  // ── Portal Message Draft ──
+  const msgSection=document.createElement("div");
+  msgSection.className="form-section";
+  const msgH=document.createElement("h3");
+  msgH.textContent="Patient Portal Message Draft";
+  msgSection.appendChild(msgH);
+  const msgSub=document.createElement("p");
+  msgSub.className="form-sublabel";
+  msgSub.textContent="Auto-generated from what you entered. Copy and paste into your patient portal.";
+  msgSection.appendChild(msgSub);
+
+  const msgPreview=document.createElement("div");
+  msgPreview.className="msg-preview";
+  msgPreview.setAttribute("aria-live","polite");
+  msgSection.appendChild(msgPreview);
+
+  const copyBtn=document.createElement("button");
+  copyBtn.className="btn-copy no-print";
+  copyBtn.textContent="Copy to Clipboard";
+  copyBtn.style.marginTop="8px";
+  msgSection.appendChild(copyBtn);
+
+  function generateMessage(){
+    const dr=visit.practitionerName||"[Doctor]";
+    const date=formatDateShort(visit.visitDate);
+    let msg="Hi "+dr+",\n\nFollowing up on my visit on "+date+".";
+
+    const forgot=visit.forgotToMention.filter(s=>s.trim());
+    if(forgot.length>0){
+      msg+="\n\nI forgot to mention:\n"+forgot.map(s=>"\u2022 "+s.trim()).join("\n");
+    }
+
+    const questions=(visit.dontUnderstand||"").trim();
+    if(questions){
+      msg+="\n\nI also wanted to clarify:\n"+questions;
+    }
+
+    const steps=visit.nextSteps.filter(s=>s.description&&s.description.trim());
+    if(steps.length>0){
+      msg+="\n\nCan you confirm these are the next steps?\n"+steps.map(s=>{
+        const typeLabel=NEXT_STEP_TYPES.find(t=>t.id===s.stepType);
+        return "\u2022 "+(typeLabel?typeLabel.label+": ":"")+s.description.trim();
+      }).join("\n");
+    }
+
+    msg+="\n\nThank you!";
+    visit.portalMessageDraft=msg;
+    return msg;
+  }
+
+  function updateMessage(){msgPreview.textContent=generateMessage()}
+  updateMessage();
+
+  // Re-generate whenever we come back or fields change
+  const observer=new MutationObserver(updateMessage);
+  observer.observe(captureFormEl,{childList:true,subtree:true});
+  // Also re-gen on any input
+  captureFormEl.addEventListener("input",()=>setTimeout(updateMessage,50));
+
+  copyBtn.addEventListener("click",()=>{
+    const msg=generateMessage();
+    navigator.clipboard.writeText(msg).then(()=>{
+      copyBtn.textContent="Copied!";
+      copyBtn.classList.add("copied");
+      setTimeout(()=>{copyBtn.textContent="Copy to Clipboard";copyBtn.classList.remove("copied")},2000);
+    }).catch(()=>{
+      // Fallback for older browsers
+      const ta=document.createElement("textarea");
+      ta.value=msg;ta.style.position="fixed";ta.style.left="-9999px";
+      document.body.appendChild(ta);ta.select();
+      try{document.execCommand("copy");copyBtn.textContent="Copied!";copyBtn.classList.add("copied");setTimeout(()=>{copyBtn.textContent="Copy to Clipboard";copyBtn.classList.remove("copied")},2000)}catch(e){}
+      document.body.removeChild(ta);
+    });
+  });
+
+  captureFormEl.appendChild(msgSection);
+
+  // ── Form actions ──
+  const actions=document.createElement("div");
+  actions.className="form-actions";
+
+  const backBtn=document.createElement("button");
+  backBtn.className="btn-back";
+  backBtn.textContent="\u2190 All Visits";
+  backBtn.addEventListener("click",()=>{
+    immediateSave();
+    cleanEmptyVisit(visit);
+    editingVisitId=null;
+    switchTab(tabs[0]);
+  });
+  actions.appendChild(backBtn);
+
+  const deleteBtn=document.createElement("button");
+  deleteBtn.className="btn-delete";
+  deleteBtn.textContent="Delete Visit";
+  deleteBtn.addEventListener("click",()=>{
+    if(!confirm("Delete this visit capture? This cannot be undone.")) return;
+    data.visits=data.visits.filter(v=>v.id!==visit.id);
+    saveData(data);
+    editingVisitId=null;
+    switchTab(tabs[0]);
+  });
+  actions.appendChild(deleteBtn);
+
+  captureFormEl.appendChild(actions);
+}
+
+function cleanEmptyVisit(visit){
+  const forgot=visit.forgotToMention.filter(s=>s.trim());
+  const steps=visit.nextSteps.filter(s=>s.description&&s.description.trim());
+  const hasContent=forgot.length>0||visit.whatDoctorSaid.trim()||steps.length>0||visit.dontUnderstand.trim()||visit.visitFeeling;
+  if(!hasContent){
+    data.visits=data.visits.filter(v=>v.id!==visit.id);
+    saveData(data);
+  }
+}
+
+/* ── Doctor Summary (print view) ── */
+function renderSummary(){
+  const content=document.getElementById("summaryContent");
+  content.innerHTML="";
+
+  const sorted=[...data.visits].sort((a,b)=>b.visitDate.localeCompare(a.visitDate)||b.createdAt.localeCompare(a.createdAt));
+
+  if(sorted.length===0){
+    const p=document.createElement("p");
+    p.style.cssText="text-align:center;color:var(--fg3);padding:20px";
+    p.textContent="No visits captured yet.";
+    content.appendChild(p);
+    return;
+  }
+
+  const dates=sorted.map(v=>v.visitDate);
+  document.getElementById("summaryDateRange").textContent=formatDateShort(dates[dates.length-1])+" \u2013 "+formatDateShort(dates[0])+" ("+sorted.length+" visit"+(sorted.length>1?"s":"")+")";
+
+  // Collect unresolved items across visits
+  const allUnresolved=[];
+
+  sorted.forEach(visit=>{
+    const block=document.createElement("div");
+    block.className="summary-visit";
+
+    const h3=document.createElement("h3");
+    h3.textContent=formatDateShort(visit.visitDate)+(visit.practitionerName?" \u2014 "+visit.practitionerName:"");
+    block.appendChild(h3);
+
+    // Forgot to mention
+    const forgot=visit.forgotToMention.filter(s=>s.trim());
+    if(forgot.length>0){
+      const label=document.createElement("div");
+      label.className="summary-section-label";
+      label.textContent="Not Mentioned During Visit";
+      block.appendChild(label);
+      const ul=document.createElement("ul");
+      ul.className="summary-bullets";
+      forgot.forEach(s=>{const li=document.createElement("li");li.textContent=s.trim();ul.appendChild(li)});
+      block.appendChild(ul);
+    }
+
+    // What doctor said
+    if(visit.whatDoctorSaid.trim()){
+      const label=document.createElement("div");
+      label.className="summary-section-label";
+      label.textContent="Patient\u2019s Recall of Discussion";
+      block.appendChild(label);
+      const p=document.createElement("p");
+      p.className="summary-text";
+      p.textContent=visit.whatDoctorSaid.trim();
+      block.appendChild(p);
+    }
+
+    // Next steps
+    const steps=visit.nextSteps.filter(s=>s.description&&s.description.trim());
+    if(steps.length>0){
+      const label=document.createElement("div");
+      label.className="summary-section-label";
+      label.textContent="Understood Next Steps";
+      block.appendChild(label);
+      const ul=document.createElement("ul");
+      ul.className="summary-bullets";
+      steps.forEach(s=>{
+        const typeLabel=NEXT_STEP_TYPES.find(t=>t.id===s.stepType);
+        const li=document.createElement("li");
+        li.textContent=(typeLabel?typeLabel.label+": ":"")+s.description.trim();
+        ul.appendChild(li);
+      });
+      block.appendChild(ul);
+    }
+
+    // Don't understand
+    if(visit.dontUnderstand.trim()){
+      const label=document.createElement("div");
+      label.className="summary-section-label";
+      label.textContent="Unresolved Questions";
+      block.appendChild(label);
+      const p=document.createElement("p");
+      p.className="summary-text";
+      p.textContent=visit.dontUnderstand.trim();
+      block.appendChild(p);
+      allUnresolved.push({date:formatDateShort(visit.visitDate),dr:visit.practitionerName,text:visit.dontUnderstand.trim()});
+    }
+
+    // Feeling
+    if(visit.visitFeeling){
+      const feel=document.createElement("span");
+      feel.className="summary-feel";
+      feel.setAttribute("data-feel",visit.visitFeeling);
+      feel.textContent="Felt: "+visit.visitFeeling.charAt(0).toUpperCase()+visit.visitFeeling.slice(1);
+      block.appendChild(feel);
+    }
+
+    content.appendChild(block);
+  });
+
+  // Unresolved items aggregate
+  if(allUnresolved.length>0){
+    const unresolvedBlock=document.createElement("div");
+    unresolvedBlock.className="summary-unresolved";
+    const uh=document.createElement("h3");
+    uh.textContent="Open Questions for Next Visit";
+    unresolvedBlock.appendChild(uh);
+    allUnresolved.forEach(u=>{
+      const p=document.createElement("p");
+      p.className="summary-text";
+      p.style.marginBottom="6px";
+      p.textContent="\u2022 "+u.text+" (from "+u.date+(u.dr?" with "+u.dr:"")+")";
+      unresolvedBlock.appendChild(p);
+    });
+    content.appendChild(unresolvedBlock);
+  }
+}
+
+/* ── Print ── */
+document.getElementById("btnPrint").addEventListener("click",()=>{
+  renderSummary();
+  window.print();
+});
+
+/* ── Theme ── */
+const toggleTheme=document.getElementById("toggleTheme");
+function applyTheme(light){
+  document.body.classList.toggle("light",light);
+  toggleTheme.classList.toggle("on",light);
+  toggleTheme.setAttribute("aria-checked",light?"true":"false");
+  localStorage.setItem(NS+"-theme",light?"light":"dark");
+}
+toggleTheme.addEventListener("click",()=>{
+  applyTheme(!document.body.classList.contains("light"));
+});
+const savedTheme=localStorage.getItem(NS+"-theme");
+if(savedTheme==="light") applyTheme(true);
+
+/* ── Default doctor name ── */
+const defaultDrInput=document.getElementById("defaultDrName");
+defaultDrInput.value=data.settings.defaultDrName||"";
+defaultDrInput.addEventListener("input",()=>{
+  data.settings.defaultDrName=defaultDrInput.value;
+  saveData(data);
+});
+
+/* ── Export JSON ── */
+document.getElementById("btnExportJSON").addEventListener("click",()=>{
+  const blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement("a");
+  a.href=url;
+  a.download=SLUG+"-export.json";
+  a.click();
+  URL.revokeObjectURL(url);
+});
+
+/* ── Export CSV ── */
+document.getElementById("btnExportCSV").addEventListener("click",()=>{
+  const headers=["visitDate","practitionerName","forgotToMention","whatDoctorSaid","nextSteps","dontUnderstand","visitFeeling"];
+  const rows=[headers.join(",")];
+  data.visits.forEach(v=>{
+    const forgot=v.forgotToMention.filter(s=>s.trim()).join("; ");
+    const steps=v.nextSteps.filter(s=>s.description&&s.description.trim()).map(s=>{
+      const t=NEXT_STEP_TYPES.find(t=>t.id===s.stepType);
+      return (t?t.label+": ":"")+s.description.trim();
+    }).join("; ");
+    const cols=[
+      v.visitDate,
+      '"'+(v.practitionerName||"").replace(/"/g,'""')+'"',
+      '"'+forgot.replace(/"/g,'""')+'"',
+      '"'+(v.whatDoctorSaid||"").replace(/"/g,'""')+'"',
+      '"'+steps.replace(/"/g,'""')+'"',
+      '"'+(v.dontUnderstand||"").replace(/"/g,'""')+'"',
+      v.visitFeeling||""
+    ];
+    rows.push(cols.join(","));
+  });
+  const blob=new Blob([rows.join("\n")],{type:"text/csv"});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement("a");
+  a.href=url;
+  a.download=SLUG+"-export.csv";
+  a.click();
+  URL.revokeObjectURL(url);
+});
+
+/* ── Import JSON ── */
+const fileImport=document.getElementById("fileImport");
+document.getElementById("btnImportJSON").addEventListener("click",()=>fileImport.click());
+fileImport.addEventListener("change",e=>{
+  const file=e.target.files[0];
+  if(!file) return;
+  const reader=new FileReader();
+  reader.onload=function(ev){
+    try{
+      const imported=JSON.parse(ev.target.result);
+      if(imported.slug!==SLUG){alert("Wrong file type. Expected "+SLUG+" data.");return}
+      data=imported;
+      saveData(data);
+      editingVisitId=null;
+      renderVisitsList();
+      switchTab(tabs[0]);
+    }catch(err){alert("Invalid JSON file.")}
+  };
+  reader.readAsText(file);
+  fileImport.value="";
+});
+
+/* ── Clear all data ── */
+document.getElementById("btnClear").addEventListener("click",()=>{
+  if(!confirm("Delete all visit data? This cannot be undone.")) return;
+  localStorage.removeItem(NS);
+  data=getOrCreateData();
+  editingVisitId=null;
+  defaultDrInput.value="";
+  renderVisitsList();
+});
+
+/* ── Init ── */
+renderVisitsList();
+
+})();
+</script>
+</body>
+</html>
