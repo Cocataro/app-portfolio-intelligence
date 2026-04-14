@@ -70,7 +70,8 @@ input[type="date"].form-input,input[type="text"].form-input,input[type="number"]
 .inj-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
 .inj-cell{aspect-ratio:1;display:flex;align-items:center;justify-content:center;border-radius:8px;font-size:.75rem;font-weight:600;background:var(--bg3);border:1px solid var(--border);color:var(--fg3);position:relative;cursor:pointer}
 .inj-cell.today{border-color:var(--accent)}
-.inj-cell.injected{background:var(--green-dim);color:var(--green);border-color:var(--green)}
+.inj-cell.injected{background:var(--green-dim);color:#fff;border-color:var(--green)}
+.light .inj-cell.injected{color:#186830}
 .inj-cell.dose-change{border-color:var(--orange)}
 .inj-cell.future{opacity:.5}
 .inj-cell .dot{position:absolute;bottom:2px;width:5px;height:5px;border-radius:50%;background:var(--accent)}
@@ -149,7 +150,8 @@ body{background:#fff!important;color:#000!important}
 }
 
 /* Listing badge */
-.listing-badge{background:var(--accent-dim);border:1px solid var(--accent);border-radius:8px;padding:12px 14px;font-size:.82rem;line-height:1.5;color:var(--fg2)}
+.listing-badge{background:var(--accent-dim);border:1px solid var(--accent);border-radius:8px;padding:12px 14px;font-size:.82rem;line-height:1.5;color:var(--fg)}
+.light .listing-badge{color:var(--fg2)}
 .listing-badge strong{color:var(--fg)}
 </style>
 </head>
