@@ -1,0 +1,1276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>GLP-1 First 90 Days</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+--bg:#0a0a0a;--bg2:#141414;--bg3:#1e1e1e;
+--fg:#cccccc;--fg2:#aaaaaa;--fg3:#8a8a8a;
+--accent:#3670a8;--accent-dim:#264466;
+--green:#267a49;--green-dim:#1a5535;
+--red:#cc3333;--red-dim:#802020;
+--orange:#c47e20;--orange-dim:rgba(196,126,32,.15);
+--border:#333333;--radius:10px;
+--font:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+}
+.light{
+--bg:#f5f5f5;--bg2:#ffffff;--bg3:#e8e8e8;
+--fg:#1a1a1a;--fg2:#555555;--fg3:#666666;
+--accent:#2266aa;--accent-dim:#c8ddf0;
+--green:#208040;--green-dim:#c8f0d8;
+--red:#cc2020;--red-dim:#ffcccc;
+--orange:#a06010;--orange-dim:rgba(160,96,16,.1);
+--border:#cccccc;
+}
+html{font-size:17px;font-family:var(--font)}
+body{background:var(--bg);color:var(--fg);min-height:100vh;min-height:100dvh;display:flex;flex-direction:column;overflow-x:hidden}
+button{font-family:var(--font);cursor:pointer;border:none;border-radius:var(--radius);font-size:1rem;font-weight:600;touch-action:manipulation;-webkit-tap-highlight-color:transparent;transition:opacity .1s}
+button:active{opacity:.8}
+button:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+input,textarea,select{font-family:var(--font);font-size:1rem}
+a{color:var(--accent)}
+
+/* Nav */
+.nav{display:flex;background:var(--bg2);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:10;flex-wrap:wrap}
+.nav button{flex:1;background:transparent;color:var(--fg2);padding:12px 4px;border-radius:0;font-size:.8rem;border-bottom:3px solid transparent;min-width:0;white-space:nowrap}
+.nav button[aria-selected="true"]{color:var(--fg);border-bottom-color:var(--accent)}
+.nav button:focus-visible{outline-offset:-2px}
+
+/* Views */
+.view{display:none;flex:1;padding:16px;overflow-y:auto}
+.view.active{display:flex;flex-direction:column;gap:16px}
+
+/* Cards */
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;display:flex;flex-direction:column;gap:10px}
+.card h3{font-size:.85rem;color:var(--fg3);text-transform:uppercase;letter-spacing:.05em}
+
+/* Buttons */
+.btn-primary{background:var(--accent);color:#fff;padding:12px 20px;font-size:1rem;width:100%}
+.btn-green{background:var(--green);color:#fff;padding:12px 20px;font-size:1rem}
+.btn-secondary{background:var(--bg3);color:var(--fg);border:1px solid var(--border);padding:10px 18px;font-size:.95rem}
+.btn-danger{background:transparent;color:var(--red);border:1px solid var(--red-dim);padding:10px 18px;font-size:.95rem}
+.btn-small{padding:8px 12px;font-size:.85rem}
+
+/* Forms */
+.form-label{font-size:.95rem;font-weight:600;display:block;margin-bottom:4px}
+.form-sublabel{font-size:.8rem;color:var(--fg3);margin-bottom:6px;line-height:1.4}
+.form-input{width:100%;background:var(--bg3);border:1px solid var(--border);color:var(--fg);padding:10px 12px;border-radius:8px;font-size:.95rem;line-height:1.4}
+.form-input:focus{outline:2px solid var(--accent);border-color:var(--accent)}
+.form-input::placeholder{color:var(--fg3)}
+textarea.form-input{resize:vertical;min-height:60px}
+input[type="date"].form-input,input[type="text"].form-input,input[type="number"].form-input,select.form-input{height:44px}
+
+.form-row{display:flex;gap:8px;align-items:flex-end}
+.form-row>*{flex:1}
+
+/* Injection calendar */
+.inj-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.inj-cell{aspect-ratio:1;display:flex;align-items:center;justify-content:center;border-radius:8px;font-size:.75rem;font-weight:600;background:var(--bg3);border:1px solid var(--border);color:var(--fg3);position:relative;cursor:pointer}
+.inj-cell.today{border-color:var(--accent)}
+.inj-cell.injected{background:var(--green-dim);color:var(--green);border-color:var(--green)}
+.inj-cell.dose-change{border-color:var(--orange)}
+.inj-cell.future{opacity:.5}
+.inj-cell .dot{position:absolute;bottom:2px;width:5px;height:5px;border-radius:50%;background:var(--accent)}
+.inj-day-labels{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:4px}
+.inj-day-labels span{text-align:center;font-size:.7rem;color:var(--fg3);font-weight:600}
+
+/* Side effect bars */
+.se-row{display:flex;align-items:center;gap:8px;padding:6px 0}
+.se-label{width:100px;font-size:.8rem;color:var(--fg2);flex-shrink:0;text-align:right}
+.se-bar-wrap{flex:1;height:20px;background:var(--bg3);border-radius:4px;overflow:hidden;position:relative}
+.se-bar{height:100%;border-radius:4px;transition:width .2s}
+.se-val{font-size:.75rem;color:var(--fg3);width:24px;text-align:center;flex-shrink:0}
+
+/* Rating buttons */
+.rating-group{display:flex;gap:4px}
+.rating-btn{width:36px;height:36px;display:flex;align-items:center;justify-content:center;background:var(--bg3);border:1px solid var(--border);border-radius:6px;font-size:.85rem;font-weight:700;color:var(--fg2)}
+.rating-btn[aria-pressed="true"]{background:var(--accent);color:#fff;border-color:var(--accent)}
+
+/* Site rotation */
+.site-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.site-btn{padding:10px;text-align:center;background:var(--bg3);border:1px solid var(--border);border-radius:8px;font-size:.85rem;color:var(--fg2)}
+.site-btn[aria-pressed="true"]{background:var(--accent-dim);color:var(--accent);border-color:var(--accent)}
+
+/* Log list */
+.log-list{display:flex;flex-direction:column;gap:6px}
+.log-item{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:10px 14px;display:flex;justify-content:space-between;align-items:center}
+.log-item-date{font-weight:700;font-size:.9rem}
+.log-item-info{font-size:.8rem;color:var(--fg2)}
+.log-item-actions button{background:var(--bg3);color:var(--fg3);padding:6px 8px;font-size:.75rem;border:1px solid var(--border)}
+
+/* Dose timeline */
+.dose-timeline{display:flex;flex-direction:column;gap:0;position:relative;padding-left:20px}
+.dose-timeline::before{content:"";position:absolute;left:8px;top:4px;bottom:4px;width:2px;background:var(--border)}
+.dose-step{position:relative;padding:8px 0 8px 16px}
+.dose-step::before{content:"";position:absolute;left:-16px;top:14px;width:10px;height:10px;border-radius:50%;background:var(--bg3);border:2px solid var(--border)}
+.dose-step.active::before{background:var(--green);border-color:var(--green)}
+.dose-step.upcoming::before{background:var(--orange);border-color:var(--orange)}
+.dose-step-label{font-size:.85rem;font-weight:600}
+.dose-step-date{font-size:.75rem;color:var(--fg3)}
+
+/* Disclaimer */
+.disclaimer{background:var(--orange-dim);border:1px solid var(--orange);border-radius:var(--radius);padding:12px 14px;font-size:.8rem;color:var(--fg2);line-height:1.5}
+
+/* Toggle */
+.toggle{width:48px;height:28px;border-radius:14px;background:var(--bg3);border:1px solid var(--border);position:relative;cursor:pointer;flex-shrink:0}
+.toggle::after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:var(--fg3);transition:transform .2s}
+.toggle.on::after{transform:translateX(20px);background:var(--accent)}
+
+/* Toolbar */
+.toolbar{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
+.toolbar-right{display:flex;gap:8px;align-items:center}
+
+/* Empty state */
+.empty{text-align:center;padding:40px 20px;color:var(--fg2)}
+.empty h2{font-size:1.1rem;margin-bottom:8px;color:var(--fg)}
+.empty p{font-size:.85rem;line-height:1.5}
+
+/* Chart (simple canvas) */
+.chart-wrap{width:100%;overflow-x:auto}
+canvas.chart{width:100%;height:200px;display:block}
+
+/* Print */
+@media print{
+body{background:#fff!important;color:#000!important}
+.nav,.toolbar,.toggle,button:not(.no-hide-print),[data-noprint]{display:none!important}
+.view{display:none!important}
+#viewSummary{display:flex!important;flex-direction:column;gap:12px}
+.card{border:1px solid #ccc!important;background:#fff!important;break-inside:avoid}
+.card h3{color:#555!important}
+.se-bar-wrap{background:#eee!important}
+.disclaimer{background:#fff8e0!important;border-color:#cca000!important;color:#333!important}
+.summary-header{text-align:center;margin-bottom:12px}
+.summary-header h2{font-size:1.3rem}
+.summary-header p{color:#555;font-size:.85rem}
+@page{margin:0.5in}
+}
+
+/* Listing badge */
+.listing-badge{background:var(--accent-dim);border:1px solid var(--accent);border-radius:8px;padding:12px 14px;font-size:.82rem;line-height:1.5;color:var(--fg2)}
+.listing-badge strong{color:var(--fg)}
+</style>
+</head>
+<body>
+<nav class="nav" role="tablist" aria-label="Main navigation">
+<button role="tab" aria-selected="true" data-tab="dashboard">Dashboard</button>
+<button role="tab" aria-selected="false" data-tab="inject">Inject</button>
+<button role="tab" aria-selected="false" data-tab="symptoms">Symptoms</button>
+<button role="tab" aria-selected="false" data-tab="log">Log</button>
+<button role="tab" aria-selected="false" data-tab="summary">Summary</button>
+<button role="tab" aria-selected="false" data-tab="settings">Settings</button>
+</nav>
+
+<!-- DASHBOARD -->
+<div id="viewDashboard" class="view active" role="tabpanel">
+<div class="disclaimer">
+&#9888;&#65039; Ask your prescriber before changing dose. This is a tracking tool, not medical advice.
+</div>
+<div id="dashOnboarding" class="card" style="display:none">
+<h3>Welcome</h3>
+<p style="font-size:.9rem;line-height:1.5">Track your first 90 days on GLP-1 medication. Start by setting up your medication and dose schedule in <strong>Settings</strong>.</p>
+<button class="btn-primary" onclick="switchTab('settings')">Set Up Medication</button>
+</div>
+<div id="dashActive" style="display:none;flex-direction:column;gap:16px">
+<div class="card" id="dashDrugCard">
+<h3>Current Medication</h3>
+<div id="dashDrugInfo" style="font-size:.95rem;line-height:1.6"></div>
+</div>
+<div class="card">
+<h3>Next Injection</h3>
+<div id="dashNextInj" style="font-size:.95rem;line-height:1.6"></div>
+</div>
+<div class="card">
+<h3>Day <span id="dashDayNum">0</span> of 90</h3>
+<div style="height:8px;background:var(--bg3);border-radius:4px;overflow:hidden;margin-top:4px">
+<div id="dashProgress" style="height:100%;background:var(--green);border-radius:4px;width:0%;transition:width .3s"></div>
+</div>
+<div id="dashProgressLabel" style="font-size:.8rem;color:var(--fg3);margin-top:4px"></div>
+</div>
+<div class="card">
+<h3>Today's Side Effects</h3>
+<div id="dashTodaySE" style="font-size:.9rem;line-height:1.6"></div>
+</div>
+<div class="card" id="dashQuickLog">
+<h3>Quick Log</h3>
+<div class="form-row" style="flex-wrap:wrap">
+<div>
+<label class="form-label" style="font-size:.8rem">Protein (g)</label>
+<input type="number" class="form-input" id="qlProtein" min="0" max="500" placeholder="—">
+</div>
+<div>
+<label class="form-label" style="font-size:.8rem">Water (oz)</label>
+<input type="number" class="form-input" id="qlWater" min="0" max="500" placeholder="—">
+</div>
+<div>
+<label class="form-label" style="font-size:.8rem">Weight (lbs)</label>
+<input type="number" class="form-input" id="qlWeight" min="0" max="999" step="0.1" placeholder="—">
+</div>
+</div>
+<button class="btn-green btn-small" id="btnQuickSave" style="align-self:flex-start;margin-top:4px">Save</button>
+</div>
+</div>
+</div>
+
+<!-- INJECT -->
+<div id="viewInject" class="view" role="tabpanel">
+<div class="card">
+<h3 id="injMonthLabel">Calendar</h3>
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+<button class="btn-secondary btn-small" id="injPrev" aria-label="Previous month">&larr;</button>
+<span id="injMonthTitle" style="font-weight:700"></span>
+<button class="btn-secondary btn-small" id="injNext" aria-label="Next month">&rarr;</button>
+</div>
+<div class="inj-day-labels"><span>Su</span><span>Mo</span><span>Tu</span><span>We</span><span>Th</span><span>Fr</span><span>Sa</span></div>
+<div class="inj-grid" id="injGrid"></div>
+</div>
+<div class="card" id="injDayDetail" style="display:none">
+<h3 id="injDayTitle">Selected Day</h3>
+<div id="injDayContent"></div>
+</div>
+<div class="card">
+<h3>Log Injection</h3>
+<div>
+<label class="form-label">Date</label>
+<input type="date" class="form-input" id="injDate">
+</div>
+<div>
+<label class="form-label">Time</label>
+<input type="time" class="form-input" id="injTime" style="height:44px">
+</div>
+<div>
+<label class="form-label">Site</label>
+<div class="site-grid" id="injSiteGrid">
+<button class="site-btn" data-site="left-abdomen" aria-pressed="false">Left Abdomen</button>
+<button class="site-btn" data-site="right-abdomen" aria-pressed="false">Right Abdomen</button>
+<button class="site-btn" data-site="left-thigh" aria-pressed="false">Left Thigh</button>
+<button class="site-btn" data-site="right-thigh" aria-pressed="false">Right Thigh</button>
+</div>
+</div>
+<div>
+<label class="form-label">Dose</label>
+<input type="text" class="form-input" id="injDose" placeholder="e.g. 0.25 mg">
+</div>
+<div>
+<label class="form-label">Notes (optional)</label>
+<textarea class="form-input" id="injNotes" rows="2" placeholder="Any observations..."></textarea>
+</div>
+<button class="btn-green" id="btnLogInj" style="width:100%">Log Injection</button>
+</div>
+<div class="card">
+<h3>Dose Schedule</h3>
+<div id="doseTimeline" class="dose-timeline"></div>
+</div>
+</div>
+
+<!-- SYMPTOMS -->
+<div id="viewSymptoms" class="view" role="tabpanel">
+<div class="card">
+<h3>Daily Side Effects — <span id="seDate"></span></h3>
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+<button class="btn-secondary btn-small" id="sePrev" aria-label="Previous day">&larr; Prev</button>
+<button class="btn-secondary btn-small" id="seToday">Today</button>
+<button class="btn-secondary btn-small" id="seNext" aria-label="Next day">Next &rarr;</button>
+</div>
+<div id="seRatings"></div>
+<div style="margin-top:8px">
+<label class="form-label">Notes</label>
+<textarea class="form-input" id="seNotes" rows="2" placeholder="How are you feeling today?"></textarea>
+</div>
+<button class="btn-green" id="btnSaveSE" style="width:100%;margin-top:8px">Save Symptoms</button>
+</div>
+<div class="card">
+<h3>7-Day Trend</h3>
+<div class="chart-wrap"><canvas class="chart" id="seChart"></canvas></div>
+</div>
+</div>
+
+<!-- LOG -->
+<div id="viewLog" class="view" role="tabpanel">
+<div class="toolbar">
+<h2 style="font-size:1.1rem">Daily Log</h2>
+<div class="toolbar-right">
+<select class="form-input" id="logFilter" style="width:auto;height:36px;font-size:.85rem;padding:4px 8px">
+<option value="all">All</option>
+<option value="injections">Injections</option>
+<option value="symptoms">Symptoms</option>
+<option value="weight">Weight</option>
+</select>
+</div>
+</div>
+<div class="log-list" id="logList"></div>
+<div class="empty" id="logEmpty" style="display:none">
+<h2>No entries yet</h2>
+<p>Start logging injections and symptoms to see your history.</p>
+</div>
+</div>
+
+<!-- SUMMARY (Doctor Print) -->
+<div id="viewSummary" class="view" role="tabpanel">
+<div class="toolbar" data-noprint>
+<h2 style="font-size:1.1rem">Doctor Summary</h2>
+<div class="toolbar-right">
+<select class="form-input" id="summaryRange" style="width:auto;height:36px;font-size:.85rem;padding:4px 8px">
+<option value="30">Last 30 days</option>
+<option value="60">Last 60 days</option>
+<option value="90">Full 90 days</option>
+</select>
+<button class="btn-secondary btn-small" id="btnPrint">Print</button>
+</div>
+</div>
+<div id="summaryContent"></div>
+</div>
+
+<!-- SETTINGS -->
+<div id="viewSettings" class="view" role="tabpanel">
+<div class="card">
+<h3>Medication</h3>
+<div>
+<label class="form-label">Drug</label>
+<select class="form-input" id="setDrug">
+<option value="">Select...</option>
+<option value="semaglutide">Semaglutide (Ozempic / Wegovy)</option>
+<option value="tirzepatide">Tirzepatide (Mounjaro / Zepbound)</option>
+<option value="liraglutide">Liraglutide (Saxenda / Victoza)</option>
+<option value="dulaglutide">Dulaglutide (Trulicity)</option>
+<option value="semaglutide-compound">Semaglutide (compounded)</option>
+<option value="tirzepatide-compound">Tirzepatide (compounded)</option>
+<option value="other">Other</option>
+</select>
+</div>
+<div id="setDrugOtherWrap" style="display:none">
+<label class="form-label">Drug Name</label>
+<input type="text" class="form-input" id="setDrugOther" placeholder="Enter drug name">
+</div>
+<div>
+<label class="form-label">Start Date</label>
+<input type="date" class="form-input" id="setStartDate">
+</div>
+<div>
+<label class="form-label">Injection Day</label>
+<select class="form-input" id="setInjDay">
+<option value="0">Sunday</option>
+<option value="1">Monday</option>
+<option value="2">Tuesday</option>
+<option value="3">Wednesday</option>
+<option value="4">Thursday</option>
+<option value="5">Friday</option>
+<option value="6">Saturday</option>
+</select>
+</div>
+</div>
+<div class="card">
+<h3>Dose Titration Schedule</h3>
+<p class="form-sublabel">Enter your prescribed dose schedule. Each row = a dose level and how many weeks to stay on it.</p>
+<div id="setDoseRows"></div>
+<button class="btn-secondary btn-small" id="btnAddDose" style="margin-top:8px">+ Add Dose Level</button>
+</div>
+<div class="card">
+<h3>Baseline Symptoms</h3>
+<p class="form-sublabel">Rate any symptoms you had <strong>before</strong> starting GLP-1, so we can show what's new vs. pre-existing.</p>
+<div id="setBaseline"></div>
+</div>
+<div class="card">
+<h3>Custom Side Effects</h3>
+<p class="form-sublabel">Add any symptoms not in the default list.</p>
+<div id="setCustomSE"></div>
+<div class="form-row" style="margin-top:8px">
+<input type="text" class="form-input" id="setNewSE" placeholder="Symptom name">
+<button class="btn-secondary btn-small" id="btnAddSE" style="flex:0">Add</button>
+</div>
+</div>
+<button class="btn-green" id="btnSaveSettings" style="width:100%">Save Settings</button>
+<div class="card" style="margin-top:8px">
+<h3>Appearance</h3>
+<div style="display:flex;justify-content:space-between;align-items:center">
+<span style="font-size:.9rem">Light Mode</span>
+<div class="toggle" id="toggleTheme" role="switch" aria-checked="false" aria-label="Toggle light mode" tabindex="0"></div>
+</div>
+</div>
+<div class="card">
+<h3>Data</h3>
+<div style="display:flex;flex-direction:column;gap:8px">
+<button class="btn-secondary" id="btnExportJSON">Export JSON</button>
+<button class="btn-secondary" id="btnExportCSV">Export CSV</button>
+<button class="btn-secondary" id="btnImportJSON">Import JSON</button>
+<input type="file" id="fileImport" accept=".json" style="display:none">
+<button class="btn-danger" id="btnClear">Clear All Data</button>
+</div>
+</div>
+<div class="listing-badge">
+<strong>GLP-1 First 90 Days — Free Edition</strong><br>
+Pro version includes lab integration, recipe library, and meal planning.<br>
+iOS app coming soon.
+</div>
+</div>
+
+<script>
+(function(){
+"use strict";
+const SLUG="glp1-first-90";
+const NS="qhc-glp1-first-90-v1";
+const SCHEMA_VERSION=1;
+
+const DEFAULT_SYMPTOMS=[
+"Nausea","Constipation","Fatigue","Food aversion",
+"Injection site pain","Sulfur burps","Hair loss","Heartburn"
+];
+
+const SITE_LABELS={"left-abdomen":"L Abdomen","right-abdomen":"R Abdomen","left-thigh":"L Thigh","right-thigh":"R Thigh"};
+
+/* ── Data ── */
+function makeDefault(){
+return{
+slug:SLUG,schemaVersion:SCHEMA_VERSION,
+settings:{drug:"",drugOther:"",startDate:"",injDay:1,
+doseSchedule:[{dose:"0.25 mg",weeks:4}],
+customSymptoms:[],baseline:{}},
+administrations:[],
+symptoms:{},
+dailyLogs:{}
+};
+}
+
+function loadData(){
+try{const raw=localStorage.getItem(NS);if(raw){const d=JSON.parse(raw);if(d.schemaVersion===SCHEMA_VERSION) return d;}}catch(e){}
+return makeDefault();
+}
+function saveData(d){localStorage.setItem(NS,JSON.stringify(d))}
+let data=loadData();
+
+function allSymptoms(){return[...DEFAULT_SYMPTOMS,...(data.settings.customSymptoms||[])]}
+function todayStr(){return new Date().toISOString().slice(0,10)}
+function daysBetween(a,b){return Math.round((new Date(b)-new Date(a))/864e5)}
+function fmtDate(s){if(!s)return"—";const d=new Date(s+"T00:00:00");return d.toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"})}
+function fmtShortDate(s){if(!s)return"—";const d=new Date(s+"T00:00:00");return d.toLocaleDateString("en-US",{month:"short",day:"numeric"})}
+function escHtml(s){const d=document.createElement("div");d.textContent=s;return d.innerHTML}
+
+/* ── Tabs ── */
+const tabs=document.querySelectorAll(".nav button[role=tab]");
+const views={
+dashboard:document.getElementById("viewDashboard"),
+inject:document.getElementById("viewInject"),
+symptoms:document.getElementById("viewSymptoms"),
+log:document.getElementById("viewLog"),
+summary:document.getElementById("viewSummary"),
+settings:document.getElementById("viewSettings")
+};
+function switchTab(name){
+tabs.forEach(t=>{
+const sel=t.dataset.tab===name;
+t.setAttribute("aria-selected",sel?"true":"false");
+});
+Object.entries(views).forEach(([k,v])=>{
+v.classList.toggle("active",k===name);
+});
+if(name==="dashboard") renderDashboard();
+if(name==="inject") renderCalendar();
+if(name==="symptoms") renderSymptoms();
+if(name==="log") renderLog();
+if(name==="summary") renderSummary();
+if(name==="settings") renderSettings();
+}
+tabs.forEach(t=>t.addEventListener("click",()=>switchTab(t.dataset.tab)));
+window.switchTab=switchTab;
+
+/* ── Dose helpers ── */
+function getDoseAtDate(dateStr){
+const sched=data.settings.doseSchedule||[];
+if(!data.settings.startDate||sched.length===0) return null;
+let cumWeeks=0;
+for(let i=0;i<sched.length;i++){
+const endWeek=cumWeeks+parseInt(sched[i].weeks||4);
+const daysSinceStart=daysBetween(data.settings.startDate,dateStr);
+if(daysSinceStart<endWeek*7) return{dose:sched[i].dose,level:i,cumWeeks};
+cumWeeks=endWeek;
+}
+return{dose:sched[sched.length-1].dose,level:sched.length-1,cumWeeks};
+}
+
+function getNextInjDate(){
+if(!data.settings.startDate) return null;
+const injDay=parseInt(data.settings.injDay)||0;
+const today=new Date();
+const todayD=new Date(today.getFullYear(),today.getMonth(),today.getDate());
+// Find next occurrence of injDay from today
+let d=new Date(todayD);
+while(d.getDay()!==injDay) d.setDate(d.getDate()+1);
+// If today is inj day and no injection logged today, return today
+if(d.getTime()===todayD.getTime()){
+const todayLogged=data.administrations.find(inj=>inj.date===todayStr());
+if(!todayLogged) return todayStr();
+d.setDate(d.getDate()+7);
+}
+return d.toISOString().slice(0,10);
+}
+
+function getSuggestedSite(){
+if(data.administrations.length===0) return"left-abdomen";
+const sites=["left-abdomen","right-abdomen","left-thigh","right-thigh"];
+const last=data.administrations[data.administrations.length-1];
+const idx=sites.indexOf(last.bodySite);
+return sites[(idx+1)%sites.length];
+}
+
+/* ── Dashboard ── */
+function renderDashboard(){
+const hasSetup=data.settings.drug&&data.settings.startDate;
+document.getElementById("dashOnboarding").style.display=hasSetup?"none":"block";
+document.getElementById("dashActive").style.display=hasSetup?"flex":"none";
+if(!hasSetup) return;
+
+// Drug info
+const drugNames={"semaglutide":"Semaglutide (Ozempic/Wegovy)","tirzepatide":"Tirzepatide (Mounjaro/Zepbound)","liraglutide":"Liraglutide (Saxenda/Victoza)","dulaglutide":"Dulaglutide (Trulicity)","semaglutide-compound":"Semaglutide (compounded)","tirzepatide-compound":"Tirzepatide (compounded)","other":data.settings.drugOther||"Other"};
+const doseInfo=getDoseAtDate(todayStr());
+document.getElementById("dashDrugInfo").innerHTML=
+"<strong>"+escHtml(drugNames[data.settings.drug]||data.settings.drug)+"</strong><br>"+
+"Current dose: <strong>"+(doseInfo?escHtml(doseInfo.dose):"—")+"</strong><br>"+
+"Started: "+escHtml(fmtDate(data.settings.startDate));
+
+// Day progress
+const dayNum=Math.max(0,Math.min(90,daysBetween(data.settings.startDate,todayStr())+1));
+document.getElementById("dashDayNum").textContent=dayNum;
+const pct=Math.min(100,Math.round(dayNum/90*100));
+document.getElementById("dashProgress").style.width=pct+"%";
+document.getElementById("dashProgressLabel").textContent=pct+"% complete — "+(90-dayNum)+" days remaining";
+
+// Next injection
+const nextInj=getNextInjDate();
+const ni=document.getElementById("dashNextInj");
+if(nextInj){
+const doseAtNext=getDoseAtDate(nextInj);
+const site=getSuggestedSite();
+ni.innerHTML=(nextInj===todayStr()?"<strong style='color:var(--green)'>Today!</strong>":"<strong>"+escHtml(fmtDate(nextInj))+"</strong>")+"<br>"+
+"Dose: "+(doseAtNext?escHtml(doseAtNext.dose):"—")+"<br>"+
+"Suggested site: "+escHtml(SITE_LABELS[site]||site);
+}else{
+ni.textContent="Set up your injection day in Settings.";
+}
+
+// Today side effects
+const todaySE=data.symptoms[todayStr()];
+const seDiv=document.getElementById("dashTodaySE");
+if(todaySE&&todaySE.ratings){
+const entries=Object.entries(todaySE.ratings).filter(([,v])=>v>0);
+if(entries.length){
+seDiv.innerHTML=entries.map(([k,v])=>escHtml(k)+": <strong>"+v+"/5</strong>").join("<br>");
+}else{
+seDiv.innerHTML="<span style='color:var(--green)'>No symptoms logged today.</span>";
+}
+}else{
+seDiv.innerHTML="<a href='#' onclick='switchTab(\"symptoms\");return false'>Log today's symptoms &rarr;</a>";
+}
+
+// Quick log - load today's values
+const dl=data.dailyLogs[todayStr()]||{};
+document.getElementById("qlProtein").value=dl.protein||"";
+document.getElementById("qlWater").value=dl.water||"";
+document.getElementById("qlWeight").value=dl.weight||"";
+}
+
+document.getElementById("btnQuickSave").addEventListener("click",function(){
+const day=todayStr();
+if(!data.dailyLogs[day]) data.dailyLogs[day]={};
+const p=document.getElementById("qlProtein").value;
+const w=document.getElementById("qlWater").value;
+const wt=document.getElementById("qlWeight").value;
+if(p) data.dailyLogs[day].protein=parseFloat(p);
+if(w) data.dailyLogs[day].water=parseFloat(w);
+if(wt) data.dailyLogs[day].weight=parseFloat(wt);
+saveData(data);
+this.textContent="Saved!";
+setTimeout(()=>{this.textContent="Save"},1200);
+});
+
+/* ── Injection Calendar ── */
+let calMonth=new Date().getMonth();
+let calYear=new Date().getFullYear();
+
+function renderCalendar(){
+const title=document.getElementById("injMonthTitle");
+title.textContent=new Date(calYear,calMonth).toLocaleDateString("en-US",{month:"long",year:"numeric"});
+const grid=document.getElementById("injGrid");
+grid.innerHTML="";
+const firstDay=new Date(calYear,calMonth,1).getDay();
+const daysInMonth=new Date(calYear,calMonth+1,0).getDate();
+const todayS=todayStr();
+for(let i=0;i<firstDay;i++){
+const c=document.createElement("div");
+c.className="inj-cell";
+c.style.visibility="hidden";
+grid.appendChild(c);
+}
+for(let d=1;d<=daysInMonth;d++){
+const dateStr=calYear+"-"+String(calMonth+1).padStart(2,"0")+"-"+String(d).padStart(2,"0");
+const c=document.createElement("div");
+c.className="inj-cell";
+c.textContent=d;
+c.setAttribute("role","button");
+c.setAttribute("tabindex","0");
+c.setAttribute("aria-label",fmtDate(dateStr));
+if(dateStr===todayS) c.classList.add("today");
+if(dateStr>todayS) c.classList.add("future");
+const inj=data.administrations.find(x=>x.date===dateStr);
+if(inj) c.classList.add("injected");
+// dose change marker
+const doseInfo=getDoseAtDate(dateStr);
+if(doseInfo&&data.settings.startDate){
+const dayOfWeek=new Date(dateStr+"T00:00:00").getDay();
+if(dayOfWeek===parseInt(data.settings.injDay)){
+const prevDate=new Date(new Date(dateStr+"T00:00:00").getTime()-7*864e5).toISOString().slice(0,10);
+const prevDose=getDoseAtDate(prevDate);
+if(prevDose&&prevDose.dose!==doseInfo.dose) c.classList.add("dose-change");
+}
+}
+// symptom dot
+if(data.symptoms[dateStr]){
+const dot=document.createElement("span");
+dot.className="dot";
+c.appendChild(dot);
+}
+c.addEventListener("click",()=>showDayDetail(dateStr));
+c.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();showDayDetail(dateStr)}});
+grid.appendChild(c);
+}
+// Pre-fill injection date
+document.getElementById("injDate").value=todayS;
+// Pre-fill suggested site
+const suggested=getSuggestedSite();
+document.querySelectorAll("#injSiteGrid .site-btn").forEach(b=>{
+b.setAttribute("aria-pressed",b.dataset.site===suggested?"true":"false");
+});
+// Pre-fill dose
+const curDose=getDoseAtDate(todayS);
+document.getElementById("injDose").value=curDose?curDose.dose:"";
+// Render dose timeline
+renderDoseTimeline();
+}
+
+function showDayDetail(dateStr){
+const panel=document.getElementById("injDayDetail");
+const title=document.getElementById("injDayTitle");
+const content=document.getElementById("injDayContent");
+title.textContent=fmtDate(dateStr);
+const inj=data.administrations.find(x=>x.date===dateStr);
+const se=data.symptoms[dateStr];
+const dl=data.dailyLogs[dateStr];
+let html="";
+if(inj){
+html+="<p><strong>Injection:</strong> "+escHtml(inj.dosageText)+" — "+escHtml(SITE_LABELS[inj.bodySite]||inj.bodySite);
+if(inj.effectiveTime) html+=" at "+escHtml(inj.effectiveTime);
+html+="</p>";
+if(inj.notes) html+="<p style='font-size:.85rem;color:var(--fg2)'>"+escHtml(inj.notes)+"</p>";
+}
+if(se&&se.ratings){
+const entries=Object.entries(se.ratings).filter(([,v])=>v>0);
+if(entries.length) html+="<p><strong>Symptoms:</strong> "+entries.map(([k,v])=>escHtml(k)+" "+v+"/5").join(", ")+"</p>";
+if(se.notes) html+="<p style='font-size:.85rem;color:var(--fg2)'>"+escHtml(se.notes)+"</p>";
+}
+if(dl){
+const parts=[];
+if(dl.protein) parts.push("Protein: "+dl.protein+"g");
+if(dl.water) parts.push("Water: "+dl.water+"oz");
+if(dl.weight) parts.push("Weight: "+dl.weight+" lbs");
+if(parts.length) html+="<p><strong>Daily:</strong> "+parts.join(" · ")+"</p>";
+}
+if(!html) html="<p style='color:var(--fg3)'>No data for this day.</p>";
+content.innerHTML=html;
+panel.style.display="flex";
+}
+
+document.getElementById("injPrev").addEventListener("click",()=>{calMonth--;if(calMonth<0){calMonth=11;calYear--}renderCalendar()});
+document.getElementById("injNext").addEventListener("click",()=>{calMonth++;if(calMonth>11){calMonth=0;calYear++}renderCalendar()});
+
+// Site selection
+document.querySelectorAll("#injSiteGrid .site-btn").forEach(b=>{
+b.addEventListener("click",()=>{
+document.querySelectorAll("#injSiteGrid .site-btn").forEach(x=>x.setAttribute("aria-pressed","false"));
+b.setAttribute("aria-pressed","true");
+});
+});
+
+// Log injection
+document.getElementById("btnLogInj").addEventListener("click",()=>{
+const date=document.getElementById("injDate").value;
+const time=document.getElementById("injTime").value;
+const siteBtn=document.querySelector("#injSiteGrid .site-btn[aria-pressed='true']");
+const site=siteBtn?siteBtn.dataset.site:"";
+const dose=document.getElementById("injDose").value.trim();
+const notes=document.getElementById("injNotes").value.trim();
+if(!date){alert("Please select a date.");return}
+if(!dose){alert("Please enter the dose.");return}
+// Remove existing for same date
+data.administrations=data.administrations.filter(x=>x.date!==date);
+data.administrations.push({date,effectiveTime:time,bodySite:site,dosageText:dose,notes});
+data.administrations.sort((a,b)=>a.date.localeCompare(b.date));
+saveData(data);
+document.getElementById("injNotes").value="";
+renderCalendar();
+});
+
+function renderDoseTimeline(){
+const el=document.getElementById("doseTimeline");
+const sched=data.settings.doseSchedule||[];
+if(!data.settings.startDate||sched.length===0){el.innerHTML="<p style='color:var(--fg3);font-size:.85rem'>Set up your dose schedule in Settings.</p>";return}
+el.innerHTML="";
+let cumWeeks=0;
+const today=todayStr();
+sched.forEach((s,i)=>{
+const startDay=new Date(new Date(data.settings.startDate+"T00:00:00").getTime()+cumWeeks*7*864e5);
+const endDay=new Date(startDay.getTime()+(parseInt(s.weeks||4))*7*864e5-864e5);
+const startStr=startDay.toISOString().slice(0,10);
+const endStr=endDay.toISOString().slice(0,10);
+const step=document.createElement("div");
+step.className="dose-step";
+if(today>=startStr&&today<=endStr) step.classList.add("active");
+else if(today<startStr) step.classList.add("upcoming");
+step.innerHTML="<div class='dose-step-label'>"+escHtml(s.dose)+" — "+s.weeks+" weeks</div>"+
+"<div class='dose-step-date'>"+fmtShortDate(startStr)+" → "+fmtShortDate(endStr)+"</div>";
+el.appendChild(step);
+cumWeeks+=parseInt(s.weeks||4);
+});
+}
+
+/* ── Symptoms ── */
+let seCurrentDate=todayStr();
+
+function renderSymptoms(){
+document.getElementById("seDate").textContent=fmtDate(seCurrentDate);
+const container=document.getElementById("seRatings");
+container.innerHTML="";
+const syms=allSymptoms();
+const existing=data.symptoms[seCurrentDate]||{ratings:{},notes:""};
+const baseline=data.settings.baseline||{};
+syms.forEach(sym=>{
+const row=document.createElement("div");
+row.style.cssText="display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--border)";
+const label=document.createElement("div");
+label.style.cssText="flex:1;font-size:.9rem";
+label.textContent=sym;
+const bv=baseline[sym];
+if(bv&&bv>0){
+const tag=document.createElement("span");
+tag.style.cssText="font-size:.7rem;color:var(--orange);margin-left:4px";
+tag.textContent="(baseline: "+bv+")";
+label.appendChild(tag);
+}
+row.appendChild(label);
+const group=document.createElement("div");
+group.className="rating-group";
+for(let r=0;r<=5;r++){
+const btn=document.createElement("button");
+btn.className="rating-btn";
+btn.textContent=r;
+btn.setAttribute("aria-pressed",(existing.ratings[sym]===r)?"true":"false");
+btn.setAttribute("aria-label",sym+" severity "+r);
+btn.addEventListener("click",()=>{
+group.querySelectorAll(".rating-btn").forEach(b=>b.setAttribute("aria-pressed","false"));
+btn.setAttribute("aria-pressed","true");
+});
+group.appendChild(btn);
+}
+row.appendChild(group);
+container.appendChild(row);
+});
+document.getElementById("seNotes").value=existing.notes||"";
+renderSEChart();
+}
+
+document.getElementById("sePrev").addEventListener("click",()=>{
+const d=new Date(seCurrentDate+"T00:00:00");d.setDate(d.getDate()-1);
+seCurrentDate=d.toISOString().slice(0,10);renderSymptoms();
+});
+document.getElementById("seNext").addEventListener("click",()=>{
+const d=new Date(seCurrentDate+"T00:00:00");d.setDate(d.getDate()+1);
+seCurrentDate=d.toISOString().slice(0,10);renderSymptoms();
+});
+document.getElementById("seToday").addEventListener("click",()=>{
+seCurrentDate=todayStr();renderSymptoms();
+});
+
+document.getElementById("btnSaveSE").addEventListener("click",()=>{
+const ratings={};
+const rows=document.getElementById("seRatings").children;
+const syms=allSymptoms();
+for(let i=0;i<rows.length;i++){
+const btns=rows[i].querySelectorAll(".rating-btn[aria-pressed='true']");
+if(btns.length) ratings[syms[i]]=parseInt(btns[0].textContent);
+}
+data.symptoms[seCurrentDate]={ratings,notes:document.getElementById("seNotes").value.trim()};
+saveData(data);
+const btn=document.getElementById("btnSaveSE");
+btn.textContent="Saved!";setTimeout(()=>{btn.textContent="Save Symptoms"},1200);
+});
+
+function renderSEChart(){
+const canvas=document.getElementById("seChart");
+const ctx=canvas.getContext("2d");
+const dpr=window.devicePixelRatio||1;
+canvas.width=canvas.offsetWidth*dpr;
+canvas.height=200*dpr;
+ctx.scale(dpr,dpr);
+const W=canvas.offsetWidth;
+const H=200;
+ctx.clearRect(0,0,W,H);
+
+const syms=allSymptoms();
+const dates=[];
+for(let i=6;i>=0;i--){
+const d=new Date(seCurrentDate+"T00:00:00");
+d.setDate(d.getDate()-i);
+dates.push(d.toISOString().slice(0,10));
+}
+
+const padL=10,padR=10,padT=20,padB=30;
+const plotW=W-padL-padR;
+const plotH=H-padT-padB;
+const stepX=plotW/(dates.length-1||1);
+
+// Colors for symptoms
+const colors=["#cc3333","#3670a8","#267a49","#c47e20","#8844aa","#44aacc","#cc6699","#88aa44"];
+
+// Grid
+const fg3=getComputedStyle(document.body).getPropertyValue("--fg3").trim()||"#555";
+const bg3=getComputedStyle(document.body).getPropertyValue("--bg3").trim()||"#1e1e1e";
+ctx.strokeStyle=bg3;ctx.lineWidth=1;
+for(let y=0;y<=5;y++){
+const py=padT+plotH-plotH*y/5;
+ctx.beginPath();ctx.moveTo(padL,py);ctx.lineTo(W-padR,py);ctx.stroke();
+}
+
+// Date labels
+ctx.fillStyle=fg3;ctx.font="11px sans-serif";ctx.textAlign="center";
+dates.forEach((d,i)=>{
+const x=padL+i*stepX;
+ctx.fillText(fmtShortDate(d),x,H-6);
+});
+
+// Lines per symptom (top 4 active)
+const activeSyns=syms.filter(s=>{
+return dates.some(d=>data.symptoms[d]&&data.symptoms[d].ratings[s]>0);
+}).slice(0,4);
+
+activeSyns.forEach((sym,si)=>{
+ctx.strokeStyle=colors[si%colors.length];
+ctx.lineWidth=2;
+ctx.beginPath();
+let started=false;
+dates.forEach((d,i)=>{
+const val=(data.symptoms[d]&&data.symptoms[d].ratings[sym])||0;
+const x=padL+i*stepX;
+const y=padT+plotH-plotH*val/5;
+if(!started){ctx.moveTo(x,y);started=true}else{ctx.lineTo(x,y)}
+});
+ctx.stroke();
+// Legend dot
+const ly=padT+si*14;
+ctx.fillStyle=colors[si%colors.length];
+ctx.fillRect(W-padR-80,ly,10,10);
+ctx.fillStyle=fg3;ctx.textAlign="left";
+ctx.fillText(sym,W-padR-66,ly+9);
+});
+
+// Injection markers
+const injOnDates=dates.filter(d=>data.administrations.find(x=>x.date===d));
+injOnDates.forEach(d=>{
+const i=dates.indexOf(d);
+const x=padL+i*stepX;
+ctx.fillStyle=getComputedStyle(document.body).getPropertyValue("--green").trim()||"#267a49";
+ctx.beginPath();ctx.arc(x,padT-6,4,0,Math.PI*2);ctx.fill();
+});
+}
+
+/* ── Log ── */
+function renderLog(){
+const list=document.getElementById("logList");
+const emptyEl=document.getElementById("logEmpty");
+const filter=document.getElementById("logFilter").value;
+list.innerHTML="";
+
+// Gather all dates
+const allDates=new Set();
+data.administrations.forEach(x=>allDates.add(x.date));
+Object.keys(data.symptoms).forEach(d=>allDates.add(d));
+Object.keys(data.dailyLogs).forEach(d=>allDates.add(d));
+const sorted=[...allDates].sort().reverse();
+
+let shown=0;
+sorted.forEach(date=>{
+const inj=data.administrations.find(x=>x.date===date);
+const se=data.symptoms[date];
+const dl=data.dailyLogs[date];
+if(filter==="injections"&&!inj) return;
+if(filter==="symptoms"&&!se) return;
+if(filter==="weight"&&(!dl||!dl.weight)) return;
+
+const item=document.createElement("div");
+item.className="log-item";
+let info="";
+if(inj) info+="&#128137; "+escHtml(inj.dosageText)+" "+escHtml(SITE_LABELS[inj.bodySite]||"")+"  ";
+if(se&&se.ratings){
+const active=Object.entries(se.ratings).filter(([,v])=>v>0);
+if(active.length) info+=active.map(([k,v])=>escHtml(k)+" "+v).join(", ")+"  ";
+}
+if(dl){
+const parts=[];
+if(dl.protein) parts.push(dl.protein+"g protein");
+if(dl.water) parts.push(dl.water+"oz water");
+if(dl.weight) parts.push(dl.weight+" lbs");
+if(parts.length) info+=parts.join(" · ");
+}
+item.innerHTML="<div><div class='log-item-date'>"+escHtml(fmtDate(date))+"</div><div class='log-item-info'>"+info+"</div></div>";
+list.appendChild(item);
+shown++;
+});
+emptyEl.style.display=shown?"none":"block";
+}
+document.getElementById("logFilter").addEventListener("change",renderLog);
+
+/* ── Doctor Summary ── */
+function renderSummary(){
+const content=document.getElementById("summaryContent");
+const rangeDays=parseInt(document.getElementById("summaryRange").value);
+content.innerHTML="";
+
+const today=new Date();
+const rangeStart=new Date(today.getTime()-rangeDays*864e5).toISOString().slice(0,10);
+const todayS=todayStr();
+
+// Header
+const header=document.createElement("div");
+header.className="summary-header";
+const drugNames={"semaglutide":"Semaglutide","tirzepatide":"Tirzepatide","liraglutide":"Liraglutide","dulaglutide":"Dulaglutide","semaglutide-compound":"Semaglutide (compounded)","tirzepatide-compound":"Tirzepatide (compounded)","other":data.settings.drugOther||"Other"};
+header.innerHTML="<h2>GLP-1 Response Summary</h2>"+
+"<p>"+escHtml(drugNames[data.settings.drug]||"Not set")+" — "+rangeDays+"-day report<br>"+
+"Generated "+escHtml(fmtDate(todayS))+"</p>";
+content.appendChild(header);
+
+// Medication & dose history
+const medCard=document.createElement("div");
+medCard.className="card";
+let medHtml="<h3>Medication &amp; Dose History</h3>";
+medHtml+="<p>Start date: "+escHtml(fmtDate(data.settings.startDate))+"</p>";
+const sched=data.settings.doseSchedule||[];
+if(sched.length){
+medHtml+="<p>Titration: "+sched.map(s=>escHtml(s.dose)+" ("+s.weeks+"wk)").join(" → ")+"</p>";
+}
+const doseNow=getDoseAtDate(todayS);
+if(doseNow) medHtml+="<p>Current dose: <strong>"+escHtml(doseNow.dose)+"</strong></p>";
+medCard.innerHTML=medHtml;
+content.appendChild(medCard);
+
+// Injection log
+const injInRange=data.administrations.filter(x=>x.date>=rangeStart&&x.date<=todayS);
+if(injInRange.length){
+const injCard=document.createElement("div");
+injCard.className="card";
+let injHtml="<h3>Injections ("+injInRange.length+")</h3>";
+injInRange.forEach(inj=>{
+injHtml+="<p>"+escHtml(fmtDate(inj.date))+" — "+escHtml(inj.dosageText)+", "+escHtml(SITE_LABELS[inj.bodySite]||inj.bodySite);
+if(inj.effectiveTime) injHtml+=" at "+escHtml(inj.effectiveTime);
+injHtml+="</p>";
+});
+injCard.innerHTML=injHtml;
+content.appendChild(injCard);
+}
+
+// Side effect summary
+const syms=allSymptoms();
+const baseline=data.settings.baseline||{};
+const seCard=document.createElement("div");
+seCard.className="card";
+let seHtml="<h3>Side Effect Summary</h3>";
+const symAvgs={};
+let symDayCount=0;
+Object.entries(data.symptoms).forEach(([d,entry])=>{
+if(d<rangeStart||d>todayS) return;
+symDayCount++;
+if(entry.ratings){
+Object.entries(entry.ratings).forEach(([k,v])=>{
+if(!symAvgs[k]) symAvgs[k]={sum:0,count:0,max:0};
+symAvgs[k].sum+=v;symAvgs[k].count++;symAvgs[k].max=Math.max(symAvgs[k].max,v);
+});
+}
+});
+if(symDayCount>0){
+seHtml+="<p>"+symDayCount+" days logged</p>";
+const sorted=Object.entries(symAvgs).sort((a,b)=>(b[1].sum/b[1].count)-(a[1].sum/a[1].count));
+sorted.forEach(([sym,info])=>{
+const avg=(info.sum/info.count).toFixed(1);
+const bv=baseline[sym]||0;
+const delta=avg-bv;
+let tag="";
+if(bv>0) tag=" <span style='font-size:.8rem;color:var(--fg3)'>(baseline: "+bv+", change: "+(delta>=0?"+":"")+delta.toFixed(1)+")</span>";
+seHtml+="<div class='se-row'><span class='se-label'>"+escHtml(sym)+"</span>"+
+"<div class='se-bar-wrap'><div class='se-bar' style='width:"+Math.round(avg/5*100)+"%;background:"+(avg>3?"var(--red)":avg>1.5?"var(--orange)":"var(--green)")+";'></div></div>"+
+"<span class='se-val'>"+avg+"</span></div>"+
+(tag?"<div style='text-align:right;margin-top:-4px'>"+tag+"</div>":"");
+});
+}else{
+seHtml+="<p style='color:var(--fg3)'>No symptom data in this range.</p>";
+}
+seCard.innerHTML=seHtml;
+content.appendChild(seCard);
+
+// Weight trend
+const weights=[];
+Object.entries(data.dailyLogs).forEach(([d,dl])=>{
+if(d>=rangeStart&&d<=todayS&&dl.weight) weights.push({date:d,weight:dl.weight});
+});
+if(weights.length>1){
+weights.sort((a,b)=>a.date.localeCompare(b.date));
+const wtCard=document.createElement("div");
+wtCard.className="card";
+const first=weights[0].weight;
+const last=weights[weights.length-1].weight;
+const change=last-first;
+wtCard.innerHTML="<h3>Weight Trend</h3>"+
+"<p>"+escHtml(fmtDate(weights[0].date))+": <strong>"+first+" lbs</strong> → "+
+escHtml(fmtDate(weights[weights.length-1].date))+": <strong>"+last+" lbs</strong></p>"+
+"<p>Change: <strong style='color:var("+(change<=0?"--green":"--red")+")'>"+
+(change>=0?"+":"")+change.toFixed(1)+" lbs</strong></p>";
+content.appendChild(wtCard);
+}
+
+// Disclaimer
+const disc=document.createElement("div");
+disc.className="disclaimer";
+disc.textContent="Ask your prescriber before changing dose. This is a tracking tool, not medical advice. Generated by GLP-1 First 90 Days tracker. Data is stored locally on this device only.";
+content.appendChild(disc);
+}
+document.getElementById("summaryRange").addEventListener("change",renderSummary);
+document.getElementById("btnPrint").addEventListener("click",()=>{renderSummary();window.print()});
+
+/* ── Settings ── */
+function renderSettings(){
+// Drug
+document.getElementById("setDrug").value=data.settings.drug||"";
+document.getElementById("setDrugOther").value=data.settings.drugOther||"";
+document.getElementById("setDrugOtherWrap").style.display=data.settings.drug==="other"?"block":"none";
+document.getElementById("setStartDate").value=data.settings.startDate||"";
+document.getElementById("setInjDay").value=data.settings.injDay!=null?data.settings.injDay:1;
+
+// Dose rows
+renderDoseRows();
+
+// Baseline
+renderBaseline();
+
+// Custom SE
+renderCustomSE();
+}
+
+document.getElementById("setDrug").addEventListener("change",function(){
+document.getElementById("setDrugOtherWrap").style.display=this.value==="other"?"block":"none";
+});
+
+function renderDoseRows(){
+const container=document.getElementById("setDoseRows");
+container.innerHTML="";
+(data.settings.doseSchedule||[]).forEach((s,i)=>{
+const row=document.createElement("div");
+row.className="form-row";
+row.style.marginBottom="6px";
+row.innerHTML="<input type='text' class='form-input' value='"+escHtml(s.dose)+"' placeholder='Dose (e.g. 0.25 mg)' data-idx='"+i+"' data-field='dose'>"+
+"<input type='number' class='form-input' value='"+(s.weeks||4)+"' min='1' max='52' style='max-width:80px' data-idx='"+i+"' data-field='weeks' aria-label='Weeks at this dose'>"+
+"<span style='font-size:.8rem;color:var(--fg3);white-space:nowrap'>wks</span>"+
+"<button class='btn-danger btn-small' style='flex:0;padding:8px' data-delidx='"+i+"' aria-label='Remove dose level'>&times;</button>";
+container.appendChild(row);
+});
+container.querySelectorAll("[data-delidx]").forEach(b=>{
+b.addEventListener("click",()=>{
+data.settings.doseSchedule.splice(parseInt(b.dataset.delidx),1);
+renderDoseRows();
+});
+});
+}
+
+document.getElementById("btnAddDose").addEventListener("click",()=>{
+if(!data.settings.doseSchedule) data.settings.doseSchedule=[];
+data.settings.doseSchedule.push({dose:"",weeks:4});
+renderDoseRows();
+});
+
+function renderBaseline(){
+const container=document.getElementById("setBaseline");
+container.innerHTML="";
+const syms=allSymptoms();
+const baseline=data.settings.baseline||{};
+syms.forEach(sym=>{
+const row=document.createElement("div");
+row.style.cssText="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--border)";
+const label=document.createElement("div");
+label.style.cssText="flex:1;font-size:.85rem";
+label.textContent=sym;
+row.appendChild(label);
+const group=document.createElement("div");
+group.className="rating-group";
+for(let r=0;r<=5;r++){
+const btn=document.createElement("button");
+btn.className="rating-btn";
+btn.textContent=r;
+btn.setAttribute("aria-pressed",(baseline[sym]===r)?"true":"false");
+btn.setAttribute("aria-label",sym+" baseline "+r);
+btn.addEventListener("click",()=>{
+group.querySelectorAll(".rating-btn").forEach(b=>b.setAttribute("aria-pressed","false"));
+btn.setAttribute("aria-pressed","true");
+});
+group.appendChild(btn);
+}
+row.appendChild(group);
+container.appendChild(row);
+});
+}
+
+function renderCustomSE(){
+const container=document.getElementById("setCustomSE");
+container.innerHTML="";
+(data.settings.customSymptoms||[]).forEach((s,i)=>{
+const row=document.createElement("div");
+row.style.cssText="display:flex;align-items:center;gap:8px;padding:4px 0";
+row.innerHTML="<span style='flex:1;font-size:.9rem'>"+escHtml(s)+"</span>"+
+"<button class='btn-danger btn-small' data-rmse='"+i+"'>&times;</button>";
+container.appendChild(row);
+});
+container.querySelectorAll("[data-rmse]").forEach(b=>{
+b.addEventListener("click",()=>{
+data.settings.customSymptoms.splice(parseInt(b.dataset.rmse),1);
+renderCustomSE();
+renderBaseline();
+});
+});
+}
+
+document.getElementById("btnAddSE").addEventListener("click",()=>{
+const input=document.getElementById("setNewSE");
+const name=input.value.trim();
+if(!name) return;
+if(!data.settings.customSymptoms) data.settings.customSymptoms=[];
+if(allSymptoms().includes(name)){alert("That symptom already exists.");return}
+data.settings.customSymptoms.push(name);
+input.value="";
+renderCustomSE();
+renderBaseline();
+});
+
+document.getElementById("btnSaveSettings").addEventListener("click",()=>{
+data.settings.drug=document.getElementById("setDrug").value;
+data.settings.drugOther=document.getElementById("setDrugOther").value.trim();
+data.settings.startDate=document.getElementById("setStartDate").value;
+data.settings.injDay=parseInt(document.getElementById("setInjDay").value);
+// Read dose rows
+const doseInputs=document.querySelectorAll("#setDoseRows [data-field='dose']");
+const weekInputs=document.querySelectorAll("#setDoseRows [data-field='weeks']");
+data.settings.doseSchedule=[];
+doseInputs.forEach((inp,i)=>{
+data.settings.doseSchedule.push({dose:inp.value.trim(),weeks:parseInt(weekInputs[i].value)||4});
+});
+// Read baseline
+const baseContainer=document.getElementById("setBaseline");
+const syms=allSymptoms();
+data.settings.baseline={};
+const baseRows=baseContainer.children;
+for(let i=0;i<baseRows.length;i++){
+const pressed=baseRows[i].querySelector(".rating-btn[aria-pressed='true']");
+if(pressed) data.settings.baseline[syms[i]]=parseInt(pressed.textContent);
+}
+saveData(data);
+const btn=document.getElementById("btnSaveSettings");
+btn.textContent="Saved!";setTimeout(()=>{btn.textContent="Save Settings"},1200);
+});
+
+/* ── Theme ── */
+const toggleTheme=document.getElementById("toggleTheme");
+function applyTheme(light){
+document.body.classList.toggle("light",light);
+toggleTheme.classList.toggle("on",light);
+toggleTheme.setAttribute("aria-checked",light?"true":"false");
+localStorage.setItem(NS+"-theme",light?"light":"dark");
+}
+toggleTheme.addEventListener("click",()=>applyTheme(!document.body.classList.contains("light")));
+toggleTheme.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();applyTheme(!document.body.classList.contains("light"))}});
+const savedTheme=localStorage.getItem(NS+"-theme");
+if(savedTheme==="light") applyTheme(true);
+
+/* ── Export JSON ── */
+document.getElementById("btnExportJSON").addEventListener("click",()=>{
+const blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});
+const url=URL.createObjectURL(blob);
+const a=document.createElement("a");
+a.href=url;a.download=SLUG+"-export.json";a.click();
+URL.revokeObjectURL(url);
+});
+
+/* ── Export CSV ── */
+document.getElementById("btnExportCSV").addEventListener("click",()=>{
+const headers=["date","type","dose","injectionSite","injectionTime","protein_g","water_oz","weight_lbs","notes"];
+const syms=allSymptoms();
+syms.forEach(s=>headers.push("symptom_"+s.replace(/\s+/g,"_").toLowerCase()));
+const rows=[headers.join(",")];
+
+const allDates=new Set();
+data.administrations.forEach(x=>allDates.add(x.date));
+Object.keys(data.symptoms).forEach(d=>allDates.add(d));
+Object.keys(data.dailyLogs).forEach(d=>allDates.add(d));
+[...allDates].sort().forEach(date=>{
+const inj=data.administrations.find(x=>x.date===date);
+const se=data.symptoms[date];
+const dl=data.dailyLogs[date];
+const cols=[
+date,
+[inj?"injection":"",se?"symptoms":"",dl?"daily":""].filter(Boolean).join("+"),
+inj?'"'+inj.dosageText.replace(/"/g,'""')+'"':"",
+inj?inj.bodySite:"",
+inj?inj.effectiveTime||"":"",
+dl&&dl.protein?dl.protein:"",
+dl&&dl.water?dl.water:"",
+dl&&dl.weight?dl.weight:"",
+'"'+[(inj&&inj.notes?inj.notes:""),(se&&se.notes?se.notes:"")].filter(Boolean).join("; ").replace(/"/g,'""')+'"'
+];
+syms.forEach(s=>{
+cols.push(se&&se.ratings&&se.ratings[s]!=null?se.ratings[s]:"");
+});
+rows.push(cols.join(","));
+});
+const blob=new Blob([rows.join("\n")],{type:"text/csv"});
+const url=URL.createObjectURL(blob);
+const a=document.createElement("a");
+a.href=url;a.download=SLUG+"-export.csv";a.click();
+URL.revokeObjectURL(url);
+});
+
+/* ── Import JSON ── */
+const fileImport=document.getElementById("fileImport");
+document.getElementById("btnImportJSON").addEventListener("click",()=>fileImport.click());
+fileImport.addEventListener("change",e=>{
+const file=e.target.files[0];
+if(!file) return;
+const reader=new FileReader();
+reader.onload=function(ev){
+try{
+const imported=JSON.parse(ev.target.result);
+if(imported.slug!==SLUG){alert("Wrong file type. Expected "+SLUG+" data.");return}
+data=imported;saveData(data);switchTab("dashboard");
+}catch(err){alert("Invalid JSON file.")}
+};
+reader.readAsText(file);
+fileImport.value="";
+});
+
+/* ── Clear all data ── */
+document.getElementById("btnClear").addEventListener("click",()=>{
+if(!confirm("Delete all GLP-1 tracking data? This cannot be undone.")) return;
+localStorage.removeItem(NS);
+data=makeDefault();
+switchTab("dashboard");
+});
+
+/* ── Init ── */
+renderDashboard();
+
+})();
+</script>
+</body>
+</html>
