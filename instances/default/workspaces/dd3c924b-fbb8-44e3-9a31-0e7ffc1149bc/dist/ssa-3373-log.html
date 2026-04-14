@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>SSA-3373 Function Report Daily Log</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+--bg:#0a0a0a;--bg2:#141414;--bg3:#1e1e1e;
+--fg:#cccccc;--fg2:#aaaaaa;--fg3:#555555;
+--accent:#3670a8;--accent-dim:#264466;
+--green:#267a49;--green-dim:#1a5535;
+--red:#cc3333;--red-dim:#802020;
+--orange:#c47e20;
+--border:#333333;
+--radius:10px;
+--font:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+--sev-none:#444;--sev-mild:#3670a8;--sev-moderate:#c47e20;--sev-severe:#cc3333;--sev-unable:#881144;
+}
+.light{
+--bg:#f5f5f5;--bg2:#ffffff;--bg3:#e8e8e8;
+--fg:#1a1a1a;--fg2:#555555;--fg3:#999999;
+--accent:#2266aa;--accent-dim:#c8ddf0;
+--green:#208040;--green-dim:#c8f0d8;
+--red:#cc2020;--red-dim:#ffcccc;
+--orange:#a06010;
+--border:#cccccc;
+--sev-none:#aaa;--sev-mild:#2266aa;--sev-moderate:#a06010;--sev-severe:#cc2020;--sev-unable:#881144;
+}
+html{font-size:17px;font-family:var(--font)}
+body{background:var(--bg);color:var(--fg);min-height:100vh;min-height:100dvh;display:flex;flex-direction:column;overflow-x:hidden}
+button{font-family:var(--font);cursor:pointer;border:none;border-radius:var(--radius);font-size:1rem;font-weight:600;touch-action:manipulation;-webkit-tap-highlight-color:transparent;transition:opacity .1s}
+button:active{opacity:.8}
+button:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+input,textarea,select{font-family:var(--font);font-size:1rem}
+
+/* Nav */
+.nav{display:flex;background:var(--bg2);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:10}
+.nav button{flex:1;background:transparent;color:var(--fg2);padding:12px 6px;border-radius:0;font-size:.9rem;border-bottom:3px solid transparent}
+.nav button[aria-selected="true"]{color:var(--fg);border-bottom-color:var(--accent)}
+.nav button:focus-visible{outline-offset:-2px}
+
+/* Views */
+.view{display:none;flex:1;padding:16px;overflow-y:auto}
+.view.active{display:flex;flex-direction:column;gap:16px}
+
+/* Day selector */
+.day-nav{display:flex;align-items:center;gap:8px;justify-content:center;flex-wrap:wrap}
+.day-nav button{background:var(--bg3);color:var(--fg2);border:1px solid var(--border);padding:8px 12px;font-size:.85rem;min-width:40px}
+.day-nav button.current{background:var(--accent);color:#fff;border-color:var(--accent)}
+.day-nav button.has-data{border-color:var(--green)}
+.day-label{font-size:1.1rem;font-weight:700;text-align:center;margin:0 4px;min-width:140px}
+
+/* Category card */
+.cat-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;display:flex;flex-direction:column;gap:10px}
+.cat-header{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:4px}
+.cat-name{font-weight:700;font-size:1rem}
+.cat-ssa-ref{font-size:.75rem;color:var(--fg3)}
+.sev-group{display:flex;gap:0;border-radius:8px;overflow:hidden;border:1px solid var(--border)}
+.sev-btn{background:var(--bg3);color:var(--fg2);padding:7px 10px;font-size:.78rem;font-weight:600;border-radius:0;border:none;border-right:1px solid var(--border);min-width:0;flex:1}
+.sev-btn:last-child{border-right:none}
+.sev-btn[aria-pressed="true"]{color:#fff}
+.sev-btn[data-sev="none"][aria-pressed="true"]{background:var(--sev-none)}
+.sev-btn[data-sev="mild"][aria-pressed="true"]{background:var(--sev-mild)}
+.sev-btn[data-sev="moderate"][aria-pressed="true"]{background:var(--sev-moderate)}
+.sev-btn[data-sev="severe"][aria-pressed="true"]{background:var(--sev-severe)}
+.sev-btn[data-sev="unable"][aria-pressed="true"]{background:var(--sev-unable)}
+.cat-text{width:100%;background:var(--bg3);border:1px solid var(--border);color:var(--fg);padding:8px 10px;border-radius:8px;resize:vertical;min-height:48px;font-size:.9rem;line-height:1.4}
+.cat-text:focus{outline:2px solid var(--accent);border-color:var(--accent)}
+.cat-text::placeholder{color:var(--fg3)}
+
+/* Prefill banner */
+.prefill-banner{background:var(--accent-dim);border:1px solid var(--accent);border-radius:var(--radius);padding:10px 14px;font-size:.85rem;color:var(--fg);text-align:center;display:none}
+.prefill-banner button{background:var(--accent);color:#fff;padding:6px 14px;font-size:.85rem;margin-left:8px}
+
+/* Summary view */
+.summary-header{text-align:center;margin-bottom:8px}
+.summary-header h2{font-size:1.2rem;font-weight:700}
+.summary-header p{color:var(--fg2);font-size:.85rem;margin-top:4px}
+.summary-cat{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;break-inside:avoid}
+.summary-cat h3{font-size:1rem;font-weight:700;margin-bottom:8px;border-bottom:1px solid var(--border);padding-bottom:6px}
+.summary-freq{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:8px}
+.freq-badge{font-size:.8rem;padding:3px 8px;border-radius:6px;background:var(--bg3);color:var(--fg2)}
+.freq-badge.severe,.freq-badge.unable{background:var(--red-dim);color:var(--red)}
+.summary-quotes{list-style:none;display:flex;flex-direction:column;gap:4px}
+.summary-quotes li{font-size:.85rem;color:var(--fg2);line-height:1.4;padding-left:12px;position:relative}
+.summary-quotes li::before{content:"\201C";position:absolute;left:0;color:var(--fg3)}
+.summary-no-data{color:var(--fg3);font-size:.85rem;font-style:italic}
+.btn-print{background:var(--accent);color:#fff;padding:12px 24px;font-size:1rem;align-self:center}
+
+/* Settings */
+.settings-section{margin-bottom:20px}
+.settings-section h3{font-size:1rem;color:var(--fg2);margin-bottom:10px;font-weight:600}
+.setting-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border)}
+.setting-row:last-child{border-bottom:none}
+.setting-label{font-size:.95rem}
+.toggle{position:relative;width:48px;height:26px;background:var(--fg3);border-radius:13px;cursor:pointer;transition:background .15s;border:none;padding:0}
+.toggle.on{background:var(--green)}
+.toggle::after{content:"";position:absolute;top:2px;left:2px;width:22px;height:22px;background:#fff;border-radius:50%;transition:transform .15s}
+.toggle.on::after{transform:translateX(22px)}
+.btn-settings{background:var(--bg3);color:var(--fg);border:1px solid var(--border);padding:10px 18px;font-size:.95rem;width:100%;margin-top:6px}
+.btn-danger{border-color:var(--red);color:var(--red)}
+
+/* Date range config */
+.date-config{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.date-config label{font-size:.9rem;color:var(--fg2)}
+.date-config input{background:var(--bg2);border:1px solid var(--border);color:var(--fg);padding:6px 10px;border-radius:8px;font-size:.9rem}
+.date-config input:focus{outline:2px solid var(--accent);border-color:var(--accent)}
+
+.privacy-note{color:var(--fg3);font-size:.75rem;text-align:center;padding:10px 16px;border-top:1px solid var(--border);margin-top:auto;line-height:1.4}
+
+/* Print */
+@media print{
+html{font-size:11pt}
+body{background:#fff;color:#000}
+.nav,.log-view,.settings-view,.privacy-note,.btn-print,.no-print{display:none!important}
+.view.print-target{display:flex!important;flex-direction:column;gap:10px;padding:0}
+.summary-cat{border:1px solid #999;page-break-inside:avoid;padding:10px 12px}
+.summary-cat h3{border-bottom:1px solid #999;color:#000}
+.summary-freq{gap:8px}
+.freq-badge{background:#eee;color:#333;border:1px solid #ccc}
+.freq-badge.severe,.freq-badge.unable{background:#fdd;color:#900;border-color:#c99}
+.summary-quotes li{color:#333}
+.summary-quotes li::before{color:#666}
+.summary-header h2{color:#000}
+.summary-header p{color:#333}
+@page{margin:0.6in;size:letter}
+}
+
+/* Responsive */
+@media(max-width:400px){
+.sev-btn{padding:6px 6px;font-size:.7rem}
+.day-nav button{padding:6px 8px;font-size:.8rem;min-width:34px}
+}
+</style>
+</head>
+<body>
+
+<nav class="nav" role="tablist" aria-label="Main navigation">
+<button role="tab" aria-selected="true" aria-controls="view-log" id="tab-log" tabindex="0">Daily Log</button>
+<button role="tab" aria-selected="false" aria-controls="view-summary" id="tab-summary" tabindex="-1">SSA Summary</button>
+<button role="tab" aria-selected="false" aria-controls="view-settings" id="tab-settings" tabindex="-1">Settings</button>
+</nav>
+
+<div class="view log-view active" id="view-log" role="tabpanel" aria-labelledby="tab-log">
+<div class="day-nav" id="dayNav" role="group" aria-label="Select day"></div>
+<div class="prefill-banner" id="prefillBanner">
+  Copy yesterday&rsquo;s entries as a starting point?
+  <button id="btnPrefill">Copy</button>
+</div>
+<div id="categoryCards"></div>
+</div>
+
+<div class="view" id="view-summary" role="tabpanel" aria-labelledby="tab-summary">
+<div class="summary-header">
+  <h2>SSA-3373 Function Report &mdash; Daily Log Summary</h2>
+  <p id="summaryDateRange"></p>
+  <p style="margin-top:6px;font-size:.8rem;color:var(--fg3)">Tracking tool. Not legal advice. Not a substitute for an attorney.</p>
+</div>
+<div id="summaryContent" style="display:flex;flex-direction:column;gap:12px"></div>
+<button class="btn-print no-print" id="btnPrint" style="margin-top:16px">Print for SSA</button>
+</div>
+
+<div class="view settings-view" id="view-settings" role="tabpanel" aria-labelledby="tab-settings">
+<div class="settings-section">
+  <h3>Appearance</h3>
+  <div class="setting-row">
+    <span class="setting-label">Light mode</span>
+    <button class="toggle" id="toggleTheme" role="switch" aria-checked="false" aria-label="Toggle light mode"></button>
+  </div>
+</div>
+<div class="settings-section">
+  <h3>Log Period</h3>
+  <div class="date-config">
+    <label for="startDate">Start:</label>
+    <input type="date" id="startDate">
+  </div>
+  <p style="color:var(--fg3);font-size:.8rem;margin-top:6px">14-day period from start date. Changing this preserves existing entries.</p>
+</div>
+<div class="settings-section">
+  <h3>Data</h3>
+  <button class="btn-settings" id="btnExportJSON">Export JSON</button>
+  <button class="btn-settings" id="btnExportCSV">Export CSV</button>
+  <button class="btn-settings" id="btnImportJSON">Import JSON</button>
+  <input type="file" id="fileImport" accept=".json" style="display:none">
+  <button class="btn-settings btn-danger" id="btnClear">Clear all data</button>
+</div>
+<div class="settings-section">
+  <h3>About</h3>
+  <p style="font-size:.85rem;color:var(--fg2);line-height:1.5">
+    SSA-3373 Function Report Daily Log v1.0<br>
+    Track daily functional limitations across SSA-3373-BK categories for 14 days.
+    Generate a printable summary for your disability application.<br><br>
+    <strong>Pro version coming soon</strong> &mdash; auto-categorization and smart suggestions.<br>
+    <strong>iOS app</strong> &mdash; in development for on-the-go tracking.
+  </p>
+  <p style="font-size:.78rem;color:var(--fg3);margin-top:8px;line-height:1.4">
+    Tracking tool only. Not legal advice. Not a substitute for an attorney.
+    All data stored locally on your device. No data is sent anywhere.
+  </p>
+</div>
+</div>
+
+<div class="privacy-note">All data stored locally on your device. Nothing is sent anywhere.</div>
+
+<script>
+(function(){
+"use strict";
+
+/* ── Constants ── */
+const NS = "qhc-ssa-3373-log-v1";
+const SLUG = "ssa-3373-log";
+const SCHEMA_VERSION = 1;
+const DAYS = 14;
+
+const CATEGORIES = [
+  {id:"personal_care",name:"Personal Care",ssa:"Daily Activities",placeholder:"e.g., Needed help getting dressed, couldn\u2019t bend to tie shoes"},
+  {id:"cooking",name:"Cooking / Meals",ssa:"Daily Activities",placeholder:"e.g., Had to sit down 3 times while making dinner, burned food due to concentration"},
+  {id:"shopping",name:"Shopping / Errands",ssa:"Daily Activities",placeholder:"e.g., Couldn\u2019t carry bags, had to use motorized cart"},
+  {id:"hobbies",name:"Hobbies / Interests",ssa:"Hobbies & Social",placeholder:"e.g., Couldn\u2019t hold book, gave up gardening after 10 min"},
+  {id:"social",name:"Social Functioning",ssa:"Hobbies & Social",placeholder:"e.g., Avoided family gathering, snapped at coworker due to pain"},
+  {id:"concentration",name:"Concentration / Memory",ssa:"Mental Functioning",placeholder:"e.g., Forgot appointment, couldn\u2019t follow TV plot, re-read same page 4 times"},
+  {id:"sitting",name:"Sitting",ssa:"Physical Limits",placeholder:"e.g., Had to stand up after 15 min, used cushion but still painful"},
+  {id:"standing",name:"Standing",ssa:"Physical Limits",placeholder:"e.g., Could only stand 10 min before needing to sit"},
+  {id:"walking",name:"Walking",ssa:"Physical Limits",placeholder:"e.g., Used cane, could only walk half a block"},
+  {id:"lifting",name:"Lifting / Carrying",ssa:"Physical Limits",placeholder:"e.g., Couldn\u2019t lift gallon of milk, dropped coffee mug"},
+  {id:"sleep",name:"Sleep",ssa:"Sleep & Rest",placeholder:"e.g., Woke up 4 times, only slept 3 hours, needed daytime nap"},
+  {id:"pain",name:"Pain Levels",ssa:"Pain & Medications",placeholder:"e.g., Lower back 8/10, couldn\u2019t find comfortable position"},
+  {id:"medications",name:"Medications / Side Effects",ssa:"Pain & Medications",placeholder:"e.g., Took ibuprofen 800mg, caused drowsiness and nausea"}
+];
+
+const SEVERITIES = ["none","mild","moderate","severe","unable"];
+
+/* ── Storage helpers ── */
+function loadData(){
+  try{const d=localStorage.getItem(NS);return d?JSON.parse(d):null}catch(e){return null}
+}
+function saveData(data){
+  data.schemaVersion=SCHEMA_VERSION;
+  data.slug=SLUG;
+  data.updatedAt=new Date().toISOString();
+  localStorage.setItem(NS,JSON.stringify(data));
+}
+function getOrCreateData(){
+  let d=loadData();
+  if(!d){
+    const start=new Date();
+    start.setHours(0,0,0,0);
+    d={
+      schemaVersion:SCHEMA_VERSION,
+      slug:SLUG,
+      resourceType:"FunctionalAssessmentLog",
+      startDate:start.toISOString().slice(0,10),
+      periodDays:DAYS,
+      entries:{},
+      createdAt:new Date().toISOString(),
+      updatedAt:new Date().toISOString()
+    };
+    saveData(d);
+  }
+  return d;
+}
+
+/* ── Date helpers ── */
+function dateStr(d){return d.toISOString().slice(0,10)}
+function parseDate(s){const p=s.split("-");return new Date(+p[0],+p[1]-1,+p[2])}
+function addDays(d,n){const r=new Date(d);r.setDate(r.getDate()+n);return r}
+function formatDateShort(s){const d=parseDate(s);return d.toLocaleDateString("en-US",{month:"short",day:"numeric"})}
+function formatDateFull(s){const d=parseDate(s);return d.toLocaleDateString("en-US",{weekday:"long",month:"long",day:"numeric",year:"numeric"})}
+function getDayDates(data){
+  const start=parseDate(data.startDate);
+  const dates=[];
+  for(let i=0;i<DAYS;i++) dates.push(dateStr(addDays(start,i)));
+  return dates;
+}
+
+/* ── State ── */
+let data=getOrCreateData();
+let currentDay=0;
+let dates=getDayDates(data);
+
+// Set currentDay to today if within range
+const today=dateStr(new Date());
+const todayIdx=dates.indexOf(today);
+if(todayIdx>=0) currentDay=todayIdx;
+
+/* ── Tab navigation ── */
+const tabs=document.querySelectorAll(".nav button[role=tab]");
+const views={
+  "view-log":document.getElementById("view-log"),
+  "view-summary":document.getElementById("view-summary"),
+  "view-settings":document.getElementById("view-settings")
+};
+
+function switchTab(tabBtn){
+  tabs.forEach(t=>{t.setAttribute("aria-selected","false");t.tabIndex=-1});
+  Object.values(views).forEach(v=>v.classList.remove("active","print-target"));
+  tabBtn.setAttribute("aria-selected","true");
+  tabBtn.tabIndex=0;
+  tabBtn.focus();
+  const viewId=tabBtn.getAttribute("aria-controls");
+  views[viewId].classList.add("active");
+  if(viewId==="view-summary"){
+    views[viewId].classList.add("print-target");
+    renderSummary();
+  }
+}
+
+tabs.forEach(t=>{
+  t.addEventListener("click",()=>switchTab(t));
+  t.addEventListener("keydown",e=>{
+    const idx=[...tabs].indexOf(t);
+    let next=-1;
+    if(e.key==="ArrowRight") next=(idx+1)%tabs.length;
+    else if(e.key==="ArrowLeft") next=(idx-1+tabs.length)%tabs.length;
+    else if(e.key==="Home") next=0;
+    else if(e.key==="End") next=tabs.length-1;
+    if(next>=0){e.preventDefault();switchTab(tabs[next])}
+  });
+});
+
+/* ── Day navigation ── */
+const dayNavEl=document.getElementById("dayNav");
+const dayLabel=document.createElement("span");
+dayLabel.className="day-label";
+dayLabel.setAttribute("aria-live","polite");
+
+function renderDayNav(){
+  dayNavEl.innerHTML="";
+  const prevBtn=document.createElement("button");
+  prevBtn.textContent="\u25C0";
+  prevBtn.setAttribute("aria-label","Previous day");
+  prevBtn.disabled=currentDay===0;
+  prevBtn.addEventListener("click",()=>{if(currentDay>0){currentDay--;renderDay()}});
+  dayNavEl.appendChild(prevBtn);
+
+  // Day dots
+  for(let i=0;i<DAYS;i++){
+    const b=document.createElement("button");
+    b.textContent=String(i+1);
+    b.setAttribute("aria-label","Day "+(i+1)+", "+formatDateFull(dates[i]));
+    if(i===currentDay) b.classList.add("current");
+    if(data.entries[dates[i]]) b.classList.add("has-data");
+    const idx=i;
+    b.addEventListener("click",()=>{currentDay=idx;renderDay()});
+    dayNavEl.appendChild(b);
+  }
+
+  dayLabel.textContent=formatDateFull(dates[currentDay]);
+  dayNavEl.appendChild(dayLabel);
+
+  const nextBtn=document.createElement("button");
+  nextBtn.textContent="\u25B6";
+  nextBtn.setAttribute("aria-label","Next day");
+  nextBtn.disabled=currentDay===DAYS-1;
+  nextBtn.addEventListener("click",()=>{if(currentDay<DAYS-1){currentDay++;renderDay()}});
+  dayNavEl.appendChild(nextBtn);
+}
+
+/* ── Prefill ── */
+const prefillBanner=document.getElementById("prefillBanner");
+const btnPrefill=document.getElementById("btnPrefill");
+
+function checkPrefill(){
+  const curDate=dates[currentDay];
+  if(data.entries[curDate]){prefillBanner.style.display="none";return}
+  if(currentDay===0){prefillBanner.style.display="none";return}
+  const prevDate=dates[currentDay-1];
+  if(!data.entries[prevDate]){prefillBanner.style.display="none";return}
+  prefillBanner.style.display="block";
+}
+
+btnPrefill.addEventListener("click",()=>{
+  const prevDate=dates[currentDay-1];
+  const curDate=dates[currentDay];
+  if(!data.entries[prevDate]) return;
+  const prev=data.entries[prevDate];
+  const copy={};
+  for(const cat of CATEGORIES){
+    if(prev[cat.id]){
+      copy[cat.id]={
+        severityCode:prev[cat.id].severityCode||"none",
+        note:prev[cat.id].note||""
+      };
+    }
+  }
+  data.entries[curDate]=copy;
+  saveData(data);
+  renderDay();
+});
+
+/* ── Category cards ── */
+const cardsEl=document.getElementById("categoryCards");
+
+function renderDay(){
+  renderDayNav();
+  checkPrefill();
+  cardsEl.innerHTML="";
+
+  const curDate=dates[currentDay];
+  if(!data.entries[curDate]) data.entries[curDate]={};
+  const entry=data.entries[curDate];
+
+  let currentSection="";
+
+  CATEGORIES.forEach(cat=>{
+    // Section header
+    if(cat.ssa!==currentSection){
+      currentSection=cat.ssa;
+      const h=document.createElement("h3");
+      h.textContent=currentSection;
+      h.style.cssText="font-size:.85rem;color:var(--fg3);text-transform:uppercase;letter-spacing:.05em;margin-top:12px;margin-bottom:4px;padding-left:2px";
+      cardsEl.appendChild(h);
+    }
+
+    const card=document.createElement("div");
+    card.className="cat-card";
+
+    // Header
+    const header=document.createElement("div");
+    header.className="cat-header";
+    const nameEl=document.createElement("span");
+    nameEl.className="cat-name";
+    nameEl.textContent=cat.name;
+    const refEl=document.createElement("span");
+    refEl.className="cat-ssa-ref";
+    refEl.textContent=cat.ssa;
+    header.appendChild(nameEl);
+    header.appendChild(refEl);
+    card.appendChild(header);
+
+    // Severity buttons
+    const sevGroup=document.createElement("div");
+    sevGroup.className="sev-group";
+    sevGroup.setAttribute("role","radiogroup");
+    sevGroup.setAttribute("aria-label",cat.name+" severity");
+
+    const curSev=(entry[cat.id]&&entry[cat.id].severityCode)||"none";
+
+    SEVERITIES.forEach(sev=>{
+      const btn=document.createElement("button");
+      btn.className="sev-btn";
+      btn.setAttribute("role","radio");
+      btn.setAttribute("data-sev",sev);
+      btn.setAttribute("aria-checked",sev===curSev?"true":"false");
+      btn.setAttribute("aria-pressed",sev===curSev?"true":"false");
+      btn.setAttribute("aria-label",sev);
+      btn.tabIndex=sev===curSev?0:-1;
+      btn.textContent=sev.charAt(0).toUpperCase()+sev.slice(1);
+
+      btn.addEventListener("click",()=>{
+        if(!entry[cat.id]) entry[cat.id]={severityCode:"none",note:""};
+        entry[cat.id].severityCode=sev;
+        saveData(data);
+        sevGroup.querySelectorAll(".sev-btn").forEach(b=>{
+          const isCur=b.getAttribute("data-sev")===sev;
+          b.setAttribute("aria-checked",isCur?"true":"false");
+          b.setAttribute("aria-pressed",isCur?"true":"false");
+          b.tabIndex=isCur?0:-1;
+        });
+        // Update day nav dot
+        renderDayNav();
+      });
+
+      btn.addEventListener("keydown",e=>{
+        const btns=[...sevGroup.querySelectorAll(".sev-btn")];
+        const idx=btns.indexOf(btn);
+        let next=-1;
+        if(e.key==="ArrowRight"||e.key==="ArrowDown") next=(idx+1)%btns.length;
+        else if(e.key==="ArrowLeft"||e.key==="ArrowUp") next=(idx-1+btns.length)%btns.length;
+        if(next>=0){e.preventDefault();btns[next].click();btns[next].focus()}
+      });
+
+      sevGroup.appendChild(btn);
+    });
+    card.appendChild(sevGroup);
+
+    // Free text
+    const textarea=document.createElement("textarea");
+    textarea.className="cat-text";
+    textarea.placeholder=cat.placeholder;
+    textarea.setAttribute("aria-label",cat.name+" notes");
+    textarea.rows=2;
+    textarea.value=(entry[cat.id]&&entry[cat.id].note)||"";
+
+    let saveTimer=null;
+    textarea.addEventListener("input",()=>{
+      if(!entry[cat.id]) entry[cat.id]={severityCode:"none",note:""};
+      entry[cat.id].note=textarea.value;
+      clearTimeout(saveTimer);
+      saveTimer=setTimeout(()=>saveData(data),400);
+    });
+    textarea.addEventListener("blur",()=>{
+      clearTimeout(saveTimer);
+      if(!entry[cat.id]) entry[cat.id]={severityCode:"none",note:""};
+      entry[cat.id].note=textarea.value;
+      saveData(data);
+    });
+
+    card.appendChild(textarea);
+    cardsEl.appendChild(card);
+  });
+}
+
+/* ── Summary ── */
+function renderSummary(){
+  const content=document.getElementById("summaryContent");
+  content.innerHTML="";
+
+  const startStr=formatDateShort(dates[0]);
+  const endStr=formatDateShort(dates[DAYS-1]);
+  document.getElementById("summaryDateRange").textContent=startStr+" \u2013 "+endStr+" ("+DAYS+" days)";
+
+  let currentSection="";
+
+  CATEGORIES.forEach(cat=>{
+    // Section divider
+    if(cat.ssa!==currentSection){
+      currentSection=cat.ssa;
+    }
+
+    const block=document.createElement("div");
+    block.className="summary-cat";
+
+    const h3=document.createElement("h3");
+    h3.textContent=cat.name+" \u2014 "+cat.ssa;
+    block.appendChild(h3);
+
+    // Count severities
+    const counts={none:0,mild:0,moderate:0,severe:0,unable:0};
+    const quotes=[];
+    let hasAny=false;
+
+    dates.forEach(d=>{
+      const e=data.entries[d];
+      if(!e||!e[cat.id]) return;
+      const sev=e[cat.id].severityCode||"none";
+      counts[sev]++;
+      hasAny=true;
+      const note=(e[cat.id].note||"").trim();
+      if(note){
+        quotes.push({date:formatDateShort(d),text:note});
+      }
+    });
+
+    if(!hasAny){
+      const p=document.createElement("p");
+      p.className="summary-no-data";
+      p.textContent="No entries recorded.";
+      block.appendChild(p);
+      content.appendChild(block);
+      return;
+    }
+
+    // Frequency badges
+    const freqDiv=document.createElement("div");
+    freqDiv.className="summary-freq";
+    SEVERITIES.forEach(sev=>{
+      if(counts[sev]===0) return;
+      const badge=document.createElement("span");
+      badge.className="freq-badge";
+      if(sev==="severe"||sev==="unable") badge.classList.add(sev);
+      badge.textContent=sev.charAt(0).toUpperCase()+sev.slice(1)+": "+counts[sev]+"/"+DAYS+" days";
+      freqDiv.appendChild(badge);
+    });
+    block.appendChild(freqDiv);
+
+    // Quoted examples
+    if(quotes.length>0){
+      const ul=document.createElement("ul");
+      ul.className="summary-quotes";
+      quotes.forEach(q=>{
+        const li=document.createElement("li");
+        li.textContent=q.text+"\u201D \u2014 "+q.date;
+        ul.appendChild(li);
+      });
+      block.appendChild(ul);
+    }
+
+    content.appendChild(block);
+  });
+}
+
+/* ── Print ── */
+document.getElementById("btnPrint").addEventListener("click",()=>{
+  renderSummary();
+  window.print();
+});
+
+/* ── Theme ── */
+const toggleTheme=document.getElementById("toggleTheme");
+function applyTheme(light){
+  document.body.classList.toggle("light",light);
+  toggleTheme.classList.toggle("on",light);
+  toggleTheme.setAttribute("aria-checked",light?"true":"false");
+  localStorage.setItem(NS+"-theme",light?"light":"dark");
+}
+toggleTheme.addEventListener("click",()=>{
+  applyTheme(!document.body.classList.contains("light"));
+});
+const savedTheme=localStorage.getItem(NS+"-theme");
+if(savedTheme==="light") applyTheme(true);
+
+/* ── Start date ── */
+const startDateInput=document.getElementById("startDate");
+startDateInput.value=data.startDate;
+startDateInput.addEventListener("change",()=>{
+  const val=startDateInput.value;
+  if(!val) return;
+  data.startDate=val;
+  saveData(data);
+  dates=getDayDates(data);
+  currentDay=0;
+  const todayIdx2=dates.indexOf(today);
+  if(todayIdx2>=0) currentDay=todayIdx2;
+  renderDay();
+});
+
+/* ── Export JSON ── */
+document.getElementById("btnExportJSON").addEventListener("click",()=>{
+  const exportData={...data};
+  const blob=new Blob([JSON.stringify(exportData,null,2)],{type:"application/json"});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement("a");
+  a.href=url;
+  a.download=SLUG+"-"+data.startDate+".json";
+  a.click();
+  URL.revokeObjectURL(url);
+});
+
+/* ── Export CSV ── */
+document.getElementById("btnExportCSV").addEventListener("click",()=>{
+  const headers=["effectiveDate"];
+  CATEGORIES.forEach(c=>{
+    headers.push(c.id+"_severityCode");
+    headers.push(c.id+"_note");
+  });
+
+  const rows=[headers.join(",")];
+  dates.forEach(d=>{
+    const entry=data.entries[d]||{};
+    const cols=[d];
+    CATEGORIES.forEach(c=>{
+      const val=entry[c.id]||{};
+      cols.push(val.severityCode||"none");
+      cols.push('"'+(val.note||"").replace(/"/g,'""')+'"');
+    });
+    rows.push(cols.join(","));
+  });
+
+  const blob=new Blob([rows.join("\n")],{type:"text/csv"});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement("a");
+  a.href=url;
+  a.download=SLUG+"-"+data.startDate+".csv";
+  a.click();
+  URL.revokeObjectURL(url);
+});
+
+/* ── Import JSON ── */
+const fileImport=document.getElementById("fileImport");
+document.getElementById("btnImportJSON").addEventListener("click",()=>fileImport.click());
+fileImport.addEventListener("change",e=>{
+  const file=e.target.files[0];
+  if(!file) return;
+  const reader=new FileReader();
+  reader.onload=function(ev){
+    try{
+      const imported=JSON.parse(ev.target.result);
+      if(imported.slug!==SLUG){alert("Wrong file type. Expected "+SLUG+" data.");return}
+      data=imported;
+      saveData(data);
+      dates=getDayDates(data);
+      currentDay=0;
+      startDateInput.value=data.startDate;
+      renderDay();
+    }catch(err){alert("Invalid JSON file.")}
+  };
+  reader.readAsText(file);
+  fileImport.value="";
+});
+
+/* ── Clear all data ── */
+document.getElementById("btnClear").addEventListener("click",()=>{
+  if(!confirm("Delete all logged data? This cannot be undone.")) return;
+  localStorage.removeItem(NS);
+  data=getOrCreateData();
+  dates=getDayDates(data);
+  currentDay=0;
+  startDateInput.value=data.startDate;
+  renderDay();
+});
+
+/* ── Init ── */
+renderDay();
+
+})();
+</script>
+</body>
+</html>
