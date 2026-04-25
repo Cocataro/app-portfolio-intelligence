@@ -1,7 +1,7 @@
 ---
 name: human-character-prose
-version: 8
-description: Complete reference manual for writing prose and building characters that read as human-authored fiction. Two references — (1) write-human prose guide covering surface tells, deep tells, dialogue, POV, character, scene construction, rhythm, time, humor, and prose music; (2) character-psychology manual covering wound/public-self/private-self/blind-spot/self-deception architecture, behavior patterns, relationships, trauma/grief/shame/love/loneliness/anger dynamics, and Crossroads-Inn-specific character work. Used by Daniel for drafting, Eleanor for dev-edit, Thomas for line-copy QA, Margaret for EIC ratification. Paired with `pangram-detector` for ship-ready gating. v8 adds four Pangram-validated protocol rules from JAS-60 comparative benchmark research (commit 7bec7c1).
+version: 9
+description: Complete reference manual for writing prose and building characters that read as human-authored fiction. Two references — (1) write-human prose guide covering surface tells, deep tells, dialogue, POV, character, scene construction, rhythm, time, humor, and prose music; (2) character-psychology manual covering wound/public-self/private-self/blind-spot/self-deception architecture, behavior patterns, relationships, trauma/grief/shame/love/loneliness/anger dynamics, and Crossroads-Inn-specific character work. Used by Daniel for drafting, Eleanor for dev-edit, Thomas for line-copy QA, Margaret for EIC ratification. Paired with `pangram-detector` for ship-ready gating. v8 adds four Pangram-validated protocol rules from JAS-60 comparative benchmark research. v9 adds four catalog/structural failure-mode rules (20-23) from JAS-60/63/72 cycle analysis, plus references/failure-modes.md cataloging 7 concrete failure patterns with commit-level evidence.
 ---
 
 # Human-Character-Prose
@@ -91,6 +91,53 @@ Any emotional-aftermath scene (grief, confusion, being alone) exceeding 150 word
 **Rule 19 — Name elapsed time via specific detail, not summary.**
 
 Elapsed time stated directly is correct (`"Six months"` is fine). What follows must be filled with specific named things — one town, one named event, one specific object — not generalizing summaries. `"towns that blurred together"` is the AI-default for "this happened repeatedly." Replace with specificity; let the reader infer repetition.
+
+---
+
+## v9 Protocol Additions — JAS-60/63/72 Structural Failure Modes (commit TBD)
+
+**Added 2026-04-25. Source:** Aria Patel's analysis of v9/v10 Prologue failure cycle. All four rules address structural catalog patterns that persist even after rule-16-19 prose improvements. Failure modes documented with commit-level evidence in `references/failure-modes.md`. Pre-commit detection in `pangram-detector/scripts/pre-commit-pattern-check.py` (P1/P2/P5/P6).
+
+---
+
+**Rule 20 — Parallel syntactic template banned across vignettes.**
+
+3+ consecutive paragraphs sharing the same grammatical opening template are an AI structural fingerprint. This includes pronoun-driven paragraph runs ("She..." × 3) AND location-template runs ("In [Town]..." × 3).
+
+- Vary the syntactic position of the location or action across consecutive paragraphs
+- If you write two "She..." paragraphs in a row, ensure the third opens differently
+- Check with `pre-commit-pattern-check.py` P1 before Pangram submission
+
+Historical evidence: v9 `4ae7bbe` FAIL (P1 + P5); v9.1 `c25eda5` cleared P1 only.
+
+**Rule 21 — Semantic-register catalog ceiling: collapse, don't vary syntax.**
+
+When a section has 3+ named-location vignettes in sequence (e.g., separate short paragraphs for Thornwall, Bracken, Ashford, Millhaven), varying the syntactic opener is insufficient. The semantic catalog structure — separate paragraphs, each about a named-location transaction — triggers Pangram regardless of syntax.
+
+The correct fix is structural: **collapse** the catalog into a single summary paragraph using a generic reference ("in other towns"), then give ONE named example in full. Do NOT try to fix by rewording each opener.
+
+- P5 (`check_semantic_catalog`) catches explicit transaction-verb catalogs
+- P6 (`check_named_location_catalog`) catches the semantic ceiling case — 3+ consecutive short paragraphs each naming a specific location, even without explicit transaction verbs
+
+Historical evidence: v10.1 `79f4040` FAIL at fraction_ai 0.128 despite Bracken syntax fix; v10.2 `c4d7229` FAIL at fraction_ai 0.128 despite all-four-opener variation.
+
+**Rule 22 — Expansion regression: run the script before re-expanding compressed prose.**
+
+When you expand a section that previously failed Pangram and was then compressed to pass (e.g., collapsing four vignettes into a summary paragraph), re-expanding it risks re-creating the catalog pattern. The expanded text may look fine in isolation but fail because the structure was reintroduced.
+
+- Before expanding any compressed section that previously scored as a Pangram window, run `pre-commit-pattern-check.py` on the new version
+- If P5 or P6 fires in the expanded section, the expansion has regressed regardless of how the syntax differs from the original failure
+
+Historical evidence: v9.2+LC `a3c5f9d` PASS at 0.000 Human; v10 `36eb938` FAIL at 0.133 Mixed after Bracken/Ashford expansion.
+
+**Rule 23 — Departure-scene rhythm parallelism: vary subject and structure.**
+
+3+ consecutive short same-subject sentences in the departure/transition beat — "She packed the saddlebag. She paid the innkeeper. She rode through the gate." — register as LLM action-list prose even without a catalog marker.
+
+- Break the run with: a sensory intrusion, an unexpected object detail, a physical friction beat (something doesn't work as expected), or a dialogue fragment
+- Check for 3+ consecutive "She..." paragraph openers (caught by P1) and 4+ consecutive "She..." sentence openers within a paragraph (caught by P2)
+
+Historical evidence: v9.1 `c25eda5` cleared armor-catalog but departure scene remained; v9.2 `668ba9a` fixed saddlebag/innkeeper/gate → PASS at 0.000 Human.
 
 ---
 
